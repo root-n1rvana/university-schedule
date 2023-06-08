@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:text-align="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home Page</title>
+  <style>
+    /* Style for menu bar */
+    .menu {
+      display: flex;
+      align-items: center;
+      background-color: #333;
+      color: white;
+      height: 50px;
+    }
+
+    /* Style for menu items */
+    .menu-item {
+      padding: 0 20px;
+      cursor: pointer;
+    }
+
+    /* Style for Logout button */
+    .logout-btn {
+      margin-left: auto;
+      margin-right: 20px;
+      padding: 5px 10px;
+      background-color: #fff;
+      color: #333;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Style for main content */
+    .content {
+      margin-top: 50px;
+      text-align: left;
+    }
+
+    /* Style for buttons */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 20px;
+    }
+
+    .btn:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+<!-- Menu bar -->
+<div class="menu">
+  <a href="/" class="menu-item" style="color: white">Home</a>
+  <div class="menu-item">Hi</div>
+  <div class="menu-item">Teacher</div>
+  <a href="#" class="logout-btn">Logout</a>
+</div>
+
+<!-- Main content -->
+<div class="content">
+  <h1 style="text-align: center;">Welcome to our University</h1>
+  <a href="/schedule" class="btn">Schedule</a>
+  <a href="#" class="btn">University Management</a>
+</div>
+</body>
+</html>
