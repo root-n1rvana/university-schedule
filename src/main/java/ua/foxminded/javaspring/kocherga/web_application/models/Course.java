@@ -22,10 +22,10 @@ public class Course {
     private String courseDescription;
 
     @OneToMany(mappedBy = "ownerCourse")
-    private final List<Lesson> lessonsList = new ArrayList<>();
+    private List<Lesson> lessonsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<UserCourse> userCourseList = new ArrayList<>();
+    private List<UserCourse> userCourseList = new ArrayList<>();
 
     public Course() {
     }
@@ -34,6 +34,46 @@ public class Course {
         this.id = id;
         this.courseName = courseName;
         this.courseDescription = courseDescription;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
+    }
+
+    public List<Lesson> getLessonsList() {
+        return lessonsList;
+    }
+
+    public void setLessonsList(List<Lesson> lessonsList) {
+        this.lessonsList = lessonsList;
+    }
+
+    public List<UserCourse> getUserCourseList() {
+        return userCourseList;
+    }
+
+    public void setUserCourseList(List<UserCourse> userCourseList) {
+        this.userCourseList = userCourseList;
     }
 
     @Override
