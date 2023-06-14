@@ -13,19 +13,4 @@ public class ScheduleController {
         return "schedule/schedule";
     }
 
-    @GetMapping("/schedule-result")
-    public String handleScheduleRequest(@RequestParam(name = "day", required = false) Integer day,
-                                        @RequestParam(name = "month", required = false) String month,
-                                        Model model) {
-        if(day != null) {
-            // retrieve data for selected day
-//            List<Data> dataForDay = dataService.getDataForDay(day);
-//            model.addAttribute("data", dataForDay);
-        } else if(month != null) {
-            // retrieve data for selected month
-//            List<Data> dataForMonth = dataService.getDataForMonth(month);
-//            model.addAttribute("data", dataForMonth);
-        }
-        return "result";
-    }
 }

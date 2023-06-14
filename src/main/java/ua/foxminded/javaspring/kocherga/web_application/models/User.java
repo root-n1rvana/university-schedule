@@ -37,81 +37,77 @@ public class User {
     )
     private List<Course> userCourses = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<UserCourse> userCourses = new ArrayList<>();
-
     public User() {
     }
 
-//    public User(int id, String userName, String userLastname, Group ownerGroup, Role ownerRole) {
-//        this.id = id;
-//        this.userName = userName;
-//        this.userLastname = userLastname;
-//        this.ownerGroup = ownerGroup;
-//        this.ownerRole = ownerRole;
-//    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public String getUserName() {
-//        return userName;
-//    }
-//
-//    public void setUserName(String userName) {
-//        this.userName = userName;
-//    }
-//
-//    public String getUserLastname() {
-//        return userLastname;
-//    }
-//
-//    public void setUserLastname(String userLastname) {
-//        this.userLastname = userLastname;
-//    }
-//
-//    public Group getOwnerGroup() {
-//        return ownerGroup;
-//    }
-//
-//    public void setOwnerGroup(Group ownerGroup) {
-//        this.ownerGroup = ownerGroup;
-//    }
-//
-//    public Role getOwnerRole() {
-//        return ownerRole;
-//    }
-//
-//    public void setOwnerRole(Role ownerRole) {
-//        this.ownerRole = ownerRole;
-//    }
-//
-//    public List<UserCourse> getUserCourses() {
-//        return userCourses;
-//    }
-//
-//    public void setUserCourses(List<UserCourse> userCourses) {
-//        this.userCourses = userCourses;
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        User user = (User) o;
-//        return id == user.id && Objects.equals(userName, user.userName) && Objects.equals(userLastname, user.userLastname) && Objects.equals(ownerGroup, user.ownerGroup) && Objects.equals(ownerRole, user.ownerRole);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, userName, userLastname, ownerGroup, ownerRole);
-//    }
-//
+    public User(String userName, String userLastname, Group ownerGroup, Role ownerRole) {
+        this.userName = userName;
+        this.userLastname = userLastname;
+        this.ownerGroup = ownerGroup;
+        this.ownerRole = ownerRole;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserLastname() {
+        return userLastname;
+    }
+
+    public void setUserLastname(String userLastname) {
+        this.userLastname = userLastname;
+    }
+
+    public Group getOwnerGroup() {
+        return ownerGroup;
+    }
+
+    public void setOwnerGroup(Group ownerGroup) {
+        this.ownerGroup = ownerGroup;
+    }
+
+    public Role getOwnerRole() {
+        return ownerRole;
+    }
+
+    public void setOwnerRole(Role ownerRole) {
+        this.ownerRole = ownerRole;
+    }
+
+    public List<Course> getUserCourses() {
+        return userCourses;
+    }
+
+    public void setUserCourses(List<Course> userCourses) {
+        this.userCourses = userCourses;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Objects.equals(userName, user.userName) && Objects.equals(userLastname, user.userLastname) && Objects.equals(ownerGroup, user.ownerGroup) && Objects.equals(ownerRole, user.ownerRole);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName, userLastname, ownerGroup, ownerRole);
+    }
+
 //    @Override
 //    public String toString() {
 //        return "User{" +
@@ -120,6 +116,7 @@ public class User {
 //                ", userLastname='" + userLastname + '\'' +
 //                ", ownerGroup=" + ownerGroup +
 //                ", ownerRole=" + ownerRole +
+//                ", userCourses=" + userCourses +
 //                '}';
 //    }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lessons</title>
+</head>
+<body>
+<h1>Lessons</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Lesson ID</th>
+    <th>Course Name</th>
+    <th>Room</th>
+    <th>Group</th>
+    <th>Schedule Date</th>
+    <th>Lesson Time</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="lesson : ${lessons}">
+    <td th:text="${lesson.lessonId}"></td>
+    <td th:text="${lesson.ownerCourse.courseName}"></td>
+    <td th:text="${lesson.ownerRoom.roomLabel}"></td>
+    <td th:text="${lesson.ownerGroup.name}"></td>
+    <td th:text="${lesson.ownerSchedule.scheduleDate}"></td>
+    <td th:text="${lesson.ownerLessonTime.lessonTime.value}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

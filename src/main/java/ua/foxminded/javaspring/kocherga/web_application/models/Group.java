@@ -1,5 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class Group {
     @Column(name = "group_name")
     private String name;
 
-    @OneToMany(mappedBy = "ownerGroup")
+    @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<User> usersList;
 
     @OneToMany(mappedBy = "ownerGroup")

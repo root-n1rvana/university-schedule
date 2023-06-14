@@ -6,7 +6,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users_courses")
-//@IdClass(UsersCoursesId.class)
 public class UserCourse {
 
     @Id
