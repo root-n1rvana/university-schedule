@@ -29,10 +29,14 @@ compile_app:
 
 build_image:
   stage: build_image
-  image: docker:20.10.23
+  image: docker:24.0.2-cli
+#  services:
+#    - docker:24.0.2-dind
+#  variables:
+#    DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
     - docker-compose build
-    - docker tag web-application-app n1rvana/web-app
-    - docker push $DOCKER_REPO
+    - docker tag web-application-app $DOCKER_REPO:$IMAGE_TAG
+    - docker push $DOCKER_REPO:$IMAGE_TAG
