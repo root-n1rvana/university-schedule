@@ -25,7 +25,7 @@ compile_app:
   stage: compile_app
   image: maven:3.8.5-openjdk-17
   script:
-    - mvn package -DskipTests
+    - mvn compile
 
 build_image:
   stage: build_image
