@@ -1,0 +1,38 @@
+services:
+  - name: docker:dind
+    command: ["--tls=false"]
+
+variables:
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  DOCKER_REPO: n1rvana/web-app
+  IMAGE_TAG: '1.0'
+
+stages:
+  - verify_app
+  - compile_app
+  - build_image
+#  - deploy
+
+run_tests:
+  stage: verify_app
+  image: maven:3.8.5-openjdk-17
+  script:
+    - mvn verify
+
+compile_app:
+  stage: compile_app
+  image: maven:3.8.5-openjdk-17
+  script:
+    - mvn package -DskipTests
+
+build_image:
+  stage: build_image
+  image: docker:20.10.23
+  before_script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
+  script:
+    - docker-compose build
+    - docker tag web-application-app n1rvana/web-app
+    - docker push $DOCKER_REPO
