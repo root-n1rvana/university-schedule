@@ -11,11 +11,10 @@ import java.util.Objects;
 public class Schedule {
 
     @Id
-    @Column(name = "schedule_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "schedule_date")
+    @Column(name = "date")
     private Date scheduleDate;
 
     @OneToMany(mappedBy = "ownerSchedule")
@@ -29,11 +28,11 @@ public class Schedule {
         this.scheduleDate = scheduleDate;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

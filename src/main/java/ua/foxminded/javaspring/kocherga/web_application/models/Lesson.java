@@ -10,27 +10,26 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lesson_id")
-    private int lessonId;
+    private long lessonId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", nullable = false)
     private Course ownerCourse;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_id", nullable = false)
     private Room ownerRoom;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "schedule_id")
+    @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule ownerSchedule;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "lesson_time_id")
+    @JoinColumn(name = "lesson_time_id", nullable = false)
     private LessonTime ownerLessonTime;
 
     public Lesson() {
@@ -45,11 +44,11 @@ public class Lesson {
         this.ownerLessonTime = ownerLessonTime;
     }
 
-    public int getLessonId() {
+    public long getLessonId() {
         return lessonId;
     }
 
-    public void setLessonId(int lessonId) {
+    public void setLessonId(long lessonId) {
         this.lessonId = lessonId;
     }
 

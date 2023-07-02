@@ -11,14 +11,13 @@ import java.util.Objects;
 public class Course {
 
     @Id
-    @Column(name = "course_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "course_name")
+    @Column(name = "name", length = 20, nullable = false)
     private String courseName;
 
-    @Column(name = "course_description")
+    @Column(name = "description", length = 100)
     private String courseDescription;
 
     @OneToMany(mappedBy = "ownerCourse")
@@ -36,11 +35,11 @@ public class Course {
         this.courseDescription = courseDescription;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

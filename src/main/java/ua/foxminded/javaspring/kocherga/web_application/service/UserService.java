@@ -22,4 +22,9 @@ public class UserService {
     public List<User> getUsersByGroupId(int groupId) {
         return userRepository.findByOwnerGroupId(groupId);
     }
+
+    @Transactional
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }

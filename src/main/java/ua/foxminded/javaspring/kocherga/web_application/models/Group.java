@@ -11,15 +11,13 @@ import java.util.Objects;
 public class Group {
 
     @Id
-    @Column(name = "group_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "group_name")
+    @Column(name = "name", length = 10, unique = true, nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<User> usersList;
 
     @OneToMany(mappedBy = "ownerGroup")
@@ -33,11 +31,11 @@ public class Group {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

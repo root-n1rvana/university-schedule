@@ -10,22 +10,22 @@ variables:
   IMAGE_TAG: '1.0'
 
 stages:
-  - verify_app
   - compile_app
+  - verify_app
   - build_image
 #  - deploy
-
-run_tests:
-  stage: verify_app
-  image: maven:3.8.5-openjdk-17
-  script:
-    - mvn verify
 
 compile_app:
   stage: compile_app
   image: maven:3.8.5-openjdk-17
   script:
     - mvn compile
+
+run_tests:
+  stage: verify_app
+  image: maven:3.8.5-openjdk-17
+  script:
+    - mvn verify
 
 build_image:
   stage: build_image

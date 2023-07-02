@@ -10,12 +10,12 @@ import java.util.Objects;
 public class Role {
 
     @Id
-    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "role_name")
-    private String roleName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name", nullable = false, unique = true)
+    private RoleName roleName;
 
     @OneToMany(mappedBy = "ownerRole")
     private List<User> usersList;
@@ -23,24 +23,24 @@ public class Role {
     public Role() {
     }
 
-    public Role(int id, String roleName) {
+    public Role(long id, RoleName roleName) {
         this.id = id;
         this.roleName = roleName;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getRoleName() {
+    public RoleName getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(String roleName) {
+    public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
     }
 

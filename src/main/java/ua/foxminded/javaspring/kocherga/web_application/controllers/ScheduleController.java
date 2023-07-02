@@ -1,16 +1,14 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ScheduleController {
 
     @GetMapping("/schedule")
     public String index() {
-        return "schedule/schedule";
+        return "schedule";
     }
 
 }

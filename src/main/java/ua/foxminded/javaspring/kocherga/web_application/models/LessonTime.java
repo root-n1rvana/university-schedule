@@ -28,9 +28,8 @@ public class LessonTime {
     }
 
     @Id
-    @Column(name = "lesson_time_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private long Id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "lesson_time", nullable = false)
@@ -47,11 +46,11 @@ public class LessonTime {
         this.lessonTime = lessonTime;
     }
 
-    public int getId() {
+    public long getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         Id = id;
     }
 

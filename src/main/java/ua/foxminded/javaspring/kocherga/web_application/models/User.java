@@ -11,22 +11,21 @@ import java.util.Objects;
 public class User {
 
     @Id
-    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "user_name")
+    @Column(name = "firstname", length = 50)
     private String userName;
 
-    @Column(name = "user_lastname")
+    @Column(name = "lastname",length = 50)
     private String userLastname;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private Role ownerRole;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -47,11 +46,11 @@ public class User {
         this.ownerRole = ownerRole;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
