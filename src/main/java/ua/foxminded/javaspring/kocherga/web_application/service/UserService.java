@@ -1,6 +1,5 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
@@ -18,13 +17,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
-    public List<User> getUsersByGroupId(int groupId) {
+    public List<User> getUsersByGroupId(long groupId) {
         return userRepository.findByOwnerGroupId(groupId);
     }
 
-    @Transactional
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public User getUserByUserId(long userId) {
+        return userRepository.getUserById(userId);
     }
 }

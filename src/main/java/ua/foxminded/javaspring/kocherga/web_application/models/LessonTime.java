@@ -9,31 +9,12 @@ import java.util.Objects;
 @Table(name = "lessons_time")
 public class LessonTime {
 
-    public enum LessonTimeEnum {
-        LESSON_1_TIME("8:00-9:30"),
-        LESSON_2_TIME("9:45-11:15"),
-        LESSON_3_TIME("11:30-13:00"),
-        LESSON_4_TIME("13:30-15:00"),
-        LESSON_5_TIME("15:15-16:45");
-
-        private final String value;
-
-        LessonTimeEnum(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "lesson_time", nullable = false)
-    private LessonTimeEnum lessonTime;
+    private String lessonTime;
 
     @OneToMany(mappedBy = "ownerLessonTime")
     private List<Lesson> lessonsList;
@@ -41,7 +22,8 @@ public class LessonTime {
     public LessonTime() {
     }
 
-    public LessonTime(int id, LessonTimeEnum lessonTime) {
+
+    public LessonTime(long id, String lessonTime) {
         Id = id;
         this.lessonTime = lessonTime;
     }
@@ -50,24 +32,12 @@ public class LessonTime {
         return Id;
     }
 
-    public void setId(long id) {
-        Id = id;
-    }
-
-    public LessonTimeEnum getLessonTime() {
+    public String getLessonTime() {
         return lessonTime;
     }
 
-    public void setLessonTime(LessonTimeEnum lessonTime) {
+    public void setLessonTime(String lessonTime) {
         this.lessonTime = lessonTime;
-    }
-
-    public List<Lesson> getLessonsList() {
-        return lessonsList;
-    }
-
-    public void setLessonsList(List<Lesson> lessonsList) {
-        this.lessonsList = lessonsList;
     }
 
     @Override

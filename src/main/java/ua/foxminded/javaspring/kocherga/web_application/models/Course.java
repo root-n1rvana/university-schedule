@@ -29,8 +29,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(int id, String courseName, String courseDescription) {
-        this.id = id;
+    public Course(String courseName, String courseDescription) {
         this.courseName = courseName;
         this.courseDescription = courseDescription;
     }

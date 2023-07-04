@@ -7,11 +7,11 @@ import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-
-    User findByUserName(String userName);
+public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByOwnerGroupId(long groupId);
 
     List<User> findAll();
+
+    User getUserById(long userId);
 }

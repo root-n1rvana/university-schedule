@@ -25,8 +25,7 @@ public class Room {
     public Room() {
     }
 
-    public Room(int id, String roomLabel, String roomDescription) {
-        this.id = id;
+    public Room(String roomLabel, String roomDescription) {
         this.roomLabel = roomLabel;
         this.roomDescription = roomDescription;
     }

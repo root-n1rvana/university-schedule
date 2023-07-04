@@ -35,12 +35,10 @@ CREATE TABLE rooms
     description VARCHAR(100)
 );
 
-CREATE TYPE lesson_time AS ENUM ('8:00-9:30', '9:45-11:15', '11:30-13:00', '13:30-15:00', '15:15-16:45');
-
 CREATE TABLE lessons_time
 (
     id          BIGSERIAL PRIMARY KEY,
-    lesson_time lesson_time NOT NULL
+    lesson_time VARCHAR(15) NOT NULL
 );
 
 CREATE TABLE schedules
