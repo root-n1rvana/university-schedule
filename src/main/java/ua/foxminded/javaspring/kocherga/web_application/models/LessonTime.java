@@ -13,7 +13,7 @@ public class LessonTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Id;
 
-    @Column(name = "lesson_time", nullable = false)
+    @Column(name = "lesson_time", unique = true, nullable = false)
     private String lessonTime;
 
     @OneToMany(mappedBy = "ownerLessonTime")

@@ -27,7 +27,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role ownerRole;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_courses",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -113,7 +113,7 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", userLastname='" + userLastname + '\'' +
                 ", ownerGroup=" + ownerGroup +
-                ", ownerRole=" + ownerRole +
+//                ", ownerRole=" + ownerRole +
                 ", userCourses=" + userCourses +
                 '}';
     }

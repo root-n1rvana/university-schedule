@@ -14,7 +14,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", unique = true, nullable = false)
     private Date scheduleDate;
 
     @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.EAGER)

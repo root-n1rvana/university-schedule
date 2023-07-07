@@ -13,13 +13,13 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", length = 20, nullable = false)
+    @Column(name = "name", length = 20, unique = true, nullable = false)
     private String courseName;
 
     @Column(name = "description", length = 100)
     private String courseDescription;
 
-    @OneToMany(mappedBy = "ownerCourse")
+    @OneToMany(mappedBy = "ownerCourse", fetch = FetchType.EAGER)
     private Set<Lesson> lessonsList;
 
     @ManyToMany(mappedBy = "userCourses")
@@ -92,7 +92,7 @@ public class Course {
                 "id=" + id +
                 ", courseName='" + courseName + '\'' +
                 ", courseDescription='" + courseDescription + '\'' +
-                ", lessonsList=" + lessonsList +
+//                ", lessonsList=" + lessonsList +
                 ", userCourseList=" + userCourseList +
                 '}';
     }

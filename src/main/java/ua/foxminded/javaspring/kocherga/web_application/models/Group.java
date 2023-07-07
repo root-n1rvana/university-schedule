@@ -19,7 +19,7 @@ public class Group {
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
     private Set<User> usersList;
 
-    @OneToMany(mappedBy = "ownerGroup")
+    @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
     private Set<Lesson> lessonsList;
 
     public Group() {
@@ -80,8 +80,8 @@ public class Group {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", usersList=" + usersList +
-                ", lessonsList=" + lessonsList +
+//                ", usersList=" + usersList +
+//                ", lessonsList=" + lessonsList +
                 '}';
     }
 }
