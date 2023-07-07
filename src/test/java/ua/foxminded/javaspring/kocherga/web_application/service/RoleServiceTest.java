@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 
-
 @SpringBootTest
 class RoleServiceTest {
 

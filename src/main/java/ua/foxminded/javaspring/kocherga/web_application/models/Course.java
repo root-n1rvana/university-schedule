@@ -2,9 +2,8 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -21,10 +20,10 @@ public class Course {
     private String courseDescription;
 
     @OneToMany(mappedBy = "ownerCourse")
-    private List<Lesson> lessonsList = new ArrayList<>();
+    private Set<Lesson> lessonsList;
 
     @ManyToMany(mappedBy = "userCourses")
-    private List<User> userCourseList = new ArrayList<>();
+    private Set<User> userCourseList;
 
     public Course() {
     }
@@ -58,19 +57,19 @@ public class Course {
         this.courseDescription = courseDescription;
     }
 
-    public List<Lesson> getLessonsList() {
+    public Set<Lesson> getLessonsList() {
         return lessonsList;
     }
 
-    public void setLessonsList(List<Lesson> lessonsList) {
+    public void setLessonsList(Set<Lesson> lessonsList) {
         this.lessonsList = lessonsList;
     }
 
-    public List<User> getUserCourseList() {
+    public Set<User> getUserCourseList() {
         return userCourseList;
     }
 
-    public void setUserCourseList(List<User> userCourseList) {
+    public void setUserCourseList(Set<User> userCourseList) {
         this.userCourseList = userCourseList;
     }
 
@@ -79,7 +78,7 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return id == course.id && Objects.equals(courseName, course.courseName) && Objects.equals(courseDescription, course.courseDescription);
+        return id == course.id && courseName.equals(course.courseName) && Objects.equals(courseDescription, course.courseDescription);
     }
 
     @Override

@@ -2,8 +2,8 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -18,7 +18,7 @@ public class Role {
     private RoleName roleName;
 
     @OneToMany(mappedBy = "ownerRole")
-    private List<User> usersList;
+    private Set<User> usersList;
 
     public Role() {
     }
@@ -44,11 +44,11 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public List<User> getUsersList() {
+    public Set<User> getUsersList() {
         return usersList;
     }
 
-    public void setUsersList(List<User> usersList) {
+    public void setUsersList(Set<User> usersList) {
         this.usersList = usersList;
     }
 
@@ -57,12 +57,12 @@ public class Role {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return id == role.id && Objects.equals(roleName, role.roleName);
+        return roleName == role.roleName;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName);
+        return Objects.hash(roleName);
     }
 
     @Override

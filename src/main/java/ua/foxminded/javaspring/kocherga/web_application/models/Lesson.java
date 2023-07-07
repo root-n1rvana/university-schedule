@@ -10,7 +10,7 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long lessonId;
+    private long Id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id", nullable = false)
@@ -35,8 +35,8 @@ public class Lesson {
     public Lesson() {
     }
 
-    public Lesson(int lessonId, Course ownerCourse, Room ownerRoom, Group ownerGroup, Schedule ownerSchedule, LessonTime ownerLessonTime) {
-        this.lessonId = lessonId;
+    public Lesson(int Id, Course ownerCourse, Room ownerRoom, Group ownerGroup, Schedule ownerSchedule, LessonTime ownerLessonTime) {
+        this.Id = Id;
         this.ownerCourse = ownerCourse;
         this.ownerRoom = ownerRoom;
         this.ownerGroup = ownerGroup;
@@ -44,12 +44,12 @@ public class Lesson {
         this.ownerLessonTime = ownerLessonTime;
     }
 
-    public long getLessonId() {
-        return lessonId;
+    public long getId() {
+        return Id;
     }
 
-    public void setLessonId(long lessonId) {
-        this.lessonId = lessonId;
+    public void setId(long lessonId) {
+        this.Id = lessonId;
     }
 
     public Course getOwnerCourse() {
@@ -97,18 +97,18 @@ public class Lesson {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lesson lesson = (Lesson) o;
-        return lessonId == lesson.lessonId && Objects.equals(ownerCourse, lesson.ownerCourse) && Objects.equals(ownerRoom, lesson.ownerRoom) && Objects.equals(ownerGroup, lesson.ownerGroup) && Objects.equals(ownerSchedule, lesson.ownerSchedule) && Objects.equals(ownerLessonTime, lesson.ownerLessonTime);
+        return ownerSchedule.equals(lesson.ownerSchedule) && ownerLessonTime.equals(lesson.ownerLessonTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lessonId, ownerCourse, ownerRoom, ownerGroup, ownerSchedule, ownerLessonTime);
+        return Objects.hash(ownerSchedule, ownerLessonTime);
     }
 
     @Override
     public String toString() {
         return "Lesson{" +
-                "lessonId=" + lessonId +
+                "lessonId=" + Id +
                 ", ownerCourse=" + ownerCourse +
                 ", ownerRoom=" + ownerRoom +
                 ", ownerGroup=" + ownerGroup +

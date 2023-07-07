@@ -1,8 +1,7 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import org.junit.jupiter.api.Test;
-
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;

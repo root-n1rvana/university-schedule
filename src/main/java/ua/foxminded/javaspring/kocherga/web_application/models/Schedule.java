@@ -3,8 +3,8 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "schedules")
@@ -14,11 +14,11 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private Date scheduleDate;
 
-    @OneToMany(mappedBy = "ownerSchedule")
-    private List<Lesson> lessonsList;
+    @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.EAGER)
+    private Set<Lesson> lessonsList;
 
     public Schedule() {
     }
@@ -44,11 +44,11 @@ public class Schedule {
         this.scheduleDate = scheduleDate;
     }
 
-    public List<Lesson> getLessonsList() {
+    public Set<Lesson> getLessonsList() {
         return lessonsList;
     }
 
-    public void setLessonsList(List<Lesson> lessonsList) {
+    public void setLessonsList(Set<Lesson> lessonsList) {
         this.lessonsList = lessonsList;
     }
 
@@ -57,7 +57,7 @@ public class Schedule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Schedule schedule = (Schedule) o;
-        return id == schedule.id && Objects.equals(scheduleDate, schedule.scheduleDate);
+        return id == schedule.id && scheduleDate.equals(schedule.scheduleDate);
     }
 
     @Override

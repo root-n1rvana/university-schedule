@@ -2,8 +2,8 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "lessons_time")
@@ -17,11 +17,10 @@ public class LessonTime {
     private String lessonTime;
 
     @OneToMany(mappedBy = "ownerLessonTime")
-    private List<Lesson> lessonsList;
+    private Set<Lesson> lessonsList;
 
     public LessonTime() {
     }
-
 
     public LessonTime(long id, String lessonTime) {
         Id = id;
@@ -40,17 +39,25 @@ public class LessonTime {
         this.lessonTime = lessonTime;
     }
 
+    public Set<Lesson> getLessonsList() {
+        return lessonsList;
+    }
+
+    public void setLessonsList(Set<Lesson> lessonsList) {
+        this.lessonsList = lessonsList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LessonTime that = (LessonTime) o;
-        return Id == that.Id && lessonTime == that.lessonTime;
+        return lessonTime.equals(that.lessonTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id, lessonTime);
+        return Objects.hash(lessonTime);
     }
 
     @Override

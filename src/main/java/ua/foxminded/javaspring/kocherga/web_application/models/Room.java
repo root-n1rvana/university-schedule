@@ -2,8 +2,8 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "rooms")
@@ -13,14 +13,14 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "label", length = 10, unique = true)
+    @Column(name = "label", length = 10, unique = true, nullable = false)
     private String roomLabel;
 
     @Column(name = "description", length = 100)
     private String roomDescription;
 
     @OneToMany(mappedBy = "ownerRoom")
-    private List<Lesson> lessonsList;
+    private Set<Lesson> lessonsList;
 
     public Room() {
     }
@@ -54,11 +54,11 @@ public class Room {
         this.roomDescription = roomDescription;
     }
 
-    public List<Lesson> getLessonsList() {
+    public Set<Lesson> getLessonsList() {
         return lessonsList;
     }
 
-    public void setLessonsList(List<Lesson> lessonsList) {
+    public void setLessonsList(Set<Lesson> lessonsList) {
         this.lessonsList = lessonsList;
     }
 
@@ -67,12 +67,12 @@ public class Room {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        return id == room.id && Objects.equals(roomLabel, room.roomLabel) && Objects.equals(roomDescription, room.roomDescription);
+        return roomLabel.equals(room.roomLabel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roomLabel, roomDescription);
+        return Objects.hash(roomLabel);
     }
 
     @Override

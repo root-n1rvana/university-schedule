@@ -1,10 +1,9 @@
 package ua.foxminded.javaspring.kocherga.web_application.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "groups")
@@ -18,10 +17,10 @@ public class Group {
     private String name;
 
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
-    private List<User> usersList;
+    private Set<User> usersList;
 
     @OneToMany(mappedBy = "ownerGroup")
-    private List<Lesson> lessonsList;
+    private Set<Lesson> lessonsList;
 
     public Group() {
     }
@@ -47,19 +46,19 @@ public class Group {
         this.name = name;
     }
 
-    public List<User> getUsersList() {
+    public Set<User> getUsersList() {
         return usersList;
     }
 
-    public void setUsersList(List<User> usersList) {
+    public void setUsersList(Set<User> usersList) {
         this.usersList = usersList;
     }
 
-    public List<Lesson> getLessonsList() {
+    public Set<Lesson> getLessonsList() {
         return lessonsList;
     }
 
-    public void setLessonsList(List<Lesson> lessonsList) {
+    public void setLessonsList(Set<Lesson> lessonsList) {
         this.lessonsList = lessonsList;
     }
 
@@ -68,7 +67,7 @@ public class Group {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return id == group.id && Objects.equals(name, group.name);
+        return id == group.id && name.equals(group.name);
     }
 
     @Override

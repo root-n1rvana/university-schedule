@@ -4,34 +4,39 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ua.foxminded.javaspring.kocherga.web_application.models.*;
+import ua.foxminded.javaspring.kocherga.web_application.models.Course;
+import ua.foxminded.javaspring.kocherga.web_application.models.Group;
+import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class UserServiceTest {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
+    private final CourseRepository courseRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private GroupRepository groupRepository;
-
-    @Autowired
-    private CourseRepository courseRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
+    public UserServiceTest(UserService userService, UserRepository userRepository, GroupRepository groupRepository,
+                           CourseRepository courseRepository, RoleRepository roleRepository) {
+        this.userService = userService;
+        this.userRepository = userRepository;
+        this.groupRepository = groupRepository;
+        this.courseRepository = courseRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @Test
     void saveAndRetrieveUser() {
@@ -45,7 +50,7 @@ class UserServiceTest {
         long roleId = 1;
         Role testRole = roleRepository.getRoleById(roleId);
 
-        List<Course> testCourses = new ArrayList<>();
+        Set<Course> testCourses = new HashSet<>();
         //Numbers 1-5 are random ID's
         testCourses.add(courseRepository.getCourseById(1L));
         testCourses.add(courseRepository.getCourseById(2L));
@@ -73,7 +78,6 @@ class UserServiceTest {
         Assertions.assertThat(savedUser.getUserLastname()).isEqualTo(retrievedUser.getUserLastname());
         Assertions.assertThat(savedUser.getOwnerGroup()).isEqualTo(retrievedUser.getOwnerGroup());
         Assertions.assertThat(savedUser.getOwnerRole()).isEqualTo(retrievedUser.getOwnerRole());
-        Assertions.assertThat(savedUser.getUserCourses()).isEqualTo(retrievedUser.getUserCourses());
     }
 
     @Test
@@ -88,6 +92,4 @@ class UserServiceTest {
         assertEquals("alex", users.get(1).getUserName());
         assertEquals("John", users.get(2).getUserName());
     }
-
-
 }

@@ -1,11 +1,10 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ua.foxminded.javaspring.kocherga.web_application.models.Room;
-
-import org.assertj.core.api.Assertions;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoomRepository;
 
 @SpringBootTest

@@ -7,4 +7,5 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
+    Schedule getSchedulesById(long scheduleId);
 }

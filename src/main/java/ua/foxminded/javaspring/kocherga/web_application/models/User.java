@@ -2,9 +2,8 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -28,13 +27,13 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role ownerRole;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(
             name = "users_courses",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    private List<Course> userCourses = new ArrayList<>();
+    private Set<Course> userCourses;
 
     public User() {
     }
@@ -86,11 +85,11 @@ public class User {
         this.ownerRole = ownerRole;
     }
 
-    public List<Course> getUserCourses() {
+    public Set<Course> getUserCourses() {
         return userCourses;
     }
 
-    public void setUserCourses(List<Course> userCourses) {
+    public void setUserCourses(Set<Course> userCourses) {
         this.userCourses = userCourses;
     }
 
@@ -99,23 +98,23 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(userName, user.userName) && Objects.equals(userLastname, user.userLastname) && Objects.equals(ownerGroup, user.ownerGroup) && Objects.equals(ownerRole, user.ownerRole);
+        return id == user.id && Objects.equals(userName, user.userName) && Objects.equals(userLastname, user.userLastname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, userLastname, ownerGroup, ownerRole);
+        return Objects.hash(id, userName, userLastname);
     }
 
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", userName='" + userName + '\'' +
-//                ", userLastname='" + userLastname + '\'' +
-//                ", ownerGroup=" + ownerGroup +
-//                ", ownerRole=" + ownerRole +
-//                ", userCourses=" + userCourses +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", userLastname='" + userLastname + '\'' +
+                ", ownerGroup=" + ownerGroup +
+                ", ownerRole=" + ownerRole +
+                ", userCourses=" + userCourses +
+                '}';
+    }
 }
