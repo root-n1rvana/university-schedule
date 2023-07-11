@@ -15,6 +15,7 @@ public class Schedule {
     private long id;
 
     @Column(name = "date", unique = true, nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date scheduleDate;
 
     @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.EAGER)
