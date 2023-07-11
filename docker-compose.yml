@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: university_db_cont
+    environment:
+      POSTGRES_USER: kocherga
+      POSTGRES_PASSWORD: kocherga
+      POSTGRES_DB: university_db
+    ports:
+      - '5432:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web_app_cont
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://university_db_cont:5432/university_db
+    stdin_open: true
+    tty: true
+    ports:
+      - "80:8080"
+    volumes:
+      - ./logs_docker:/app/logs
