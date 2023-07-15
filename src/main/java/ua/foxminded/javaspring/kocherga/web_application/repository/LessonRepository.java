@@ -8,6 +8,4 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     Lesson getLessonById(long lessonId);
-
-//    List<Lesson> findByOwnerGroupIdAndOwnerScheduleId(int groupId, int scheduleId);
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 
+import java.util.List;
+
 @Service
 public class GroupService {
 
@@ -17,5 +19,9 @@ public class GroupService {
 
     public Group getGroupById(long groupId) {
         return groupRepository.getGroupById(groupId);
+    }
+
+    public List<Group> getAllGroups() {
+        return groupRepository.findAll();
     }
 }

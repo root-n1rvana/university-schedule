@@ -1,10 +1,11 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
 import ua.foxminded.javaspring.kocherga.web_application.repository.ScheduleRepository;
+
+import java.util.List;
 
 @Service
 public class ScheduleService {
@@ -18,5 +19,9 @@ public class ScheduleService {
 
     public Schedule getScheduleById(long scheduleId) {
         return scheduleRepository.getSchedulesById(scheduleId);
+    }
+
+    public List<Schedule> getAllSchedules() {
+        return scheduleRepository.findAll();
     }
 }

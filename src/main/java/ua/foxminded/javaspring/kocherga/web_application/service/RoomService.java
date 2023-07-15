@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Room;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoomRepository;
 
+import java.util.List;
+
 @Service
 public class RoomService {
 
@@ -21,5 +23,9 @@ public class RoomService {
 
     public Room getRoomByLabel(String roomLabel) {
         return roomRepository.getRoomByRoomLabel(roomLabel);
+    }
+
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
     }
 }

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lessons Page</title>
+  <title>Rooms Page</title>
   <style>
     /* Style for menu bar */
     .menu {
@@ -65,27 +65,21 @@
 
 <!-- Main content -->
 <div class="content">
-  <h2>Lessons</h2>
+  <h2>Rooms</h2>
   <table>
     <thead>
     <tr>
       <th>ID</th>
-      <th>Course</th>
-      <th>Room</th>
-      <th>Group</th>
-      <th>Date</th>
-      <th>Time</th>
+      <th>Room label</th>
+      <th>Description</th>
     </tr>
     </thead>
     <tbody>
-    <!-- Iterate over the list of lessons and display the data in rows -->
-    <tr th:each="lesson : ${lessons}">
-      <td th:text="${lesson.id}"></td>
-      <td th:text="${lesson.ownerCourse.getCourseName}"></td>
-      <td th:text="${lesson.ownerRoom.getRoomLabel}"></td>
-      <td th:text="${lesson.ownerGroup.getName}"></td>
-      <td th:text="${lesson.ownerSchedule.getScheduleDate}"></td>
-      <td th:text="${lesson.ownerLessonTime.getLessonTime}"></td>
+    <!-- Iterate over the list of rooms and display the data in rows -->
+    <tr th:each="room : ${rooms}">
+      <td th:text="${room.id}"></td>
+      <td th:text="${room.roomLabel}"></td>
+      <td th:text="${room.roomDescription}"></td>
     </tr>
     </tbody>
   </table>

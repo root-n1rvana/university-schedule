@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Users Page</title>
+    <title>Lessons Time Page</title>
     <style>
         /* Style for menu bar */
         .menu {
@@ -65,25 +65,19 @@
 
 <!-- Main content -->
 <div class="content">
-    <h2>Users</h2>
+    <h2>Lessons Time</h2>
     <table>
         <thead>
         <tr>
             <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Group</th>
-            <th>Role</th>
+            <th>Lesson Time</th>
         </tr>
         </thead>
         <tbody>
         <!-- Iterate over the list of users and display the data in rows -->
-        <tr th:each="user : ${users}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.userName}"></td>
-            <td th:text="${user.userLastname}"></td>
-            <td th:text="${user.ownerGroup.name}"></td>
-            <td th:text="${user.ownerRole.roleName}"></td>
+        <tr th:each="lessonTime : ${lessonsTime}">
+            <td th:text="${lessonTime.id}"></td>
+            <td th:text="${lessonTime.lessonTime}"></td>
         </tr>
         </tbody>
     </table>
