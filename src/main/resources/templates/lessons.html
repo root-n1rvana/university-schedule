@@ -81,11 +81,11 @@
     <!-- Iterate over the list of lessons and display the data in rows -->
     <tr th:each="lesson : ${lessons}">
       <td th:text="${lesson.id}"></td>
-      <td th:text="${lesson.ownerCourse.getCourseName}"></td>
-      <td th:text="${lesson.ownerRoom.getRoomLabel}"></td>
-      <td th:text="${lesson.ownerGroup.getName}"></td>
-      <td th:text="${lesson.ownerSchedule.getScheduleDate}"></td>
-      <td th:text="${lesson.ownerLessonTime.getLessonTime}"></td>
+      <td th:text="${lesson.ownerCourse.courseName}"></td>
+      <td th:text="${lesson.ownerRoom.roomLabel}"></td>
+      <td th:text="${lesson.ownerGroup.name}"></td>
+      <td th:text="${lesson.ownerSchedule.scheduleDate}"></td>
+      <td th:text="${lesson.ownerLessonTime.lessonTime}"></td>
     </tr>
     </tbody>
   </table>
