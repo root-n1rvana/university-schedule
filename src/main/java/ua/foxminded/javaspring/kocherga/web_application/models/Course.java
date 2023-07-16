@@ -22,7 +22,7 @@ public class Course {
     @OneToMany(mappedBy = "ownerCourse", fetch = FetchType.EAGER)
     private Set<Lesson> lessonsList;
 
-    @ManyToMany(mappedBy = "userCourses")
+    @ManyToMany(mappedBy = "userCourses", fetch = FetchType.EAGER)
     private Set<User> userCourseList;
 
     public Course() {
@@ -93,7 +93,7 @@ public class Course {
                 ", courseName='" + courseName + '\'' +
                 ", courseDescription='" + courseDescription + '\'' +
 //                ", lessonsList=" + lessonsList +
-                ", userCourseList=" + userCourseList +
+//                ", userCourseList=" + userCourseList +
                 '}';
     }
 }
