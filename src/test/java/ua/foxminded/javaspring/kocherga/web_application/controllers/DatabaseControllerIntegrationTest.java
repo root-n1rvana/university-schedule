@@ -70,7 +70,7 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("rooms"))
                 .andExpect(model().attributeExists("rooms"))
-                .andExpect(model().attribute("rooms", hasSize(10)))
+                .andExpect(model().attribute("rooms", hasSize(11)))
                 .andExpect(model().attribute("rooms", hasItem(
                         allOf(
                                 hasProperty("id", is(10L)),
@@ -151,7 +151,7 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("lessons"))
                 .andExpect(model().attributeExists("lessons"))
-                .andExpect(model().attribute("lessons", hasSize(30)))
+                .andExpect(model().attribute("lessons", hasSize(31)))
                 .andExpect(model().attribute("lessons", hasItem(
                         allOf(
                                 hasProperty("id", is(15L)),
