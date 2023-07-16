@@ -13,7 +13,7 @@ stages:
   - compile_app
   - verify_app
   - build_image
-#  - deploy
+#  - deploy...
 
 compile_app:
   stage: compile_app
