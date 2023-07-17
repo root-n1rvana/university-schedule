@@ -4,7 +4,7 @@ services:
 
 variables:
   DOCKER_HOST: "tcp://docker:2375"
-  DOCKER_TLS_CERTDIR: ""
+  DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_DRIVER: overlay2
   DOCKER_REPO: n1rvana/web-app
   IMAGE_TAG: '1.0'
@@ -37,8 +37,8 @@ build_image:
   before_script:
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
-    - docker-compose build
-    - docker tag web-application-app $DOCKER_REPO:$IMAGE_TAG
+    - docker build -t $DOCKER_REPO:$IMAGE_TAG . --no-cache
+#    - docker $DOCKER_REPO:$IMAGE_TAG
     - docker push $DOCKER_REPO:$IMAGE_TAG
 
 #deploy_image:
