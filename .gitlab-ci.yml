@@ -13,7 +13,7 @@ stages:
   - compile_app
   - verify_app
   - build_image
-#  - deploy...
+#  - deploy
 
 compile_app:
   stage: compile_app
@@ -40,3 +40,11 @@ build_image:
     - docker-compose build
     - docker tag web-application-app $DOCKER_REPO:$IMAGE_TAG
     - docker push $DOCKER_REPO:$IMAGE_TAG
+
+#deploy_image:
+#  stage: deploy
+#  script:
+#    - ssh -o StrictHostKeyChecking=no -i $AWS_ACCESS_KEY_ID ec2-user@15.236.186.96 "
+#      docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD &&
+#      docker run $DOCKER_REPO:$IMAGE_TAG
+#      "
