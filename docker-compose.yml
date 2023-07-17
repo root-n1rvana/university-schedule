@@ -18,9 +18,9 @@ services:
     container_name: web_app_cont
     depends_on:
       - db
-    environment:
+#    environment:
 #      - SPRING_DATASOURCE_URL=jdbc:postgresql://university_db_cont:5432/university_db
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/university_db
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/university_db
     stdin_open: true
     tty: true
     ports:
