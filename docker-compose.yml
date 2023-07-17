@@ -19,7 +19,8 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://university_db_cont:5432/university_db
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://university_db_cont:5432/university_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/university_db
     stdin_open: true
     tty: true
     ports:
