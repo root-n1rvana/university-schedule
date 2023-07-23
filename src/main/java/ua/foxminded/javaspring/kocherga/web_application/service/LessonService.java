@@ -1,6 +1,5 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
@@ -22,10 +21,8 @@ public class LessonService {
         return lessonRepository.getLessonById(lessonId);
     }
 
-//    @Transactional
-//    public List<Lesson> getLessonsByGroupIdAndScheduleId(int groupId, int scheduleId) {
-//        return lessonRepository.findByOwnerGroupIdAndOwnerScheduleId(groupId, scheduleId);
-//    }
-
+    public List<Lesson> getAllLessons() {
+        return lessonRepository.findAll();
+    }
 
 }

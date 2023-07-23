@@ -12,9 +12,7 @@ services:
       - '5432:5432'
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: n1rvana/web-app:1.0
     container_name: web_app_cont
     depends_on:
       - db

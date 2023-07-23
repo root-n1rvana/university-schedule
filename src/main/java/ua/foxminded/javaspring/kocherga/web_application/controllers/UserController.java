@@ -22,14 +22,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String getUser(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "users";
-    }
-
-
     @GetMapping("/{groupId}")
     public String getUsersByGroupId(@PathVariable int groupId, Model model) {
         List<User> users = userService.getUsersByGroupId(groupId);

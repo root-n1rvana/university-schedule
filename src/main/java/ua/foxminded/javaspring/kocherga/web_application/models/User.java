@@ -19,11 +19,11 @@ public class User {
     @Column(name = "lastname",length = 50)
     private String userLastname;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role ownerRole;
 

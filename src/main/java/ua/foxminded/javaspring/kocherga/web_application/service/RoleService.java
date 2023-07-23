@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 
+import java.util.List;
+
 @Service
 public class RoleService {
 
@@ -17,5 +19,9 @@ public class RoleService {
 
     public Role getRoleById(long roleId) {
         return roleRepository.getRoleById(roleId);
+    }
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 }

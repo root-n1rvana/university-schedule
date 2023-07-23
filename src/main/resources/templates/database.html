@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lessons Page</title>
+  <title>Home Page</title>
   <style>
     /* Style for menu bar */
     .menu {
@@ -37,20 +37,22 @@
       text-align: left;
     }
 
-    /* Table styles */
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    /* Style for buttons */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 20px;
     }
 
-    th, td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f2f2f2;
+    .btn:hover {
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -65,30 +67,14 @@
 
 <!-- Main content -->
 <div class="content">
-  <h2>Lessons</h2>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Course</th>
-      <th>Room</th>
-      <th>Group</th>
-      <th>Date</th>
-      <th>Time</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Iterate over the list of lessons and display the data in rows -->
-    <tr th:each="lesson : ${lessons}">
-      <td th:text="${lesson.id}"></td>
-      <td th:text="${lesson.ownerCourse.courseName}"></td>
-      <td th:text="${lesson.ownerRoom.roomLabel}"></td>
-      <td th:text="${lesson.ownerGroup.name}"></td>
-      <td th:text="${lesson.ownerSchedule.scheduleDate}"></td>
-      <td th:text="${lesson.ownerLessonTime.lessonTime}"></td>
-    </tr>
-    </tbody>
-  </table>
+  <a href="/database/users" class="btn">Users</a>
+  <a href="/database/courses" class="btn">Courses</a>
+  <a href="/database/rooms" class="btn">Rooms</a>
+  <a href="/database/groups" class="btn">Groups</a>
+  <a href="/database/lessons" class="btn">Lessons</a>
+  <a href="/database/roles" class="btn">Roles</a>
+  <a href="/database/lessonsTime" class="btn">Lessons Time</a>
+  <a href="/database/schedules" class="btn">Schedules</a>
 </div>
 </body>
 </html>
