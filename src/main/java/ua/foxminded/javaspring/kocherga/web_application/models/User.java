@@ -19,6 +19,9 @@ public class User {
     @Column(name = "lastname",length = 50)
     private String userLastname;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
@@ -38,9 +41,10 @@ public class User {
     public User() {
     }
 
-    public User(String userName, String userLastname, Group ownerGroup, Role ownerRole) {
+    public User(String userName, String userLastname, String password, Group ownerGroup, Role ownerRole) {
         this.userName = userName;
         this.userLastname = userLastname;
+        this.password = password;
         this.ownerGroup = ownerGroup;
         this.ownerRole = ownerRole;
     }
@@ -67,6 +71,14 @@ public class User {
 
     public void setUserLastname(String userLastname) {
         this.userLastname = userLastname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Group getOwnerGroup() {
