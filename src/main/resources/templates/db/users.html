@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Schedule Page</title>
+    <title>Users Page</title>
     <style>
         /* Style for menu bar */
         .menu {
@@ -57,7 +57,7 @@
 <body>
 <!-- Menu bar -->
 <div class="menu">
-    <a href="/" class="menu-item" style="color: white">Home</a>
+    <a href="/static" class="menu-item" style="color: white">Home</a>
     <div class="menu-item">Hi</div>
     <a href="#" class="menu-item" style="color: white">User</a>
     <a href="#" class="logout-btn">Logout</a>
@@ -65,19 +65,25 @@
 
 <!-- Main content -->
 <div class="content">
-    <h2>Schedules</h2>
+    <h2>Users</h2>
     <table>
         <thead>
         <tr>
             <th>ID</th>
-            <th>Date</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Group</th>
+            <th>Role</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Iterate over the list of schedules and display the data in rows -->
-        <tr th:each="schedule : ${schedules}">
-            <td th:text="${schedule.id}"></td>
-            <td th:text="${schedule.scheduleDate}"></td>
+        <!-- Iterate over the list of users and display the data in rows -->
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.userName}"></td>
+            <td th:text="${user.userLastname}"></td>
+            <td th:text="${user.ownerGroup.name}"></td>
+            <td th:text="${user.ownerRole.roleName}"></td>
         </tr>
         </tbody>
     </table>

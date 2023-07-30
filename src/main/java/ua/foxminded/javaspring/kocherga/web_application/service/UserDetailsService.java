@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
+import ua.foxminded.javaspring.kocherga.web_application.security.UserDetailsImpl;
 
 import java.util.Optional;
 
@@ -26,6 +27,6 @@ public class UserDetailsService implements org.springframework.security.core.use
         if (user.isEmpty())
             throw  new UsernameNotFoundException("User not found!");
 
-        return new ua.foxminded.javaspring.kocherga.web_application.security.UserDetails(user.get());
+        return new UserDetailsImpl(user.get());
     }
 }

@@ -1,15 +1,16 @@
 package ua.foxminded.javaspring.kocherga.web_application.security;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 
 import java.util.Collection;
 
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
-    public UserDetails(User user) {
+    public UserDetailsImpl(User user) {
         this.user = user;
     }
 

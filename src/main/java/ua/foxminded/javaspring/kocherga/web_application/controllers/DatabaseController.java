@@ -39,62 +39,62 @@ public class DatabaseController {
 
     @GetMapping
     public String index() {
-        return "database";
+        return "db/database";
     }
 
     @GetMapping("/users")
     public String getUsers(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        return "users";
+        return "db/users";
     }
 
     @GetMapping("/courses")
     public String getCourses(Model model) {
         List<Course> courses = courseService.getAllCourses();
         model.addAttribute("courses", courses);
-        return "courses";
+        return "db/courses";
     }
 
     @GetMapping("/rooms")
     public String getRooms(Model model) {
         List<Room> rooms = roomService.getAllRooms();
         model.addAttribute("rooms", rooms);
-        return "rooms";
+        return "db/rooms";
     }
 
     @GetMapping("/groups")
     public String getGroups(Model model) {
         List<Group> groups = groupService.getAllGroups();
         model.addAttribute("groups", groups);
-        return "groups";
+        return "db/groups";
     }
 
     @GetMapping("/lessons")
     public String getLessons(Model model) {
         List<Lesson> lessons = lessonService.getAllLessons();
         model.addAttribute("lessons", lessons);
-        return "lessons";
+        return "db/lessons";
     }
 
     @GetMapping("/roles")
     public String getRoles(Model model) {
         List<Role> roles = roleService.getAllRoles();
         model.addAttribute("roles", roles);
-        return "roles";
+        return "db/roles";
     }
 
     @GetMapping("/lessonsTime")
     private String getLessonsTime(Model model) {
         List<LessonTime> lessonsTime = lessonTimeService.getAllLessonsTime();
         model.addAttribute("lessonsTime", lessonsTime);
-        return "lessonsTime";
+        return "db/lessonsTime";
     }
 
     @GetMapping("/schedules")
     private String getSchedules(Model model) {
         List<Schedule> schedules = scheduleService.getAllSchedules();
         model.addAttribute("schedules", schedules);
-        return "schedules";
+        return "db/schedules";
     }
 }
