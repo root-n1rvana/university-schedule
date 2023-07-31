@@ -33,54 +33,54 @@ INSERT INTO roles (name) VALUES ('ADMIN'), ('STUDENT'), ('PROFESSOR');
 
 INSERT INTO lessons_time (lesson_time) VALUES ('8:00-9:30'), ('9:45-11:15'), ('11:30-13:00'), ('13:30-15:00'), ('15:15-16:45');
 
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('admin', '', 'pass', 1, 1);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Victoria', 'Nazarova', 'pass', 3, 2);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Oksana', 'Boiko', 'pass', 3, 2);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Diana', 'Belova', 'pass', 3, 2);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Vitaliy', 'Rojkov', 'pass', 3, 2);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Artur', 'Morozov', 'pass', 3, 2);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('admin', '', 'admin', '$2a$10$gqHrslMttQWSsDSVRTK1OehkkBiXsJ/a4z2OURU./dizwOQu5Lovu', 1, 1);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Victoria', 'Nazarova', 'teach1', 'pass', 3, 2);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Oksana', 'Boiko', 'teach2', 'pass', 3, 2);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Diana', 'Belova', 'teach3', 'pass', 3, 2);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Vitaliy', 'Rojkov', 'teach4', 'pass', 3, 2);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Artur', 'Morozov', 'teach5', 'pass', 3, 2);
 
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Pavel', 'Ivanov', 'pass', 2, 3);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Gleb', 'Burov', 'pass', 2, 3);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Elena', 'Nosova', 'pass', 2, 3);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Boris', 'Pahomov', 'pass', 2, 3);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Maksim', 'Sidorov', 'pass', 2, 3);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Alisa', 'Mironova', 'pass', 2, 3);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Pavel', 'Ivanov', 'std1', 'pass', 2, 3);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Gleb', 'Burov', 'std2', 'pass', 2, 3);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Elena', 'Nosova', 'std3', 'pass', 2, 3);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Boris', 'Pahomov', 'std4', 'pass', 2, 3);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Maksim', 'Sidorov', 'std5', 'pass', 2, 3);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Alisa', 'Mironova', 'std6', 'pass', 2, 3);
 
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Nikolay', 'Ponomarev', 'pass', 2, 4);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Inna', 'Lapina', 'pass', 2, 4);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Roman', 'Smirnov', 'pass', 2, 4);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Ivan', 'Lazarev', 'pass', 2, 4);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Anna', 'Bezpalova', 'pass', 2, 4);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Igor', 'Sokolov', 'pass', 2, 4);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Nikolay', 'Ponomarev', 'std7', 'pass', 2, 4);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Inna', 'Lapina', 'std8', 'pass', 2, 4);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Roman', 'Smirnov', 'std9', 'pass', 2, 4);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Ivan', 'Lazarev', 'std10', 'pass', 2, 4);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Anna', 'Bezpalova', 'std11', 'pass', 2, 4);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Igor', 'Sokolov', 'std12', 'pass', 2, 4);
 
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Olga', 'Pavlova', 'pass', 2, 5);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Marina', 'Tihonova', 'pass', 2, 5);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Pavel', 'Bezpalov', 'pass', 2, 5);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Ivan', 'Lazarev', 'pass', 2, 5);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Igor', 'Pavlov', 'pass', 2, 5);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Boris', 'Sokolov', 'pass', 2, 5);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Olga', 'Pavlova', 'std13', 'pass', 2, 5);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Marina', 'Tihonova', 'std14', 'pass', 2, 5);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Pavel', 'Bezpalov', 'std15', 'pass', 2, 5);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Ivan', 'Lazarev', 'std16', 'pass', 2, 5);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Igor', 'Pavlov', 'std17', 'pass', 2, 5);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Boris', 'Sokolov', 'std18', 'pass', 2, 5);
 
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Olga', 'Pahomova', 'pass', 2, 6);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Marina', 'Lapina', 'pass', 2, 6);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Pavel', 'Tihonov', 'pass', 2, 6);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Ivan', 'Lazarev', 'pass', 2, 6);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Igor', 'Pavlov', 'pass', 2, 6);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Boris', 'Pahomov', 'pass', 2, 6);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Olga', 'Pahomova', 'std19', 'pass', 2, 6);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Marina', 'Lapina', 'std20', 'pass', 2, 6);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Pavel', 'Tihonov', 'std21', 'pass', 2, 6);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Ivan', 'Lazarev', 'std22', 'pass', 2, 6);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Igor', 'Pavlov', 'std23', 'pass', 2, 6);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Boris', 'Pahomov', 'std24', 'pass', 2, 6);
 
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Olga', 'Sokolova', 'pass', 2, 7);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Marina', 'Belova', 'pass', 2, 7);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Maksim', 'Fomin', 'pass', 2, 7);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Artur', 'Morozov', 'pass', 2, 7);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Eugenia', 'Rojkova', 'pass', 2, 7);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Elena', 'Mironova', 'pass', 2, 7);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Olga', 'Sokolova', 'std25', 'pass', 2, 7);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Marina', 'Belova', 'std26', 'pass', 2, 7);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Maksim', 'Fomin', 'std27', 'pass', 2, 7);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Artur', 'Morozov', 'std28', 'pass', 2, 7);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Eugenia', 'Rojkova', 'std29', 'pass', 2, 7);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Elena', 'Mironova', 'std30', 'pass', 2, 7);
 
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Inna', 'Ivanova', 'pass', 2, 8);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Anna', 'Lapina', 'pass', 2, 8);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Alisa', 'Popova', 'pass', 2, 8);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Irina', 'Burova', 'pass', 2, 8);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Diana', 'Sidorova', 'pass', 2, 8);
-INSERT INTO users (firstname, lastname, password, role_id, group_id) VALUES ('Olga', 'Popova', 'pass', 2, 8);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Inna', 'Ivanova', 'std31', 'pass', 2, 8);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Anna', 'Lapina', 'std32', 'pass', 2, 8);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Alisa', 'Popova', 'std33', 'pass', 2, 8);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Irina', 'Burova', 'std34', 'pass', 2, 8);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Diana', 'Sidorova', 'std35', 'pass', 2, 8);
+INSERT INTO users (firstname, lastname, username, password, role_id, group_id) VALUES ('Olga', 'Popova', 'std36', 'pass', 2, 8);
 
 INSERT INTO users_courses VALUES (8, 6);
 INSERT INTO users_courses VALUES (9, 5);

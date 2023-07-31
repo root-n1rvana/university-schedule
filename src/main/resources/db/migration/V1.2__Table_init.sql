@@ -17,7 +17,8 @@ CREATE TABLE users
     id        BIGSERIAL PRIMARY KEY,
     firstname VARCHAR(50),
     lastname  VARCHAR(50),
-    password  VARCHAR not null,
+    username  VARCHAR(20) NOT NULL UNIQUE,
+    password  VARCHAR NOT NULL,
     role_id   BIGINT NOT NULL REFERENCES roles (id),
     group_id  BIGINT NOT NULL REFERENCES groups (id)
 );

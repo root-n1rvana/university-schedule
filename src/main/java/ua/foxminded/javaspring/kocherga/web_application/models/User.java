@@ -19,7 +19,10 @@ public class User {
     @Column(name = "lastname",length = 50)
     private String userLastname;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "username", length = 20, nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
