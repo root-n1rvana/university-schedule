@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 
-import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -29,9 +29,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
 
-        Set<GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(user.getOwnerRole()
-                        .getRoleName()
-                        .toString()));
+        Set<GrantedAuthority> authorities = user.getRoles().stream()
+                .map((role) -> new SimpleGrantedAuthority(role.getRoleName().toString()))
+                .collect(Collectors.toSet());
 
         return new org.springframework.security.core.userdetails.User(
                 username,

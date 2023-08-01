@@ -29,27 +29,30 @@ public class User {
     @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role ownerRole;
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable(
+            name="users_roles",
+            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
+    private Set<Role> roles;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_courses",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course> userCourses;
 
     public User() {
     }
 
-    public User(String userName, String userLastname, String password, Group ownerGroup, Role ownerRole) {
+    public User(long id, String userName, String userLastname, String username, String password, Group ownerGroup) {
+        this.id = id;
         this.userName = userName;
         this.userLastname = userLastname;
+        this.username = username;
         this.password = password;
         this.ownerGroup = ownerGroup;
-        this.ownerRole = ownerRole;
     }
 
     public long getId() {
@@ -76,6 +79,14 @@ public class User {
         this.userLastname = userLastname;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -92,12 +103,12 @@ public class User {
         this.ownerGroup = ownerGroup;
     }
 
-    public Role getOwnerRole() {
-        return ownerRole;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setOwnerRole(Role ownerRole) {
-        this.ownerRole = ownerRole;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public Set<Course> getUserCourses() {

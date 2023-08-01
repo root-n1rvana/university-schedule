@@ -73,7 +73,7 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Group</th>
-            <th>Role</th>
+            <th>Roles</th>
         </tr>
         </thead>
         <tbody>
@@ -83,7 +83,13 @@
             <td th:text="${user.userName}"></td>
             <td th:text="${user.userLastname}"></td>
             <td th:text="${user.ownerGroup.name}"></td>
-            <td th:text="${user.ownerRole.roleName}"></td>
+            <td>
+                <span th:each="role, iterStat : ${user.roles}">
+                    <span th:text="${role.getRoleName}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                </span>
+            </td>
+
         </tr>
         </tbody>
     </table>

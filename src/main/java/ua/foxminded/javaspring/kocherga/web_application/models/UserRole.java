@@ -5,23 +5,23 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users_courses", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "course_id"}, name = "user_course"))
-public class UserCourse {
+@Table(name = "users_roles", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}, name = "user_role"))
+public class UserRole {
 
     @Id
     @Column(name = "user_id")
     private long userId;
 
     @Id
-    @Column(name = "course_id")
-    private long courseId;
+    @Column(name = "role_id")
+    private long roleId;
 
-    public UserCourse() {
+    public UserRole() {
     }
 
-    public UserCourse(int userId, int courseId) {
+    public UserRole(int userId, int roleId) {
         this.userId = userId;
-        this.courseId = courseId;
+        this.roleId = roleId;
     }
 
     public long getUserId() {
@@ -32,32 +32,32 @@ public class UserCourse {
         this.userId = userId;
     }
 
-    public long getCourseId() {
-        return courseId;
+    public long getRoleId() {
+        return roleId;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserCourse that = (UserCourse) o;
-        return userId == that.userId && courseId == that.courseId;
+        UserRole userRole = (UserRole) o;
+        return userId == userRole.userId && roleId == userRole.roleId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, courseId);
+        return Objects.hash(userId, roleId);
     }
 
     @Override
     public String toString() {
-        return "UserCourse{" +
+        return "UserRole{" +
                 "userId=" + userId +
-                ", courseId=" + courseId +
+                ", roleId=" + roleId +
                 '}';
     }
 }

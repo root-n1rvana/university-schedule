@@ -19,7 +19,6 @@ CREATE TABLE users
     lastname  VARCHAR(50),
     username  VARCHAR(20) NOT NULL UNIQUE,
     password  VARCHAR NOT NULL,
-    role_id   BIGINT NOT NULL REFERENCES roles (id),
     group_id  BIGINT NOT NULL REFERENCES groups (id)
 );
 
@@ -61,7 +60,14 @@ CREATE TABLE lessons
 
 CREATE TABLE users_courses
 (
-    user_id   int REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    course_id int REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    user_id   BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    course_id BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT user_course UNIQUE (user_id, course_id)
+);
+
+CREATE TABLE users_roles
+(
+    user_id   BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    role_id BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT user_role UNIQUE (user_id, role_id)
 );
