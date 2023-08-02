@@ -7,7 +7,6 @@ Credentials for user with admin role:
 
 ## Assignment
 
-Create new Spring Boot project using [Initializer](https://start.spring.io/) with dependencies:
 1. Review your user/roles model, and ask your mentor for clarifications regarding your security model. For example, you can add ADMIN, STUDENT, TEACHER, and STUFF roles.
 2. Use form security for user authentication.
 3. Create an admin panel for assigning a new user's role and create services that help the admin manage users.

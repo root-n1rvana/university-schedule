@@ -59,3 +59,4 @@ public class HomeController {
         return "redirect:/register?success";
     }
 }
+
