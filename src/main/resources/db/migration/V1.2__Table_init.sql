@@ -14,12 +14,12 @@ CREATE TABLE groups
 
 CREATE TABLE users
 (
-    id        BIGSERIAL PRIMARY KEY,
-    firstname VARCHAR(50),
-    lastname  VARCHAR(50),
-    username  VARCHAR(20) NOT NULL UNIQUE,
-    password  VARCHAR NOT NULL,
-    group_id  BIGINT NOT NULL REFERENCES groups (id)
+    id         BIGSERIAL PRIMARY KEY,
+    firstname  VARCHAR(50),
+    lastname   VARCHAR(50),
+    login_name VARCHAR(20) NOT NULL UNIQUE,
+    password   VARCHAR     NOT NULL,
+    group_id   BIGINT      NOT NULL REFERENCES groups (id)
 );
 
 CREATE TABLE courses
@@ -67,7 +67,7 @@ CREATE TABLE users_courses
 
 CREATE TABLE users_roles
 (
-    user_id   BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    user_id BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
     role_id BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT user_role UNIQUE (user_id, role_id)
 );

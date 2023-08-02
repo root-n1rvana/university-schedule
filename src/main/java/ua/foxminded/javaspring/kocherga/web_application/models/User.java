@@ -19,8 +19,8 @@ public class User {
     @Column(name = "lastname",length = 50)
     private String userLastname;
 
-    @Column(name = "username", length = 20, nullable = false, unique = true)
-    private String username;
+    @Column(name = "login_name", length = 20, nullable = false, unique = true)
+    private String loginName;
 
     @Column(nullable = false)
     private String password;
@@ -46,11 +46,11 @@ public class User {
     public User() {
     }
 
-    public User(long id, String userName, String userLastname, String username, String password, Group ownerGroup) {
+    public User(long id, String userName, String userLastname, String loginName, String password, Group ownerGroup) {
         this.id = id;
         this.userName = userName;
         this.userLastname = userLastname;
-        this.username = username;
+        this.loginName = loginName;
         this.password = password;
         this.ownerGroup = ownerGroup;
     }
@@ -79,12 +79,12 @@ public class User {
         this.userLastname = userLastname;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getPassword() {

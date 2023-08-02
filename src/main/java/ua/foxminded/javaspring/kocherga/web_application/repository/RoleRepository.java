@@ -8,4 +8,5 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Role getRoleById(long roleId);
+
 }
