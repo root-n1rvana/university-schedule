@@ -39,26 +39,18 @@ public class HomeController {
         return "register";
     }
 
-//    @PostMapping("/register/save")
-//    public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-//
-//        if (result.hasErrors()) {
-//            model.addAttribute("user", userDto);
-//            return "/register";
-//        }
-
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto,
                                BindingResult result,
-                               Model model){
+                               Model model) {
         User existingUser = userService.findUserByLoginName(userDto.getLoginName());
 
-        if(existingUser != null && existingUser.getLoginName() != null && !existingUser.getLoginName().isEmpty()){
-            result.rejectValue("loginName", null,
+        if (existingUser != null && existingUser.getLoginName() != null && !existingUser.getLoginName().isEmpty()) {
+            result.rejectValue("loginName", "account.exists",
                     "Account with this login already exists");
         }
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             return "/register";
         }
@@ -66,11 +58,4 @@ public class HomeController {
         userService.saveUser(userDto);
         return "redirect:/register?success";
     }
-
-//    @GetMapping("/users")
-//    public String users(Model model) {
-//        List<UserDto> users = userService.findAllUsers();
-//        model.addAttribute("users", users);
-//        return "users";
-//    }
 }
