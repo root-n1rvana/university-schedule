@@ -69,7 +69,9 @@
 <div class="content">
   <h1 style="text-align: center;">Welcome to our University</h1>
   <a href="/schedule" class="btn">Schedule</a>
-  <a href="#" class="btn">University Management</a>
+<!--  <a href="/management" class="btn">University Management</a>-->
+  <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/management" class="btn">University Management</a>
+
   <a href="/database" class="btn">Database</a>
 </div>
 </body>
