@@ -2,6 +2,10 @@ package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
+
+import java.util.Collection;
 
 @Controller
 public class HomeController {
@@ -57,6 +63,23 @@ public class HomeController {
 
         userService.saveUser(userDto);
         return "redirect:/register?success";
+    }
+
+    @GetMapping("/123")
+    public String yourControllerMethod(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        boolean isAdmin = authorities.stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+
+        if (isAdmin) {
+            System.out.println("===== WORKING FINE =====");
+        } else {
+            System.out.println("===== NOT WORKING =====");
+        }
+        return "home";
     }
 }
 

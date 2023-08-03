@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Home Page</title>
@@ -60,9 +60,10 @@
 <!-- Menu bar -->
 <div class="menu">
   <a href="/" class="menu-item" style="color: white">Home</a>
-  <div class="menu-item">Hi</div>
-  <a href="/user" class="menu-item" style="color: white">User</a>
-  <a href="/logout" class="logout-btn">Logout</a>
+  <div style="margin-left: auto;">
+    <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
+    <a href="/logout" class="logout-btn">Logout</a>
+  </div>
 </div>
 
 <!-- Main content -->
@@ -70,9 +71,20 @@
   <h1 style="text-align: center;">Welcome to our University</h1>
   <a href="/schedule" class="btn">Schedule</a>
 <!--  <a href="/management" class="btn">University Management</a>-->
-  <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/management" class="btn">University Management</a>
+  <a sec:authorize="hasRole('ADMIN')" href="/management" class="btn">University Management</a>
 
   <a href="/database" class="btn">Database</a>
 </div>
+
+  <span>DEBUG INFO</span>
+  <br /><br />
+
+  <div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>
+  <div sec:authorize="hasRole('STUDENT')">Text visible to admin.</div>
+  <div sec:authorize="hasRole('PROFESSOR')">Text visible to admin.</div>
+
+  <span>Logged user Roles: </span>
+  <span sec:authentication="principal.authorities"></span>
+
 </body>
 </html>
