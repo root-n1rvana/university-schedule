@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User Management</title>
 </head>
 <body>
+<h1>User Management Page</h1>
 
+<form th:action="@{/management/save}" method="post">
+    <table>
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Login Name</th>
+            <th>Group</th>
+            <th>Roles</th>
+            <th>Update</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td><input type="text" th:name="'users[' + ${user.id} + '].userName'" th:value="${user.userName}" /></td>
+            <td><input type="text" th:name="'users[' + ${user.id} + '].userLastname'" th:value="${user.userLastname}" /></td>
+            <td><input type="text" th:name="'users[' + ${user.id} + '].loginName'" th:value="${user.loginName}" /></td>
+            <td>
+                <select th:name="'users[' + ${user.id} + '].ownerGroup.id'">
+                    <option th:each="group : ${groups}" th:value="${group.id}"
+                            th:text="${group.name}" th:selected="${group.id == user.ownerGroup.id}"></option>
+                </select>
+            </td>
+            <td>
+                        <span th:each="role : ${roles}">
+                            <input type="checkbox" th:name="'users[' + ${user.id} + '].roles'"
+                                   th:value="${role.id}" th:checked="${user.roles.contains(role)}"/>
+                            <label th:text="${role.roleName}"></label><br/>
+                        </span>
+            </td>
+            <td>
+                <button type="submit" th:name="'updateUser'" th:value="${user.id}">Update</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="submit" value="Save Changes" />
+</form>
 </body>
 </html>

@@ -12,8 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
 import java.util.Collection;
@@ -33,7 +35,7 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/login") //TODO add authController
     public String login() {
         return "login";
     }
@@ -63,23 +65,6 @@ public class HomeController {
 
         userService.saveUser(userDto);
         return "redirect:/register?success";
-    }
-
-    @GetMapping("/123")
-    public String yourControllerMethod(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-
-        boolean isAdmin = authorities.stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
-
-        if (isAdmin) {
-            System.out.println("===== WORKING FINE =====");
-        } else {
-            System.out.println("===== NOT WORKING =====");
-        }
-        return "home";
     }
 }
 

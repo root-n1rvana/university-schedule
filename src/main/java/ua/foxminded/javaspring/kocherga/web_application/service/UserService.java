@@ -1,11 +1,10 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
@@ -13,6 +12,7 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepositor
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -59,5 +59,23 @@ public class UserService {
 
     public User findUserByLoginName(String loginName) {
         return userRepository.findByLoginName(loginName);
+    }
+
+    @Transactional
+    public void saveAll(List<User> users) {
+        for (User user : users) {
+            User existingUser = userRepository.findById(user.getId()).orElse(null);
+            if (existingUser != null) {
+                existingUser.setOwnerGroup(user.getOwnerGroup());
+                existingUser.setRoles(user.getRoles());
+                userRepository.save(existingUser);
+            }
+        }
+    }
+
+    @Transactional
+    public void save(User user) {
+        System.out.println("=================" + user.getOwnerGroup());
+        userRepository.save(user);
     }
 }

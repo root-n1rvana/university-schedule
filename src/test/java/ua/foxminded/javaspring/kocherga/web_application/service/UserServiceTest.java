@@ -48,7 +48,8 @@ class UserServiceTest {
         Group testGroup = groupRepository.getGroupById(groupId);
 
         long roleId = 1;
-        Role testRole = roleRepository.getRoleById(roleId);
+        Role testRole1 = roleRepository.getRoleById(roleId);
+        Set<Role> testRole = new HashSet<>();
 
         Set<Course> testCourses = new HashSet<>();
         //Numbers 1-5 are random ID's
@@ -63,8 +64,10 @@ class UserServiceTest {
         testUser.setUserName(userFirstName);
         testUser.setUserLastname(userLastName);
         testUser.setOwnerGroup(testGroup);
-        testUser.setOwnerRole(testRole);
+        testUser.setRoles(testRole);
         testUser.setUserCourses(testCourses);
+        testUser.setLoginName("test999");
+        testUser.setPassword("$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG");
 
         // Save user using the repository
         User savedUser = userRepository.save(testUser);
@@ -77,7 +80,7 @@ class UserServiceTest {
         Assertions.assertThat(savedUser.getUserName()).isEqualTo(retrievedUser.getUserName());
         Assertions.assertThat(savedUser.getUserLastname()).isEqualTo(retrievedUser.getUserLastname());
         Assertions.assertThat(savedUser.getOwnerGroup()).isEqualTo(retrievedUser.getOwnerGroup());
-        Assertions.assertThat(savedUser.getOwnerRole()).isEqualTo(retrievedUser.getOwnerRole());
+        Assertions.assertThat(savedUser.getRoles()).isEqualTo(retrievedUser.getRoles());
     }
 
     @Test

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" >
 <head>
   <meta charset="UTF-8">
   <title>Home Page</title>
@@ -70,9 +70,7 @@
 <div class="content">
   <h1 style="text-align: center;">Welcome to our University</h1>
   <a href="/schedule" class="btn">Schedule</a>
-<!--  <a href="/management" class="btn">University Management</a>-->
   <a sec:authorize="hasRole('ADMIN')" href="/management" class="btn">University Management</a>
-
   <a href="/database" class="btn">Database</a>
 </div>
 
@@ -80,8 +78,8 @@
   <br /><br />
 
   <div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>
-  <div sec:authorize="hasRole('STUDENT')">Text visible to admin.</div>
-  <div sec:authorize="hasRole('PROFESSOR')">Text visible to admin.</div>
+  <div sec:authorize="hasRole('STUDENT')">Text visible to student.</div>
+  <div sec:authorize="hasRole('PROFESSOR')">Text visible to professor.</div>
 
   <span>Logged user Roles: </span>
   <span sec:authentication="principal.authorities"></span>
