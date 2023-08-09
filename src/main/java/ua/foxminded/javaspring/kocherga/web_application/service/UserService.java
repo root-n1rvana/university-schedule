@@ -1,10 +1,11 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.foxminded.javaspring.kocherga.web_application.models.*;
+import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.User;
+import ua.foxminded.javaspring.kocherga.web_application.models.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
@@ -12,7 +13,6 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepositor
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -45,22 +45,10 @@ public class UserService {
         return userRepository.getUserById(userId);
     }
 
-    public void saveUser(UserDto userDto) { //TODO - check this method. Imo it can be much better
+    public void saveUser(UserDto userDto) {
         User user = new User();
         user.setUserName(userDto.getFirstName());
         user.setUserLastname(userDto.getLastName());
-        user.setLoginName(userDto.getLoginName());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
-        user.setRoles(new HashSet<>(Collections.singletonList(role)));
-        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - 'No Group'
-        userRepository.save(user);
-    }
-
-    public void saveUser(User userDto) { //TODO - check this method. Imo it can be much better
-        User user = new User();
-        user.setUserName(userDto.getUserName());
-        user.setUserLastname(userDto.getUserLastname());
         user.setLoginName(userDto.getLoginName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
@@ -73,15 +61,7 @@ public class UserService {
         return userRepository.findByLoginName(loginName);
     }
 
-    @Transactional
-    public void saveAll(List<User> users) {
-        for (User user : users) {
-            User existingUser = userRepository.findById(user.getId()).orElse(null);
-            if (existingUser != null) {
-                existingUser.setOwnerGroup(user.getOwnerGroup());
-                existingUser.setRoles(user.getRoles());
-                userRepository.save(existingUser);
-            }
-        }
+    public void save(User user) {
+        userRepository.save(user);
     }
 }
