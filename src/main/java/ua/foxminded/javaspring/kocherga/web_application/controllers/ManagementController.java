@@ -82,11 +82,12 @@ public class ManagementController {
     @PostMapping("/updateUser")
     public String updateUser(@RequestParam("userId") long userId, @RequestParam("group") long groupId,
                              @RequestParam(value = "roles", required = false) Long[] roleIds) {
+        List<Long> roleIdsList = Arrays.asList(roleIds);
+
         User user = userService.getUserByUserId(userId);
         Group group = groupService.getGroupById(groupId);
-
-        List<Long> roleIdsList = roleIds != null ? Arrays.asList(roleIds) : new ArrayList<>();
-        Set<Role> roles = roleService.getRolesByIds(roleIdsList);//TODO roleIds=null WTF
+//        List<Long> roleIdsList = roleIds != null ? Arrays.asList(roleIds) : new ArrayList<>();
+        Set<Role> roles = roleService.getRolesByIds(roleIdsList);
 
         user.setOwnerGroup(group);
         user.setRoles(roles);
