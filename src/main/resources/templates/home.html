@@ -70,16 +70,16 @@
 <div class="content">
   <h1 style="text-align: center;">Welcome to our University</h1>
   <a href="/schedule" class="btn">Schedule</a>
-  <a sec:authorize="hasRole('ADMIN')" href="/management" class="btn">University Management</a>
+  <a sec:authorize="hasAuthority('ADMIN')" href="/management" class="btn">University Management</a>
   <a href="/database" class="btn">Database</a>
 </div>
 
   <span>DEBUG INFO</span>
   <br /><br />
 
-  <div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>
-  <div sec:authorize="hasRole('STUDENT')">Text visible to student.</div>
-  <div sec:authorize="hasRole('PROFESSOR')">Text visible to professor.</div>
+  <div sec:authorize="hasAuthority('ADMIN')">Text visible to admin.</div>
+  <div sec:authorize="hasAuthority('STUDENT')">Text visible to student.</div>
+  <div sec:authorize="hasAuthority('PROFESSOR')">Text visible to professor.</div>
 
   <span>Logged user Roles: </span>
   <span sec:authentication="principal.authorities"></span>

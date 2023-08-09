@@ -6,7 +6,9 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RoleService {
@@ -24,5 +26,13 @@ public class RoleService {
 
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
+    }
+
+    public Set<Role> getRolesByIds(List<Long> ids) {
+        Set<Role> setOfRoles = new HashSet<>();
+        for (Long id : ids) {
+            roleRepository.findById(id).ifPresent(setOfRoles::add);
+        }
+        return setOfRoles;
     }
 }

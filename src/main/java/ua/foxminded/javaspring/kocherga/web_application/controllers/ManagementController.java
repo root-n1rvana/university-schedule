@@ -1,21 +1,22 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ua.foxminded.javaspring.kocherga.web_application.models.Group;
-import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.UserListWrapper;
+import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ManagementController {
@@ -31,40 +32,67 @@ public class ManagementController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/management")
-    public String showManagementPage(Model model) {
-        List<User> users = userService.getAllUsers();
-        List<Group> groups = groupService.getAllGroups();
-        List<Role> roles = roleService.getAllRoles();
+//    @GetMapping("/management")
+//    public String showManagementPage(Model model) {
+//        List<User> users = userService.getAllUsers();
+//        List<Group> groups = groupService.getAllGroups();
+//        List<Role> roles = roleService.getAllRoles();
+//
+//        model.addAttribute("users", users);
+//        model.addAttribute("groups", groups);
+//        model.addAttribute("roles", roles);
+//        return "management";
+//    }
 
-        model.addAttribute("users", users);
-        model.addAttribute("groups", groups);
-        model.addAttribute("roles", roles);
+//    @PostMapping("/management/save")
+//    public String saveManagementChanges(@ModelAttribute("usersWrapper") UserListWrapper userListWrapper,
+//                                        @RequestParam(required = false, name = "updateUser") Long userIdToUpdate) {
+//        if (userIdToUpdate != null) {
+//            userListWrapper.getUsers().stream()
+//                    .filter(user -> user.getId() == userIdToUpdate)
+//                    .findFirst()
+//                    .orElseThrow(RuntimeException::new);
+//                    .ifPresent(userService::save);
+//        } else {
+//            userService.saveAll(userListWrapper.getUsers());
+//        }
+//        return "redirect:/management";
+//    }
+
+    @GetMapping("/management")
+    public String showManagementPage() {
         return "management";
     }
 
-    @PostMapping("/management/save")
-    public String saveManagementChanges(@ModelAttribute("usersWrapper") UserListWrapper userListWrapper,
-                                        @RequestParam(required = false, name = "updateUser") Long userIdToUpdate) {
-        if (userIdToUpdate != null) {
-            userListWrapper.getUsers().stream()
-                    .filter(user -> user.getId() == userIdToUpdate)
-                    .findFirst()
-                    .orElseThrow(RuntimeException::new);
-//                    .ifPresent(userService::save);
-        } else {
-            userService.saveAll(userListWrapper.getUsers());
-        }
+    @PostMapping("/management")
+    public String findUser(@RequestParam("loginName") String loginName, Model model) {
+        User user = userService.findUserByLoginName(loginName);
+        List<Group> allGroups = groupService.getAllGroups();
+        List<Role> allRoles = roleService.getAllRoles();
+        List<Long> roleIds = new ArrayList<>();
+
+        model.addAttribute("user", user);
+        model.addAttribute("allGroups", allGroups);
+        model.addAttribute("allRoles", allRoles);
+        model.addAttribute("roleIds", roleIds);
+
+        return "management";
+    }
+
+    @PostMapping("/updateUser")
+    public String updateUser(@RequestParam("userId") long userId, @RequestParam("group") long groupId,
+                             @RequestParam(value = "roles", required = false) Long[] roleIds) {
+        User user = userService.getUserByUserId(userId);
+        Group group = groupService.getGroupById(groupId);
+
+        List<Long> roleIdsList = roleIds != null ? Arrays.asList(roleIds) : new ArrayList<>();
+        Set<Role> roles = roleService.getRolesByIds(roleIdsList);//TODO roleIds=null WTF
+
+        user.setOwnerGroup(group);
+        user.setRoles(roles);
+        userService.saveUser(user);
+
         return "redirect:/management";
     }
 
-    @GetMapping("/management/123")
-    public String testerok() {
-
-        User user = userService.getUserByUserId(2L);
-        Group group = groupService.getGroupById(9L);
-        user.setOwnerGroup(group);
-        userService.save(user);
-        return "redirect:/home";
-    }
 }

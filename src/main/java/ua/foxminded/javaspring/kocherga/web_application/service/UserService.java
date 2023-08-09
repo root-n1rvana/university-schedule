@@ -57,6 +57,18 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void saveUser(User userDto) { //TODO - check this method. Imo it can be much better
+        User user = new User();
+        user.setUserName(userDto.getUserName());
+        user.setUserLastname(userDto.getUserLastname());
+        user.setLoginName(userDto.getLoginName());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
+        user.setRoles(new HashSet<>(Collections.singletonList(role)));
+        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - 'No Group'
+        userRepository.save(user);
+    }
+
     public User findUserByLoginName(String loginName) {
         return userRepository.findByLoginName(loginName);
     }
@@ -71,11 +83,5 @@ public class UserService {
                 userRepository.save(existingUser);
             }
         }
-    }
-
-    @Transactional
-    public void save(User user) {
-        System.out.println("=================" + user.getOwnerGroup());
-        userRepository.save(user);
     }
 }
