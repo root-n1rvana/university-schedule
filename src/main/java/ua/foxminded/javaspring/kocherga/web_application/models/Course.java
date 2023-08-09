@@ -92,8 +92,6 @@ public class Course {
                 "id=" + id +
                 ", courseName='" + courseName + '\'' +
                 ", courseDescription='" + courseDescription + '\'' +
-//                ", lessonsList=" + lessonsList +
-//                ", userCourseList=" + userCourseList +
                 '}';
     }
 }

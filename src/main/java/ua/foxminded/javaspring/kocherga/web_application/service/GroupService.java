@@ -24,8 +24,4 @@ public class GroupService {
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
     }
-
-    public Group getGroupByName(String groupName) {
-        return groupRepository.findByName(groupName);
-    }
 }

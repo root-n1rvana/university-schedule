@@ -109,9 +109,7 @@ public class Lesson {
     public String toString() {
         return "Lesson{" +
                 "lessonId=" + Id +
-//                ", ownerCourse=" + ownerCourse +
                 ", ownerRoom=" + ownerRoom +
-//                ", ownerGroup=" + ownerGroup +
                 ", ownerSchedule=" + ownerSchedule +
                 ", ownerLessonTime=" + ownerLessonTime +
                 '}';

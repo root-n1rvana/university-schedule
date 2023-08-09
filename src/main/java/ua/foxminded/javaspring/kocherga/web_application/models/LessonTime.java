@@ -65,7 +65,6 @@ public class LessonTime {
         return "LessonTime{" +
                 "Id=" + Id +
                 ", lessonTime=" + lessonTime +
-//                ", lessonsList=" + lessonsList +
                 '}';
     }
 }

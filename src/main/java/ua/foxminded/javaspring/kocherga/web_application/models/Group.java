@@ -80,8 +80,6 @@ public class Group {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-//                ", usersList=" + usersList +
-//                ", lessonsList=" + lessonsList +
                 '}';
     }
 }

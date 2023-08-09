@@ -139,7 +139,6 @@ public class User {
                 ", userName='" + userName + '\'' +
                 ", userLastname='" + userLastname + '\'' +
                 ", ownerGroup=" + ownerGroup +
-//                ", ownerRole=" + ownerRole +
                 ", userCourses=" + userCourses +
                 '}';
     }
