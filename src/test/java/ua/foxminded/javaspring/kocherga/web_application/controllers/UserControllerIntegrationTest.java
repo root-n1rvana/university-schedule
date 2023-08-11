@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
@@ -19,11 +20,12 @@ class UserControllerIntegrationTest {
 
     int groupId = 1;
 
+    @WithMockUser("spring")
     @Test
     void getUsersByGroupId_Controller_ShouldReturnListOfUsers() throws Exception {
         mockMvc.perform(get("/user/{groupId}", groupId))
                 .andExpect(status().isOk())
-                .andExpect(view().name("users"))
+                .andExpect(view().name("db/users"))
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attribute("users", hasSize(3)))
                 .andExpect(model().attribute("users", hasItem(

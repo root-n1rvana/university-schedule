@@ -26,6 +26,6 @@ public class UserController {
     public String getUsersByGroupId(@PathVariable int groupId, Model model) {
         List<User> users = userService.getUsersByGroupId(groupId);
         model.addAttribute("users", users);
-        return "users";
+        return "db/users";
     }
 }

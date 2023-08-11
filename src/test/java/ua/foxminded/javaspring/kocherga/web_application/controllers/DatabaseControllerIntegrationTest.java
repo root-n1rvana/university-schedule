@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 
@@ -21,11 +22,12 @@ public class DatabaseControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @WithMockUser("spring")
     @Test
     void getAllUsers_Controller_ShouldReturnListOfAllUsers() throws Exception {
         mockMvc.perform(get("/database/users"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("users"))
+                .andExpect(view().name("db/users"))
                 .andExpect(model().attributeExists("users"))
                 .andExpect(model().attribute("users", hasSize(44)))
                 .andExpect(model().attribute("users", hasItem(
@@ -34,7 +36,9 @@ public class DatabaseControllerIntegrationTest {
                                 hasProperty("userName", is("Artur")),
                                 hasProperty("userLastname", is("Morozov")),
                                 hasProperty("ownerGroup", hasProperty("name", is("professor"))),
-                                hasProperty("ownerRole", hasProperty("roleName", is(RoleName.PROFESSOR)))
+                                hasProperty("roles", hasItem(
+                                        allOf(hasProperty("roleName", is(RoleName.PROFESSOR))
+                                        )))
                         )
                 )))
                 .andExpect(model().attribute("users", hasItem(
@@ -43,16 +47,19 @@ public class DatabaseControllerIntegrationTest {
                                 hasProperty("userName", is("Pavel")),
                                 hasProperty("userLastname", is("Ivanov")),
                                 hasProperty("ownerGroup", hasProperty("name", is("GR-1"))),
-                                hasProperty("ownerRole", hasProperty("roleName", is(RoleName.STUDENT)))
+                                hasProperty("roles", hasItem(
+                                        allOf(hasProperty("roleName", is(RoleName.STUDENT))
+                                        )))
                         )
                 )));
     }
 
+    @WithMockUser("spring")
     @Test
     void getAllCourses_Controller_ShouldReturnListOfAllCourses() throws Exception {
         mockMvc.perform(get("/database/courses"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("courses"))
+                .andExpect(view().name("db/courses"))
                 .andExpect(model().attributeExists("courses"))
                 .andExpect(model().attribute("courses", hasSize(10)))
                 .andExpect(model().attribute("courses", hasItem(
@@ -64,11 +71,12 @@ public class DatabaseControllerIntegrationTest {
                 )));
     }
 
+    @WithMockUser("spring")
     @Test
     void getAllRooms_Controller_ShouldReturnListOfAllRooms() throws Exception {
         mockMvc.perform(get("/database/rooms"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("rooms"))
+                .andExpect(view().name("db/rooms"))
                 .andExpect(model().attributeExists("rooms"))
                 .andExpect(model().attribute("rooms", hasSize(10)))
                 .andExpect(model().attribute("rooms", hasItem(
@@ -80,13 +88,14 @@ public class DatabaseControllerIntegrationTest {
                 )));
     }
 
+    @WithMockUser("spring")
     @Test
     void getAllGroups_Controller_ShouldReturnListOfAllGroups() throws Exception {
         mockMvc.perform(get("/database/groups"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("groups"))
+                .andExpect(view().name("db/groups"))
                 .andExpect(model().attributeExists("groups"))
-                .andExpect(model().attribute("groups", hasSize(8)))
+                .andExpect(model().attribute("groups", hasSize(9)))
                 .andExpect(model().attribute("groups", hasItem(
                         allOf(
                                 hasProperty("id", is(8L)),
@@ -95,11 +104,12 @@ public class DatabaseControllerIntegrationTest {
                 )));
     }
 
+    @WithMockUser("spring")
     @Test
     void getAllRoles_Controller_ShouldReturnListOfAllRoles() throws Exception {
         mockMvc.perform(get("/database/roles"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("roles"))
+                .andExpect(view().name("db/roles"))
                 .andExpect(model().attributeExists("roles"))
                 .andExpect(model().attribute("roles", hasSize(3)))
                 .andExpect(model().attribute("roles", hasItem(
@@ -110,11 +120,12 @@ public class DatabaseControllerIntegrationTest {
                 )));
     }
 
+    @WithMockUser("spring")
     @Test
     void getAllLessonsTime_Controller_ShouldReturnListOfAllLessonsTime() throws Exception {
         mockMvc.perform(get("/database/lessonsTime"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("lessonsTime"))
+                .andExpect(view().name("db/lessonsTime"))
                 .andExpect(model().attributeExists("lessonsTime"))
                 .andExpect(model().attribute("lessonsTime", hasSize(5)))
                 .andExpect(model().attribute("lessonsTime", hasItem(
@@ -125,13 +136,14 @@ public class DatabaseControllerIntegrationTest {
                 )));
     }
 
+    @WithMockUser("spring")
     @Test
     void getAllSchedules_Controller_ShouldReturnListOfAllSchedules() throws Exception {
         Date expectedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-12");
 
         mockMvc.perform(get("/database/schedules"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("schedules"))
+                .andExpect(view().name("db/schedules"))
                 .andExpect(model().attributeExists("schedules"))
                 .andExpect(model().attribute("schedules", hasSize(3)))
                 .andExpect(model().attribute("schedules", hasItem(
@@ -142,6 +154,7 @@ public class DatabaseControllerIntegrationTest {
                 )));
     }
 
+    @WithMockUser("spring")
     @Test
     void getAllLessons_Controller_ShouldReturnListOfAllLessons() throws Exception {
         Date expectedDate1 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-11");
@@ -149,7 +162,7 @@ public class DatabaseControllerIntegrationTest {
 
         mockMvc.perform(get("/database/lessons"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("lessons"))
+                .andExpect(view().name("db/lessons"))
                 .andExpect(model().attributeExists("lessons"))
                 .andExpect(model().attribute("lessons", hasSize(30)))
                 .andExpect(model().attribute("lessons", hasItem(
