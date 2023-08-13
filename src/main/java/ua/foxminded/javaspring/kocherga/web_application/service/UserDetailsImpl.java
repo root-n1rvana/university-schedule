@@ -3,9 +3,11 @@ package ua.foxminded.javaspring.kocherga.web_application.service;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl  implements UserDetails {
@@ -18,9 +20,10 @@ public class UserDetailsImpl  implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName().toString()))
-                .collect(Collectors.toList());
+//        return user.getRoles().stream()
+//                .map(role -> new SimpleGrantedAuthority(role.getRoleName().toString()))
+//                .collect(Collectors.toList());
+        return List.of(new SimpleGrantedAuthority(RoleName.ADMIN.name()));
     }
 
     @Override
@@ -30,7 +33,7 @@ public class UserDetailsImpl  implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return user.getFirstname();
     }
 
     @Override

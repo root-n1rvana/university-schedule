@@ -25,7 +25,7 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllUsers_Controller_ShouldReturnListOfAllUsers() throws Exception {
-        mockMvc.perform(get("/database/users"))
+        mockMvc.perform(get("/entity/users"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/users"))
                 .andExpect(model().attributeExists("users"))
@@ -57,7 +57,7 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllCourses_Controller_ShouldReturnListOfAllCourses() throws Exception {
-        mockMvc.perform(get("/database/courses"))
+        mockMvc.perform(get("/entity/courses"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/courses"))
                 .andExpect(model().attributeExists("courses"))
@@ -74,7 +74,7 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllRooms_Controller_ShouldReturnListOfAllRooms() throws Exception {
-        mockMvc.perform(get("/database/rooms"))
+        mockMvc.perform(get("/entity/rooms"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/rooms"))
                 .andExpect(model().attributeExists("rooms"))
@@ -91,7 +91,7 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllGroups_Controller_ShouldReturnListOfAllGroups() throws Exception {
-        mockMvc.perform(get("/database/groups"))
+        mockMvc.perform(get("/entity/groups"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/groups"))
                 .andExpect(model().attributeExists("groups"))
@@ -107,7 +107,7 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllRoles_Controller_ShouldReturnListOfAllRoles() throws Exception {
-        mockMvc.perform(get("/database/roles"))
+        mockMvc.perform(get("/entity/roles"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/roles"))
                 .andExpect(model().attributeExists("roles"))
@@ -123,7 +123,7 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllLessonsTime_Controller_ShouldReturnListOfAllLessonsTime() throws Exception {
-        mockMvc.perform(get("/database/lessonsTime"))
+        mockMvc.perform(get("/entity/lessonsTime"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/lessonsTime"))
                 .andExpect(model().attributeExists("lessonsTime"))
@@ -141,7 +141,7 @@ public class DatabaseControllerIntegrationTest {
     void getAllSchedules_Controller_ShouldReturnListOfAllSchedules() throws Exception {
         Date expectedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-12");
 
-        mockMvc.perform(get("/database/schedules"))
+        mockMvc.perform(get("/entity/schedules"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/schedules"))
                 .andExpect(model().attributeExists("schedules"))
@@ -160,7 +160,7 @@ public class DatabaseControllerIntegrationTest {
         Date expectedDate1 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-11");
         Date expectedDate2 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-12");
 
-        mockMvc.perform(get("/database/lessons"))
+        mockMvc.perform(get("/entity/lessons"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/lessons"))
                 .andExpect(model().attributeExists("lessons"))

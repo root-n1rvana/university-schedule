@@ -1,6 +1,7 @@
 package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 
 import java.util.Objects;
 import java.util.Set;
@@ -14,6 +15,7 @@ public class Role {
     private long id;
 
     @Enumerated(EnumType.STRING)
+    @Type(TypeConverter.class)
     @Column(name = "name", nullable = false, unique = true)
     private RoleName roleName;
 

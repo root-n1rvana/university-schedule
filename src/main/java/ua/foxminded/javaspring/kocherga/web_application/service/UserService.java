@@ -1,11 +1,14 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
@@ -13,6 +16,7 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepositor
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -45,23 +49,34 @@ public class UserService {
         return userRepository.getUserById(userId);
     }
 
+    @Transactional
     public void saveUser(UserDto userDto) {
         User user = new User();
-        user.setUserName(userDto.getFirstName());
-        user.setUserLastname(userDto.getLastName());
-        user.setLoginName(userDto.getLoginName());
+        user.setFirstname(userDto.getFirstName());
+        user.setLastname(userDto.getLastName());
+        user.setLogin(userDto.getLoginName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
-        user.setRoles(new HashSet<>(Collections.singletonList(role)));
+//        Role role = roleRepository.getRoleByRoleName(RoleName.STUDENT);
+//        user.setRoles(new HashSet<>(Collections.singletonList(role)));
         user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - 'No Group'
         userRepository.save(user);
     }
 
     public User findUserByLoginName(String loginName) {
-        return userRepository.findByLoginName(loginName);
+        return userRepository.findByLogin(loginName);
     }
 
+    @Transactional
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    public void checkIfUserExists(UserDto userDto, BindingResult result) {
+        User existingUser = this.findUserByLoginName(userDto.getLoginName());
+
+        if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
+            result.rejectValue("loginName", "account.exists", "Account with this login already exists");
+        }
     }
 }

@@ -1,6 +1,5 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,14 +12,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
-        User user = userRepository.findByLoginName(loginName);
+    public UserDetails loadUserByUsername(String loginName) throws UsernameNotFoundException, NullPointerException {
+        User user = userRepository.findByLogin(loginName);
         return new UserDetailsImpl(user);
     }
 }

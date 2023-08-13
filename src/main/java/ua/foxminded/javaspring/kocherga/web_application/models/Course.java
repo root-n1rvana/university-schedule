@@ -20,10 +20,10 @@ public class Course {
     private String courseDescription;
 
     @OneToMany(mappedBy = "ownerCourse", fetch = FetchType.EAGER)
-    private Set<Lesson> lessonsList;
+    private Set<Lesson> lessons;
 
     @ManyToMany(mappedBy = "userCourses", fetch = FetchType.EAGER)
-    private Set<User> userCourseList;
+    private Set<User> userCourse;
 
     public Course() {
     }
@@ -57,20 +57,20 @@ public class Course {
         this.courseDescription = courseDescription;
     }
 
-    public Set<Lesson> getLessonsList() {
-        return lessonsList;
+    public Set<Lesson> getLessons() {
+        return lessons;
     }
 
-    public void setLessonsList(Set<Lesson> lessonsList) {
-        this.lessonsList = lessonsList;
+    public void setLessons(Set<Lesson> lessonsList) {
+        this.lessons = lessonsList;
     }
 
-    public Set<User> getUserCourseList() {
-        return userCourseList;
+    public Set<User> getUserCourse() {
+        return userCourse;
     }
 
-    public void setUserCourseList(Set<User> userCourseList) {
-        this.userCourseList = userCourseList;
+    public void setUserCourse(Set<User> userCourseList) {
+        this.userCourse = userCourseList;
     }
 
     @Override

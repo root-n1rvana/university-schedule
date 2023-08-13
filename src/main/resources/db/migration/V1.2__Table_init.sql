@@ -3,23 +3,23 @@ CREATE TYPE role_name AS ENUM ('ADMIN', 'STUDENT', 'PROFESSOR');
 CREATE TABLE roles
 (
     id   BIGSERIAL PRIMARY KEY,
-    name role_name
+    name role_name NOT NULL UNIQUE
 );
 
 CREATE TABLE groups
 (
     id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(10) UNIQUE
+    name VARCHAR(10) UNIQUE NOT NULL
 );
 
 CREATE TABLE users
 (
-    id         BIGSERIAL PRIMARY KEY,
-    firstname  VARCHAR(50),
-    lastname   VARCHAR(50),
-    login_name VARCHAR(20) NOT NULL UNIQUE,
-    password   VARCHAR     NOT NULL,
-    group_id   BIGINT      NOT NULL REFERENCES groups (id)
+    id        BIGSERIAL PRIMARY KEY,
+    firstname VARCHAR(50),
+    lastname  VARCHAR(50),
+    login     VARCHAR(20) NOT NULL UNIQUE,
+    password  VARCHAR     NOT NULL,
+    group_id  BIGINT      NOT NULL REFERENCES groups (id)
 );
 
 CREATE TABLE courses
@@ -32,14 +32,14 @@ CREATE TABLE courses
 CREATE TABLE rooms
 (
     id          BIGSERIAL PRIMARY KEY,
-    label       VARCHAR(10) UNIQUE,
+    label       VARCHAR(10) UNIQUE NOT NULL,
     description VARCHAR(100)
 );
 
 CREATE TABLE lessons_time
 (
     id          BIGSERIAL PRIMARY KEY,
-    lesson_time VARCHAR(15) NOT NULL
+    lesson_time VARCHAR(15) NOT NULL UNIQUE
 );
 
 CREATE TABLE schedules

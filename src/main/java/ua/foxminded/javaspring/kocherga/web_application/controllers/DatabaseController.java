@@ -11,7 +11,7 @@ import ua.foxminded.javaspring.kocherga.web_application.service.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/database")
+@RequestMapping("/entity")
 public class DatabaseController {
 
     private final UserService userService;
@@ -39,7 +39,7 @@ public class DatabaseController {
 
     @GetMapping
     public String index() {
-        return "db/database";
+        return "db/entity";
     }
 
     @GetMapping("/users")

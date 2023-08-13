@@ -8,17 +8,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
 @Controller
-public class authController {
+public class AuthController {
 
     private final UserService userService;
 
     @Autowired
-    public authController(UserService userService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
     }
 
@@ -36,12 +35,7 @@ public class authController {
 
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-        User existingUser = userService.findUserByLoginName(userDto.getLoginName());
-
-        if (existingUser != null && existingUser.getLoginName() != null && !existingUser.getLoginName().isEmpty()) {
-            result.rejectValue("loginName", "account.exists",
-                    "Account with this login already exists");
-        }
+        userService.checkIfUserExists(userDto, result);
 
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);

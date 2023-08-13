@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -12,4 +13,7 @@ import java.util.Set;
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Role getRoleById(long roleId);
+
+    Role getRoleByRoleName(RoleName roleName);
+
 }

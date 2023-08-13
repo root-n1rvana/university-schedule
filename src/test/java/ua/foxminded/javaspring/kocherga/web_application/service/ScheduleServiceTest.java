@@ -54,7 +54,7 @@ class ScheduleServiceTest {
         Assertions.assertThat(savedSchedule.getScheduleDate()).isEqualTo(retrievedSchedule.getScheduleDate());
 
         //TODO Assertion below not working, not sure if I need to resolve it
-//        Assertions.assertThat(savedSchedule.getLessonsList()).isEqualTo(retrievedSchedule.getLessonsList());
+//        Assertions.assertThat(savedSchedule.getLessons()).isEqualTo(retrievedSchedule.getLessons());
 
     }
 }

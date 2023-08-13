@@ -3,9 +3,9 @@ package ua.foxminded.javaspring.kocherga.web_application.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,11 +28,8 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    public Set<Role> getRolesByIds(List<Long> ids) {
-        Set<Role> setOfRoles = new HashSet<>();
-        for (Long id : ids) {
-            roleRepository.findById(id).ifPresent(setOfRoles::add);
-        }
-        return setOfRoles;
+    public Set<Role> getRolesByIds(Collection<Long> ids) {
+        List<Role> rolesList = roleRepository.findAllById(ids);
+        return new HashSet<>(rolesList);
     }
 }

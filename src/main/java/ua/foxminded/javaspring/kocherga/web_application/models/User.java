@@ -14,13 +14,13 @@ public class User {
     private long id;
 
     @Column(name = "firstname", length = 50)
-    private String userName;
+    private String firstname;
 
     @Column(name = "lastname",length = 50)
-    private String userLastname;
+    private String lastname;
 
-    @Column(name = "login_name", length = 20, nullable = false, unique = true)
-    private String loginName;
+    @Column(name = "login", length = 20, nullable = false, unique = true)
+    private String login;
 
     @Column(nullable = false)
     private String password;
@@ -29,12 +29,12 @@ public class User {
     @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(
-            name="users_roles",
-            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
-    private Set<Role> roles;
+//    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+//    @JoinTable(
+//            name="users_roles",
+//            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+//            inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
+//    private Set<Role> roles;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -46,11 +46,11 @@ public class User {
     public User() {
     }
 
-    public User(long id, String userName, String userLastname, String loginName, String password, Group ownerGroup) {
+    public User(long id, String firstname, String lastname, String login, String password, Group ownerGroup) {
         this.id = id;
-        this.userName = userName;
-        this.userLastname = userLastname;
-        this.loginName = loginName;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.login = login;
         this.password = password;
         this.ownerGroup = ownerGroup;
     }
@@ -63,28 +63,28 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstname(String userName) {
+        this.firstname = userName;
     }
 
-    public String getUserLastname() {
-        return userLastname;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setUserLastname(String userLastname) {
-        this.userLastname = userLastname;
+    public void setLastname(String userLastname) {
+        this.lastname = userLastname;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getLogin() {
+        return login;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setLogin(String loginName) {
+        this.login = loginName;
     }
 
     public String getPassword() {
@@ -103,13 +103,13 @@ public class User {
         this.ownerGroup = ownerGroup;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+//    public Set<Role> getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(Set<Role> roles) {
+//        this.roles = roles;
+//    }
 
     public Set<Course> getUserCourses() {
         return userCourses;
@@ -124,20 +124,20 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(userName, user.userName) && Objects.equals(userLastname, user.userLastname);
+        return id == user.id && Objects.equals(firstname, user.firstname) && Objects.equals(lastname, user.lastname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, userLastname);
+        return Objects.hash(id, firstname, lastname);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", userLastname='" + userLastname + '\'' +
+                ", userName='" + firstname + '\'' +
+                ", userLastname='" + lastname + '\'' +
                 ", ownerGroup=" + ownerGroup +
                 ", userCourses=" + userCourses +
                 '}';

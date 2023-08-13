@@ -35,54 +35,54 @@ INSERT INTO roles (name) VALUES ('ADMIN'), ('STUDENT'), ('PROFESSOR');
 
 INSERT INTO lessons_time (lesson_time) VALUES ('8:00-9:30'), ('9:45-11:15'), ('11:30-13:00'), ('13:30-15:00'), ('15:15-16:45');
 
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('admin', '', 'admin', '$2a$10$gqHrslMttQWSsDSVRTK1OehkkBiXsJ/a4z2OURU./dizwOQu5Lovu', 1);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Victoria', 'Nazarova', 'teach1', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Oksana', 'Boiko', 'teach2', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Diana', 'Belova', 'teach3', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Vitaliy', 'Rojkov', 'teach4', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Artur', 'Morozov', 'teach5', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('admin', '', 'admin', '$2a$10$gqHrslMttQWSsDSVRTK1OehkkBiXsJ/a4z2OURU./dizwOQu5Lovu', 1);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Victoria', 'Nazarova', 'teach1', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Oksana', 'Boiko', 'teach2', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Diana', 'Belova', 'teach3', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Vitaliy', 'Rojkov', 'teach4', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Artur', 'Morozov', 'teach5', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 2);
 
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Pavel', 'Ivanov', 'std1', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Gleb', 'Burov', 'std2', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Elena', 'Nosova', 'std3', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Boris', 'Pahomov', 'std4', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Maksim', 'Sidorov', 'std5', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Alisa', 'Mironova', 'std6', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Pavel', 'Ivanov', 'std1', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Gleb', 'Burov', 'std2', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Elena', 'Nosova', 'std3', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Boris', 'Pahomov', 'std4', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Maksim', 'Sidorov', 'std5', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Alisa', 'Mironova', 'std6', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 3);
 
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Nikolay', 'Ponomarev', 'std7', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Inna', 'Lapina', 'std8', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Roman', 'Smirnov', 'std9', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Ivan', 'Lazarev', 'std10', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Anna', 'Bezpalova', 'std11', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Igor', 'Sokolov', 'std12', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Nikolay', 'Ponomarev', 'std7', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Inna', 'Lapina', 'std8', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Roman', 'Smirnov', 'std9', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Ivan', 'Lazarev', 'std10', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Anna', 'Bezpalova', 'std11', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Igor', 'Sokolov', 'std12', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 4);
 
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Olga', 'Pavlova', 'std13', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Marina', 'Tihonova', 'std14', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Pavel', 'Bezpalov', 'std15', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Ivan', 'Lazarev', 'std16', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Igor', 'Pavlov', 'std17', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Boris', 'Sokolov', 'std18', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Olga', 'Pavlova', 'std13', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Marina', 'Tihonova', 'std14', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Pavel', 'Bezpalov', 'std15', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Ivan', 'Lazarev', 'std16', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Igor', 'Pavlov', 'std17', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Boris', 'Sokolov', 'std18', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 5);
 
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Olga', 'Pahomova', 'std19', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Marina', 'Lapina', 'std20', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Pavel', 'Tihonov', 'std21', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Ivan', 'Lazarev', 'std22', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Igor', 'Pavlov', 'std23', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Boris', 'Pahomov', 'std24', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Olga', 'Pahomova', 'std19', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Marina', 'Lapina', 'std20', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Pavel', 'Tihonov', 'std21', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Ivan', 'Lazarev', 'std22', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Igor', 'Pavlov', 'std23', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Boris', 'Pahomov', 'std24', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 6);
 
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Olga', 'Sokolova', 'std25', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Marina', 'Belova', 'std26', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Maksim', 'Fomin', 'std27', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Artur', 'Morozov', 'std28', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Eugenia', 'Rojkova', 'std29', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Elena', 'Mironova', 'std30', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Olga', 'Sokolova', 'std25', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Marina', 'Belova', 'std26', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Maksim', 'Fomin', 'std27', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Artur', 'Morozov', 'std28', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Eugenia', 'Rojkova', 'std29', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Elena', 'Mironova', 'std30', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 7);
 
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Inna', 'Ivanova', 'std31', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Anna', 'Lapina', 'std32', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Alisa', 'Popova', 'std33', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Irina', 'Burova', 'std34', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Diana', 'Sidorova', 'std35', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
-INSERT INTO users (firstname, lastname, login_name, password, group_id) VALUES ('Olga', 'Popova', 'std36', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Inna', 'Ivanova', 'std31', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Anna', 'Lapina', 'std32', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Alisa', 'Popova', 'std33', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Irina', 'Burova', 'std34', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Diana', 'Sidorova', 'std35', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
+INSERT INTO users (firstname, lastname, login, password, group_id) VALUES ('Olga', 'Popova', 'std36', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG', 8);
 
 INSERT INTO users_courses VALUES (8, 6);
 INSERT INTO users_courses VALUES (9, 5);
