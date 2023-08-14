@@ -29,12 +29,12 @@ public class User {
     @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
 
-//    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-//    @JoinTable(
-//            name="users_roles",
-//            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
-//            inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
-//    private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable(
+            name="users_roles",
+            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
+    private Set<Role> roles;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -103,13 +103,13 @@ public class User {
         this.ownerGroup = ownerGroup;
     }
 
-//    public Set<Role> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(Set<Role> roles) {
-//        this.roles = roles;
-//    }
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     public Set<Course> getUserCourses() {
         return userCourses;

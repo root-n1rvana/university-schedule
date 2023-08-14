@@ -70,7 +70,6 @@
   <table>
     <thead>
     <tr>
-      <th>ID</th>
       <th>Course</th>
       <th>Room</th>
       <th>Group</th>
@@ -81,7 +80,6 @@
     <tbody>
     <!-- Iterate over the list of lessons and display the data in rows -->
     <tr th:each="lesson : ${lessons}">
-      <td th:text="${lesson.id}"></td>
       <td th:text="${lesson.ownerCourse.courseName}"></td>
       <td th:text="${lesson.ownerRoom.roomLabel}"></td>
       <td th:text="${lesson.ownerGroup.name}"></td>

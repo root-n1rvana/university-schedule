@@ -70,7 +70,6 @@
   <table>
     <thead>
     <tr>
-      <th>ID</th>
       <th>Room label</th>
       <th>Description</th>
     </tr>
@@ -78,7 +77,6 @@
     <tbody>
     <!-- Iterate over the list of rooms and display the data in rows -->
     <tr th:each="room : ${rooms}">
-      <td th:text="${room.id}"></td>
       <td th:text="${room.roomLabel}"></td>
       <td th:text="${room.roomDescription}"></td>
     </tr>

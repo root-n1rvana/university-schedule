@@ -70,14 +70,12 @@
     <table>
         <thead>
         <tr>
-            <th>ID</th>
             <th>Lesson Time</th>
         </tr>
         </thead>
         <tbody>
         <!-- Iterate over the list of users and display the data in rows -->
         <tr th:each="lessonTime : ${lessonsTime}">
-            <td th:text="${lessonTime.id}"></td>
             <td th:text="${lessonTime.lessonTime}"></td>
         </tr>
         </tbody>

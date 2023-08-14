@@ -70,14 +70,12 @@
     <table>
         <thead>
         <tr>
-            <th>ID</th>
             <th>Date</th>
         </tr>
         </thead>
         <tbody>
         <!-- Iterate over the list of schedules and display the data in rows -->
         <tr th:each="schedule : ${schedules}">
-            <td th:text="${schedule.id}"></td>
             <td th:text="${schedule.scheduleDate}"></td>
         </tr>
         </tbody>

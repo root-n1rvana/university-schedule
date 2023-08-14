@@ -15,7 +15,6 @@ public class Role {
     private long id;
 
     @Enumerated(EnumType.STRING)
-    @Type(TypeConverter.class)
     @Column(name = "name", nullable = false, unique = true)
     private RoleName roleName;
 

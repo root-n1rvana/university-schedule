@@ -1,9 +1,11 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
@@ -12,7 +14,6 @@ import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,6 @@ public class UserController {
     private final GroupService groupService;
     private final RoleService roleService;
 
-    @Autowired
     public UserController(UserService userService, GroupService groupService, RoleService roleService) {
         this.userService = userService;
         this.groupService = groupService;
@@ -66,7 +66,7 @@ public class UserController {
         Set<Role> roles = roleService.getRolesByIds(List.of(roleIds));
 
         user.setOwnerGroup(group);
-//        user.setRoles(roles);
+        user.setRoles(roles);
 
         userService.save(user);
         return "redirect:/management";

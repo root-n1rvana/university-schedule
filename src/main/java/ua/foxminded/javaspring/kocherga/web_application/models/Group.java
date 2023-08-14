@@ -13,7 +13,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", length = 10, unique = true, nullable = false)
+    @Column(name = "name", length = 10, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)

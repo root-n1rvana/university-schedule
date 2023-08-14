@@ -1,6 +1,5 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,6 @@ public class DatabaseController {
     private final LessonTimeService lessonTimeService;
     private final ScheduleService scheduleService;
 
-    @Autowired
     public DatabaseController(UserService userService, CourseService courseService, RoomService roomService,
                               GroupService groupService, LessonService lessonService, RoleService roleService,
                               LessonTimeService lessonTimeService, ScheduleService scheduleService) {

@@ -70,14 +70,12 @@
     <table>
         <thead>
         <tr>
-            <th>ID</th>
             <th>Group Name</th>
         </tr>
         </thead>
         <tbody>
         <!-- Iterate over the list of groups and display the data in rows -->
         <tr th:each="group : ${groups}">
-            <td th:text="${group.id}"></td>
             <td th:text="${group.name}"></td>
         </tr>
         </tbody>

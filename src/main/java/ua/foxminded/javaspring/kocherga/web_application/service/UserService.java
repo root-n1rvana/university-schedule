@@ -1,12 +1,10 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
@@ -16,7 +14,6 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepositor
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -26,7 +23,6 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final GroupRepository groupRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository,
@@ -58,7 +54,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
 //        Role role = roleRepository.getRoleByRoleName(RoleName.STUDENT);
-//        user.setRoles(new HashSet<>(Collections.singletonList(role)));
+        user.setRoles(new HashSet<>(Collections.singletonList(role)));
         user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - 'No Group'
         userRepository.save(user);
     }
