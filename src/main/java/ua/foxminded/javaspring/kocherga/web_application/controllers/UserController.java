@@ -2,10 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
@@ -15,9 +12,11 @@ import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -30,7 +29,7 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/user/{groupId}")
+    @GetMapping("/{groupId}")
     public String getUsersByGroupId(@PathVariable int groupId, Model model) {
         List<User> users = userService.getUsersByGroupId(groupId);
         model.addAttribute("users", users);
@@ -42,7 +41,7 @@ public class UserController {
         return "management";
     }
 
-    @PostMapping("/management")
+    @GetMapping("/find-by-login")
     public String findUser(@RequestParam("loginName") String loginName, Model model) {
         User user = userService.findUserByLoginName(loginName);
         List<Group> allGroups = groupService.getAllGroups();
@@ -57,18 +56,17 @@ public class UserController {
         return "management";
     }
 
-    @PostMapping("/user")
+    @PostMapping
     public String updateUser(@RequestParam("userId") long userId, @RequestParam("group") long groupId,
-                             @RequestParam(value = "roles", required = false) Long[] roleIds) {
-
+                             @RequestParam(value = "roles", required = false) List<Long> roleIds) {
         User user = userService.getUserByUserId(userId);
         Group group = groupService.getGroupById(groupId);
-        Set<Role> roles = roleService.getRolesByIds(List.of(roleIds));
-
+        Optional.ofNullable(roleIds)
+                .map(roleService::getRolesByIds)
+                .ifPresent(user::setRoles);
         user.setOwnerGroup(group);
-        user.setRoles(roles);
 
         userService.save(user);
-        return "redirect:/management";
+        return "redirect:/user/management";
     }
 }

@@ -30,19 +30,19 @@ class UserControllerIntegrationTest {
                 .andExpect(model().attribute("users", hasSize(3)))
                 .andExpect(model().attribute("users", hasItem(
                         allOf(
-                                hasProperty("userName", is("admin"))
+                                hasProperty("firstname", is("admin"))
                         )
                 )))
                 .andExpect(model().attribute("users", hasItem(
                         allOf(
-                                hasProperty("userName", is("alex")),
-                                hasProperty("userLastname", is("Collier"))
+                                hasProperty("firstname", is("alex")),
+                                hasProperty("lastname", is("Collier"))
                         )
                 )))
                 .andExpect(model().attribute("users", hasItem(
                         allOf(
-                                hasProperty("userName", is("John")),
-                                hasProperty("userLastname", is("Collier"))
+                                hasProperty("firstname", is("John")),
+                                hasProperty("lastname", is("Collier"))
                         )
                 )));
     }

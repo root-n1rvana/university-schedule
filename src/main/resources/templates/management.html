@@ -91,7 +91,7 @@
 <!-- Main content -->
 <div class="container">
     <h2 class="text-center">Enter User login name </h2>
-    <form th:action="@{/management}" method="post">
+    <form th:action="@{/user/find-by-login}" method="get">
         <label for="loginName">User Login Name:</label>
         <input type="text" id="loginName" name="loginName" required />
         <button type="submit" class="btn btn-primary">Find User</button>

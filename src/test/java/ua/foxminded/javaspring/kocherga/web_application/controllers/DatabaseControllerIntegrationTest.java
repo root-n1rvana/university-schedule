@@ -33,8 +33,8 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(model().attribute("users", hasItem(
                         allOf(
                                 hasProperty("id", is(6L)),
-                                hasProperty("userName", is("Artur")),
-                                hasProperty("userLastname", is("Morozov")),
+                                hasProperty("firstname", is("Artur")),
+                                hasProperty("lastname", is("Morozov")),
                                 hasProperty("ownerGroup", hasProperty("name", is("professor"))),
                                 hasProperty("roles", hasItem(
                                         allOf(hasProperty("roleName", is(RoleName.PROFESSOR))
@@ -44,8 +44,8 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(model().attribute("users", hasItem(
                         allOf(
                                 hasProperty("id", is(7L)),
-                                hasProperty("userName", is("Pavel")),
-                                hasProperty("userLastname", is("Ivanov")),
+                                hasProperty("firstname", is("Pavel")),
+                                hasProperty("lastname", is("Ivanov")),
                                 hasProperty("ownerGroup", hasProperty("name", is("GR-1"))),
                                 hasProperty("roles", hasItem(
                                         allOf(hasProperty("roleName", is(RoleName.STUDENT))
@@ -78,7 +78,7 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/rooms"))
                 .andExpect(model().attributeExists("rooms"))
-                .andExpect(model().attribute("rooms", hasSize(10)))
+                .andExpect(model().attribute("rooms", hasSize(11)))
                 .andExpect(model().attribute("rooms", hasItem(
                         allOf(
                                 hasProperty("id", is(10L)),
@@ -164,7 +164,7 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/lessons"))
                 .andExpect(model().attributeExists("lessons"))
-                .andExpect(model().attribute("lessons", hasSize(30)))
+                .andExpect(model().attribute("lessons", hasSize(31)))
                 .andExpect(model().attribute("lessons", hasItem(
                         allOf(
                                 hasProperty("id", is(15L)),
