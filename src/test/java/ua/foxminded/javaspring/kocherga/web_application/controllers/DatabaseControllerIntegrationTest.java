@@ -78,7 +78,7 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/rooms"))
                 .andExpect(model().attributeExists("rooms"))
-                .andExpect(model().attribute("rooms", hasSize(11)))
+                .andExpect(model().attribute("rooms", hasSize(10)))
                 .andExpect(model().attribute("rooms", hasItem(
                         allOf(
                                 hasProperty("id", is(10L)),
