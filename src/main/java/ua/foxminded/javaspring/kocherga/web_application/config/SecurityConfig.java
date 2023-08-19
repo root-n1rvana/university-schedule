@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register/**")
                         .permitAll()
+                        .requestMatchers("/user/management/**").hasAuthority("ADMIN")
                         .anyRequest()
                         .authenticated()
                 ).formLogin(

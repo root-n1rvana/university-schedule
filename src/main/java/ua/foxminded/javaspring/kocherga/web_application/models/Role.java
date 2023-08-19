@@ -1,7 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
 
 import java.util.Objects;
 import java.util.Set;

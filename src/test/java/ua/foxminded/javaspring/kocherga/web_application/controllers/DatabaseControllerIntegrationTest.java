@@ -6,6 +6,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +23,14 @@ public class DatabaseControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @WithMockUser("spring")
+    @Test
+    public void testEntityPage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/entity"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("db/entity"));
+    }
 
     @WithMockUser("spring")
     @Test

@@ -13,7 +13,6 @@ import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/user")

@@ -73,16 +73,5 @@
   <a sec:authorize="hasAuthority('ADMIN')" href="user/management" class="btn">University Management</a>
   <a href="/entity" class="btn">Database</a>
 </div>
-
-  <span>DEBUG INFO</span>
-  <br /><br />
-
-  <div sec:authorize="hasAuthority('ADMIN')">Text visible to admin.</div>
-  <div sec:authorize="hasAuthority('STUDENT')">Text visible to student.</div>
-  <div sec:authorize="hasAuthority('PROFESSOR')">Text visible to professor.</div>
-
-  <span>Logged user Roles: </span>
-<!--  <span sec:authentication="principal.authorities"></span>-->
-
 </body>
 </html>
