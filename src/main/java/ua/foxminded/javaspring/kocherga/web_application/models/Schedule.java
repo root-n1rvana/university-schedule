@@ -71,7 +71,6 @@ public class Schedule {
         return "Schedule{" +
                 "id=" + id +
                 ", scheduleDate=" + scheduleDate +
-//                ", lessonsList=" + lessonsList +
                 '}';
     }
 }

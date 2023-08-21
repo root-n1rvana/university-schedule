@@ -13,14 +13,14 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", length = 10, unique = true, nullable = false)
+    @Column(name = "name", length = 10, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
-    private Set<User> usersList;
+    private Set<User> users;
 
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
-    private Set<Lesson> lessonsList;
+    private Set<Lesson> lessons;
 
     public Group() {
     }
@@ -46,20 +46,20 @@ public class Group {
         this.name = name;
     }
 
-    public Set<User> getUsersList() {
-        return usersList;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUsersList(Set<User> usersList) {
-        this.usersList = usersList;
+    public void setUsers(Set<User> usersList) {
+        this.users = usersList;
     }
 
-    public Set<Lesson> getLessonsList() {
-        return lessonsList;
+    public Set<Lesson> getLessons() {
+        return lessons;
     }
 
-    public void setLessonsList(Set<Lesson> lessonsList) {
-        this.lessonsList = lessonsList;
+    public void setLessons(Set<Lesson> lessonsList) {
+        this.lessons = lessonsList;
     }
 
     @Override
@@ -80,8 +80,6 @@ public class Group {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-//                ", usersList=" + usersList +
-//                ", lessonsList=" + lessonsList +
                 '}';
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:text-align="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Home Page</title>
@@ -60,9 +60,10 @@
 <!-- Menu bar -->
 <div class="menu">
   <a href="/" class="menu-item" style="color: white">Home</a>
-  <div class="menu-item">Hi</div>
-  <a href="/user" class="menu-item" style="color: white">User</a>
-  <a href="#" class="logout-btn">Logout</a>
+  <div style="margin-left: auto;">
+    <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
+    <a href="/logout" class="logout-btn">Logout</a>
+  </div>
 </div>
 
 <!-- Main content -->
@@ -119,9 +120,6 @@
       <option value="30">30</option>
       <option value="31">31</option>
     </select>
-
-    <input type="hidden" name="scheduleId" value="1">
-    <input type="hidden" name="groupId" value="1">
 
     <button type="submit" name="scheduleForDay" class="btn btn-primary">Schedule for Day</button>
 

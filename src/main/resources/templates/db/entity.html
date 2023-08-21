@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Home Page</title>
@@ -60,21 +60,22 @@
 <!-- Menu bar -->
 <div class="menu">
   <a href="/" class="menu-item" style="color: white">Home</a>
-  <div class="menu-item">Hi</div>
-  <a href="#" class="menu-item" style="color: white">User</a>
-  <a href="#" class="logout-btn">Logout</a>
+  <div style="margin-left: auto;">
+    <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
+    <a href="/logout" class="logout-btn">Logout</a>
+  </div>
 </div>
 
 <!-- Main content -->
 <div class="content">
-  <a href="/database/users" class="btn">Users</a>
-  <a href="/database/courses" class="btn">Courses</a>
-  <a href="/database/rooms" class="btn">Rooms</a>
-  <a href="/database/groups" class="btn">Groups</a>
-  <a href="/database/lessons" class="btn">Lessons</a>
-  <a href="/database/roles" class="btn">Roles</a>
-  <a href="/database/lessonsTime" class="btn">Lessons Time</a>
-  <a href="/database/schedules" class="btn">Schedules</a>
+  <a href="/entity/users" class="btn">Users</a>
+  <a href="/entity/courses" class="btn">Courses</a>
+  <a href="/entity/rooms" class="btn">Rooms</a>
+  <a href="/entity/groups" class="btn">Groups</a>
+  <a href="/entity/lessons" class="btn">Lessons</a>
+  <a href="/entity/roles" class="btn">Roles</a>
+  <a href="/entity/lessonsTime" class="btn">Lessons Time</a>
+  <a href="/entity/schedules" class="btn">Schedules</a>
 </div>
 </body>
 </html>

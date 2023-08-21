@@ -17,8 +17,8 @@ public class Role {
     @Column(name = "name", nullable = false, unique = true)
     private RoleName roleName;
 
-    @OneToMany(mappedBy = "ownerRole")
-    private Set<User> usersList;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
     public Role() {
     }
@@ -44,12 +44,12 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public Set<User> getUsersList() {
-        return usersList;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUsersList(Set<User> usersList) {
-        this.usersList = usersList;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     @Override

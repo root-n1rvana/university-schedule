@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lessons Time Page</title>
+    <title>Schedule Page</title>
     <style>
         /* Style for menu bar */
         .menu {
@@ -58,26 +58,25 @@
 <!-- Menu bar -->
 <div class="menu">
     <a href="/" class="menu-item" style="color: white">Home</a>
-    <div class="menu-item">Hi</div>
-    <a href="#" class="menu-item" style="color: white">User</a>
-    <a href="#" class="logout-btn">Logout</a>
+    <div style="margin-left: auto;">
+        <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
 </div>
 
 <!-- Main content -->
 <div class="content">
-    <h2>Lessons Time</h2>
+    <h2>Schedules</h2>
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Lesson Time</th>
+            <th>Date</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Iterate over the list of users and display the data in rows -->
-        <tr th:each="lessonTime : ${lessonsTime}">
-            <td th:text="${lessonTime.id}"></td>
-            <td th:text="${lessonTime.lessonTime}"></td>
+        <!-- Iterate over the list of schedules and display the data in rows -->
+        <tr th:each="schedule : ${schedules}">
+            <td th:text="${schedule.scheduleDate}"></td>
         </tr>
         </tbody>
     </table>

@@ -42,4 +42,4 @@ deploy:
     - chmod 400 "$SSH_KEY"
   script:
     - scp -o StrictHostKeyChecking=no -i "$SSH_KEY" $CI_PROJECT_DIR/docker-compose.yml ec2-user@15.236.186.96:/home/ec2-user/docker-compose.yml
-    - ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@15.236.186.96 "docker ps -aq | xargs docker stop | xargs docker rm && docker-compose up -d"
+    - ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@15.236.186.96 "docker ps -aq | xargs docker stop | xargs docker rm && docker images -aq | xargs docker rmi -f && docker-compose up -d"

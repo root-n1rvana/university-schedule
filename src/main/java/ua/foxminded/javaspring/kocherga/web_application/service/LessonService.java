@@ -1,6 +1,5 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
 import ua.foxminded.javaspring.kocherga.web_application.repository.LessonRepository;
@@ -12,7 +11,6 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
 
-    @Autowired
     public LessonService(LessonRepository lessonRepository) {
         this.lessonRepository = lessonRepository;
     }

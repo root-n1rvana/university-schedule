@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" >
 <head>
   <meta charset="UTF-8">
   <title>Home Page</title>
@@ -60,17 +60,18 @@
 <!-- Menu bar -->
 <div class="menu">
   <a href="/" class="menu-item" style="color: white">Home</a>
-  <div class="menu-item">Hi</div>
-  <a href="/user" class="menu-item" style="color: white">User</a>
-  <a href="#" class="logout-btn">Logout</a>
+  <div style="margin-left: auto;">
+    <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
+    <a href="/logout" class="logout-btn">Logout</a>
+  </div>
 </div>
 
 <!-- Main content -->
 <div class="content">
   <h1 style="text-align: center;">Welcome to our University</h1>
   <a href="/schedule" class="btn">Schedule</a>
-  <a href="#" class="btn">University Management</a>
-  <a href="/database" class="btn">Database</a>
+  <a sec:authorize="hasAuthority('ADMIN')" href="user/management" class="btn">University Management</a>
+  <a href="/entity" class="btn">Database</a>
 </div>
 </body>
 </html>

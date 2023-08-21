@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Roles Page</title>
+    <title>Groups Page</title>
     <style>
         /* Style for menu bar */
         .menu {
@@ -58,26 +58,25 @@
 <!-- Menu bar -->
 <div class="menu">
     <a href="/" class="menu-item" style="color: white">Home</a>
-    <div class="menu-item">Hi</div>
-    <a href="#" class="menu-item" style="color: white">User</a>
-    <a href="#" class="logout-btn">Logout</a>
+    <div style="margin-left: auto;">
+        <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
 </div>
 
 <!-- Main content -->
 <div class="content">
-    <h2>Roles</h2>
+    <h2>Groups</h2>
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Role Name</th>
+            <th>Group Name</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Iterate over the list of roles and display the data in rows -->
-        <tr th:each="role : ${roles}">
-            <td th:text="${role.id}"></td>
-            <td th:text="${role.roleName}"></td>
+        <!-- Iterate over the list of groups and display the data in rows -->
+        <tr th:each="group : ${groups}">
+            <td th:text="${group.name}"></td>
         </tr>
         </tbody>
     </table>
