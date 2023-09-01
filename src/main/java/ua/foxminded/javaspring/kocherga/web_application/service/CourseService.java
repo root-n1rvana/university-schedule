@@ -1,5 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
@@ -21,5 +22,23 @@ public class CourseService {
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
+    }
+
+    public Course findByCourseName(String courseName) {
+        return courseRepository.getCourseByCourseName(courseName);
+    }
+
+    @Transactional
+    public void save(Course course) {
+        courseRepository.save(course);
+    }
+
+    public boolean existsByCourseName(String courseName) {
+        return courseRepository.existsByCourseName(courseName);
+    }
+
+    @Transactional
+    public void deleteByCourseName(String courseName) {
+        courseRepository.deleteByCourseName(courseName);
     }
 }

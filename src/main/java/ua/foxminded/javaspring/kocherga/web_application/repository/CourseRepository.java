@@ -9,4 +9,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Course getCourseById(long courseId);
 
+    Course getCourseByCourseName(String courseName);
+
+    boolean existsByCourseName(String courseName);
+
+    void deleteByCourseName(String courseName);
 }
