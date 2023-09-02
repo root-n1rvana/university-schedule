@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping("/management")
     public String showManagementPage() {
-        return "user-management";
+        return "management/user-management";
     }
 
     @GetMapping("/find-by-login")
@@ -52,7 +52,7 @@ public class UserController {
         model.addAttribute("allRoles", allRoles);
         model.addAttribute("roleIds", roleIds);
 
-        return "user-management";
+        return "management/user-management";
     }
 
     @PostMapping

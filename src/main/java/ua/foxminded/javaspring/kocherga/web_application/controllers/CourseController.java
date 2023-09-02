@@ -1,5 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,16 +27,18 @@ public class CourseController {
     public String showCourseManagementPage(Model model) {
         List<Course> allCourses = courseService.getAllCourses();
         model.addAttribute("allCourses", allCourses);
-        return "course-management";
+        return "management/course-management";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/find-by-name")
     public String findCourse(@RequestParam("courseName") String courseName, Model model) {
         Course course = courseService.findByCourseName(courseName);
         model.addAttribute("course", course);
-        return "course-management"; //TODO List<Course> allCourses disappearing after I press Find ...
+        return "management/course-management"; //TODO List<Course> allCourses disappearing after I press Find ...
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public String updateCourse(@RequestParam("courseId") long courseId, @RequestParam("courseName") String courseName,
                                @RequestParam("courseDescription") String courseDescription) {
@@ -46,6 +49,7 @@ public class CourseController {
         return "redirect:/course/management";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PROFESSOR')")
     @PostMapping("/addCourse")
     public String addCourse(@RequestParam String newCourseName, @RequestParam String newCourseDescription, RedirectAttributes redirectAttributes) {
         if (courseService.existsByCourseName(newCourseName)) {
@@ -60,6 +64,7 @@ public class CourseController {
         return "redirect:/course/management";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/deleteCourse")
     public String deleteCourse(@RequestParam String courseNameToDelete, RedirectAttributes redirectAttributes) {
         if (courseService.existsByCourseName(courseNameToDelete)) {

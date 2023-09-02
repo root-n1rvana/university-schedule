@@ -167,7 +167,7 @@
     </div>
 </div>
 
-<div sec:authorize="hasAuthority('ADMIN')" class="column">
+<div sec:authorize="hasAnyAuthority('ADMIN', 'PROFESSOR')" class="column">
     <div class="container">
         <h2 class="text-center">Add New Course</h2>
 
@@ -199,7 +199,6 @@
         <div th:if="${deletionSucceeded}" class="alert alert-info">
             <p th:text="${deletionSucceeded}"></p>
         </div>
-
         <form th:action="@{/course/deleteCourse}" method="post">
             <label for="courseNameToDelete">Course Name to Delete:</label>
             <input type="text" id="courseNameToDelete" name="courseNameToDelete" required/>
@@ -207,7 +206,5 @@
         </form>
     </div>
 </div>
-
-
 </body>
 </html>

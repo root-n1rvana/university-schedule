@@ -34,7 +34,7 @@ class UserControllerIntegrationTest {
     public void testManagementPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/management"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("management"));
+                .andExpect(MockMvcResultMatchers.view().name("management/user-management"));
     }
 
     @WithMockUser(authorities = "STUDENT")
@@ -52,7 +52,7 @@ class UserControllerIntegrationTest {
         mockMvc.perform(get("/user/find-by-login")
                         .param("loginName", loginName))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("management"))
+                .andExpect(MockMvcResultMatchers.view().name("management/user-management"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("user"))
                 .andExpect(MockMvcResultMatchers.model().attribute("allGroups", Matchers.any(List.class)))
                 .andExpect(MockMvcResultMatchers.model().attribute("allRoles", Matchers.any(List.class)))
