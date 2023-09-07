@@ -34,8 +34,10 @@ public class CourseController {
     @GetMapping("/find-by-name")
     public String findCourse(@RequestParam("courseName") String courseName, Model model) {
         Course course = courseService.findByCourseName(courseName);
+        List<Course> allCourses = courseService.getAllCourses();
+        model.addAttribute("allCourses", allCourses);
         model.addAttribute("course", course);
-        return "management/course-management"; //TODO List<Course> allCourses disappearing after I press Find ...
+        return "management/course-management";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

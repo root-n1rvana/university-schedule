@@ -1,5 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
@@ -21,5 +22,10 @@ public class GroupService {
 
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
+    }
+
+    @Transactional
+    public void save(Group group) {
+        groupRepository.save(group);
     }
 }
