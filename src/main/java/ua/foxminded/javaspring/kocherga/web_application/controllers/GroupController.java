@@ -22,22 +22,13 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-//    @GetMapping("/management")
-//    public String showManagementPage(Model model) {
-//        List<Group> allGroups = groupService.getAllGroups();
-//        model.addAttribute("groups", allGroups);
-//        return "management/group-management";
-//    }
-
     @GetMapping("/management")
     public String showManagementPage(Model model) {
         List<Group> groups = groupService.getAllGroups();
-        // Sort the groups by ID
         groups.sort(Comparator.comparing(Group::getId));
         model.addAttribute("groups", groups);
         return "management/group-management";
     }
-
 
     @PostMapping("/update")
     public String updateGroupName(@RequestParam("groupId") long groupId, @RequestParam("newName") String newName) {
