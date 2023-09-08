@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
@@ -74,5 +75,9 @@ public class UserService {
         if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
             result.rejectValue("loginName", "account.exists", "Account with this login already exists");
         }
+    }
+
+    public List<User> getUsersByRole(RoleName roleName) {
+        return userRepository.findByRoles(roleName);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 
@@ -35,6 +36,24 @@ public class GroupController {
         Group group = groupService.getGroupById(groupId);
         group.setName(newName);
         groupService.save(group);
+        return "redirect:/group/management";
+    }
+
+    @PostMapping("/addGroup")
+    public String addGroup(@RequestParam String newGroupName, RedirectAttributes redirectAttributes) {
+        if (groupService.existsByGroupName(newGroupName)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Group with the same name already exists.");
+        } else {
+            Group newGroup = new Group();
+            newGroup.setName(newGroupName);
+            groupService.save(newGroup);
+        }
+        return "redirect:/group/management";
+    }
+
+    @PostMapping("/delete")
+    public String deleteGroup(@RequestParam("groupId") long groupId) {
+        groupService.deleteGroupById(groupId);
         return "redirect:/group/management";
     }
 }

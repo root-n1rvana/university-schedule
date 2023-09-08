@@ -28,4 +28,13 @@ public class GroupService {
     public void save(Group group) {
         groupRepository.save(group);
     }
+
+    @Transactional
+    public void deleteGroupById(long groupId) {
+        groupRepository.deleteById(groupId);
+    }
+
+    public boolean existsByGroupName(String groupName) {
+        return groupRepository.existsByName(groupName);
+    }
 }

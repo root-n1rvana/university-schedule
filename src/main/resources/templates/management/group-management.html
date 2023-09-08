@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>Group Management</title>
     <style>
-        /* Style for menu bar */
         .menu {
             display: flex;
             align-items: center;
@@ -20,13 +19,11 @@
             font-weight: bold;
         }
 
-        /* Style for menu items */
         .menu-item {
             padding: 0 20px;
             cursor: pointer;
         }
 
-        /* Style for Logout button */
         .logout-btn {
             margin-left: auto;
             margin-right: 20px;
@@ -38,7 +35,6 @@
             font-weight: bold;
         }
 
-        /* Modal container */
         .modal {
             display: none;
             position: fixed;
@@ -51,7 +47,6 @@
             background-color: rgba(0, 0, 0, 0.4);
         }
 
-        /* Modal content */
         .modal-content {
             background-color: #fff;
             margin: 15% auto;
@@ -61,7 +56,6 @@
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         }
 
-        /* Close button */
         .close {
             float: right;
             cursor: pointer;
@@ -82,6 +76,18 @@
             background-color: #e1e1e0;
         }
 
+        .alert {
+            border-radius: 4px;
+            max-width: 300px;
+            margin-bottom: 15px;
+        }
+
+        .alert-danger {
+            color: #ffffff;
+            background-color: #da1028;
+            border-color: #da1028
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
@@ -99,12 +105,31 @@
 
 <!-- Main content -->
 <h2>Group Management</h2>
-
+<div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    <span>Add new</span>
+    <i class="fa-regular fa-square-plus" onclick="openModal(this)"></i>
+    <div class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal(this)">×</span>
+            <h3>Add new Group to database</h3>
+            <form th:action="@{addGroup}" method="post">
+                <label for="newGroupName">Name:</label>
+                <input type="text" id="newGroupName" name="newGroupName" required/>
+                <button type="submit" class="btn btn-primary">Add Group</button>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
 <table>
     <thead>
     <tr>
         <th>Group Name</th>
-        <th>Action</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -122,6 +147,21 @@
                         <input type="text" id="newName" name="newName" required/>
                         <button type="submit">Update</button>
                     </form>
+                </div>
+            </div>
+        </td>
+        <td style="text-align: center">
+            <i class="fa-regular fa-trash-can" onclick="openModal(this)"></i>
+            <div class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal(this)">×</span>
+                    <h3>Deletion group "<span th:text="${group.name}"></span>"</h3>
+                    <p>Are you sure you want to delete this group?</p>
+                    <form th:action="@{/group/delete}" method="post" style="display: inline;">
+                        <input type="hidden" name="groupId" th:value="${group.id}"/>
+                        <button type="submit" class="yes-button">Yes</button>
+                    </form>
+                    <button type="button" class="no-button" onclick="closeModal(this)">No</button>
                 </div>
             </div>
         </td>
