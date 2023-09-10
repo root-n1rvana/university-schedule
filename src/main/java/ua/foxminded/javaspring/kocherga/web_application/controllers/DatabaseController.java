@@ -44,6 +44,7 @@ public class DatabaseController {
     public String getUsers(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
+        userService.test();
         return "db/users";
     }
 

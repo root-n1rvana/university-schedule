@@ -47,7 +47,7 @@ public class DatabaseControllerIntegrationTest {
                                 hasProperty("lastname", is("Morozov")),
                                 hasProperty("ownerGroup", hasProperty("name", is("professor"))),
                                 hasProperty("roles", hasItem(
-                                        allOf(hasProperty("roleName", is(RoleName.PROFESSOR))
+                                        allOf(hasProperty("roleName", is(RoleName.ROLE_PROFESSOR))
                                         )))
                         )
                 )))
@@ -58,7 +58,7 @@ public class DatabaseControllerIntegrationTest {
                                 hasProperty("lastname", is("Ivanov")),
                                 hasProperty("ownerGroup", hasProperty("name", is("GR-1"))),
                                 hasProperty("roles", hasItem(
-                                        allOf(hasProperty("roleName", is(RoleName.STUDENT))
+                                        allOf(hasProperty("roleName", is(RoleName.ROLE_STUDENT))
                                         )))
                         )
                 )));
@@ -125,7 +125,7 @@ public class DatabaseControllerIntegrationTest {
                 .andExpect(model().attribute("roles", hasItem(
                         allOf(
                                 hasProperty("id", is(3L)),
-                                hasProperty("roleName", is(RoleName.PROFESSOR))
+                                hasProperty("roleName", is(RoleName.ROLE_PROFESSOR))
                         )
                 )));
     }

@@ -30,7 +30,7 @@ public class CourseController {
         return "management/course-management";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/find-by-name")
     public String findCourse(@RequestParam("courseName") String courseName, Model model) {
         Course course = courseService.findByCourseName(courseName);
@@ -40,7 +40,7 @@ public class CourseController {
         return "management/course-management";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public String updateCourse(@RequestParam("courseId") long courseId, @RequestParam("courseName") String courseName,
                                @RequestParam("courseDescription") String courseDescription) {
@@ -51,7 +51,7 @@ public class CourseController {
         return "redirect:/course/management";
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasAnyRoles('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addCourse")
     public String addCourse(@RequestParam String newCourseName, @RequestParam String newCourseDescription, RedirectAttributes redirectAttributes) {
         if (courseService.existsByCourseName(newCourseName)) {
@@ -66,7 +66,7 @@ public class CourseController {
         return "redirect:/course/management";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/deleteCourse")
     public String deleteCourse(@RequestParam String courseNameToDelete, RedirectAttributes redirectAttributes) {
         if (courseService.existsByCourseName(courseNameToDelete)) {

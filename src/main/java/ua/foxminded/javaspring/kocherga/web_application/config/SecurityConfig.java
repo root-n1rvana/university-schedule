@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.kocherga.web_application.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,10 +20,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register/**")
                         .permitAll()
-                        .requestMatchers("/user/management/**").hasAuthority("ADMIN")
-                        .requestMatchers("/find-by-name").hasAuthority("ADMIN")
-                        .requestMatchers("/course/addCourse").hasAnyAuthority("ADMIN", "PROFESSOR")
-                        .requestMatchers("/course/deleteCourse").hasAuthority("ADMIN")
+                        .requestMatchers("/user/management/**").hasRole("ADMIN")
+                        .requestMatchers("/find-by-name").hasRole("ADMIN")
+                        .requestMatchers("/course/addCourse").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/course/deleteCourse").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()
                 ).formLogin(

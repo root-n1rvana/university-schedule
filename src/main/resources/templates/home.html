@@ -70,7 +70,7 @@
 <div class="content">
     <h1 style="text-align: center;">Welcome to our University</h1>
     <a href="/schedule" class="btn">Schedule</a>
-    <a sec:authorize="hasAuthority('ADMIN')" href="/entity" class="btn">Database</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" href="/entity" class="btn">Database</a>
     <a href="user/management" class="btn">User Management</a>
     <a href="course/management" class="btn">Course Management</a>
     <a href="group/management" class="btn">Group Management</a>

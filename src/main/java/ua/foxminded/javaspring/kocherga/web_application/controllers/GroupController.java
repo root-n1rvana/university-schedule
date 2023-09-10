@@ -12,6 +12,7 @@ import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/group")
@@ -25,8 +26,10 @@ public class GroupController {
 
     @GetMapping("/management")
     public String showManagementPage(Model model) {
-        List<Group> groups = groupService.getAllGroups();
-        groups.sort(Comparator.comparing(Group::getId));
+        List<Group> groups = groupService.getAllGroups().stream()
+                .sorted(Comparator.comparing(Group::getId))
+                .collect(Collectors.toList());
+//        groups.sort(Comparator.comparing(Group::getId));
         model.addAttribute("groups", groups);
         return "management/group-management";
     }

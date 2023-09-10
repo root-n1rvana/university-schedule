@@ -29,7 +29,7 @@ class UserControllerIntegrationTest {
 
     int groupId = 1;
 
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     @Test
     public void testManagementPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/management"))
@@ -37,7 +37,7 @@ class UserControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.view().name("management/user-management"));
     }
 
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     @Test
     public void testShowManagementPageUnauthorized() throws Exception {
         mockMvc.perform(get("/user/management"))
@@ -59,7 +59,7 @@ class UserControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.model().attribute("roleIds", Matchers.any(List.class)));
     }
 
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     @Test
     public void testUpdateUser() throws Exception {
         long userId = 2L;

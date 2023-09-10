@@ -135,7 +135,7 @@
     </div>
 </div>
 
-<div sec:authorize="hasAuthority('ADMIN')" class="column">
+<div sec:authorize="hasRole('ROLE_ADMIN')" class="column">
     <div class="container">
         <h2 class="text-center">Edit Course</h2>
         <form th:action="@{/course/find-by-name}" method="get">
@@ -167,7 +167,7 @@
     </div>
 </div>
 
-<div sec:authorize="hasAnyAuthority('ADMIN', 'PROFESSOR')" class="column">
+<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="column">
     <div class="container">
         <h2 class="text-center">Add New Course</h2>
 
@@ -190,7 +190,7 @@
     </div>
 </div>
 
-<div sec:authorize="hasAuthority('ADMIN')" class="column">
+<div sec:authorize="hasRole('ROLE_ADMIN')" class="column">
     <div class="container">
         <h2 class="text-center">Delete Course</h2>
         <div th:if="${deletionError}" class="alert alert-danger">

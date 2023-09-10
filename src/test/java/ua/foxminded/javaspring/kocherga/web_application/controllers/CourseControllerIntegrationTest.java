@@ -43,7 +43,7 @@ class CourseControllerIntegrationTest {
                 )));
     }
 
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     @Test
     public void testFindCourse_AdminAccess() throws Exception {
         String courseName = "Math";
@@ -54,7 +54,7 @@ class CourseControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("course"));
     }
 
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     @Test
     public void testFindCourse_StudentAccess() throws Exception {
         String courseName = "Math";
@@ -65,7 +65,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testUpdateCourse() throws Exception {
         // Create a test course
         Course testCourse = new Course();
@@ -95,7 +95,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "PROFESSOR")
+    @WithMockUser(roles = "PROFESSOR")
     public void testAddCourse_AdminOrProfessorAccess() throws Exception {
         String newCourseName = "New Course";
         String newCourseDescription = "New Course Description";
@@ -117,7 +117,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     public void testAddCourse_StudentAccess() throws Exception {
         String newCourseName = "New Course";
         String newCourseDescription = "New Course Description";
@@ -129,7 +129,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testDeleteCourse_AdminAccess() throws Exception {
         String courseNameToDelete = "CourseToDelete";
         String courseDescriptionToDelete = "CourseDescriptionToDelete";
@@ -152,7 +152,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testDeleteCourse_CourseNotFound() throws Exception {
         String courseNameToDelete = "NonExistentCourse";
 
@@ -165,7 +165,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     public void testDeleteCourse_StudentAccess() throws Exception {
         String courseNameToDelete = "CourseToDelete";
 
