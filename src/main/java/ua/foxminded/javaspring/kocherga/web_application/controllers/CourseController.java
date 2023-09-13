@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.Course;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.List;
 @RequestMapping("/course")
 public class CourseController {
 
+    private final static String COURSE_MANAGEMENT_PAGE = "management/course-management";
+    private final static String REDIRECT_TO_COURSE_MANAGEMENT_PAGE = "redirect:/course/management";
     private final CourseService courseService;
 
     public CourseController(CourseService courseService) {
@@ -25,56 +28,35 @@ public class CourseController {
 
     @GetMapping("/management")
     public String showCourseManagementPage(Model model) {
-        List<Course> allCourses = courseService.getAllCourses();
+        List<CourseDto> allCourses = courseService.getAllCourses();
         model.addAttribute("allCourses", allCourses);
-        return "management/course-management";
+        return COURSE_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/find-by-name")
-    public String findCourse(@RequestParam("courseName") String courseName, Model model) {
-        Course course = courseService.findByCourseName(courseName);
-        List<Course> allCourses = courseService.getAllCourses();
-        model.addAttribute("allCourses", allCourses);
-        model.addAttribute("course", course);
-        return "management/course-management";
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping
+    @PostMapping("/update")
     public String updateCourse(@RequestParam("courseId") long courseId, @RequestParam("courseName") String courseName,
                                @RequestParam("courseDescription") String courseDescription) {
-        Course course = courseService.getCourseById(courseId);
-        course.setCourseName(courseName);
-        course.setCourseDescription(courseDescription);
-        courseService.save(course);
-        return "redirect:/course/management";
+        CourseDto courseDto = courseService.getCourseById(courseId);
+        courseDto.setCourseName(courseName);
+        courseDto.setCourseDescription(courseDescription);
+        courseService.save(courseDto);
+        return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'PROFESSOR')")
     @PostMapping("/addCourse")
     public String addCourse(@RequestParam String newCourseName, @RequestParam String newCourseDescription, RedirectAttributes redirectAttributes) {
-        if (courseService.existsByCourseName(newCourseName)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Course with the same name already exists.");
-        } else {
-            Course newCourse = new Course();
-            newCourse.setCourseName(newCourseName);
-            newCourse.setCourseDescription(newCourseDescription);
-            courseService.save(newCourse);
-            redirectAttributes.addFlashAttribute("successMessage", "Course added successfully!");
-        }
-        return "redirect:/course/management";
+        RedirectAttributesDto redirAttrDto = courseService.saveWithRedirAttr(newCourseName, newCourseDescription);
+        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/deleteCourse")
-    public String deleteCourse(@RequestParam String courseNameToDelete, RedirectAttributes redirectAttributes) {
-        if (courseService.existsByCourseName(courseNameToDelete)) {
-            courseService.deleteByCourseName(courseNameToDelete);
-            redirectAttributes.addFlashAttribute("deletionSucceeded", "Course deleted successfully!");
-        } else {
-            redirectAttributes.addFlashAttribute("deletionError", "Course not found or could not be deleted.");
-        }
-        return "redirect:/course/management";
+    @PostMapping("/delete")
+    public String deleteCourse(@RequestParam long courseId, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = courseService.deleteWithRedirAttr(courseId);
+        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
 }

@@ -12,11 +12,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByOwnerGroupId(long groupId);
 
-    List<User> findByRoles(RoleName roleName);
-
     User getUserById(long userId);
 
     User findByLogin(String loginName);
 
-//    User findByLogin(String login);
+    boolean existsByLogin(String login);
+
 }

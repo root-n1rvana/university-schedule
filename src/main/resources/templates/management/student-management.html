@@ -99,30 +99,26 @@
 
 <!-- Main content -->
 <h2>Student Management</h2>
-<table>
-    <thead>
-    <tr>
-        <th>User ID</th>
-        <th>Username</th>
-        <th>Full Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Loop through the list of students -->
-    <tr th:each="student : ${students}">
-        <td th:text="${student.id}"></td>
-        <td th:text="${student.username}"></td>
-        <td th:text="${student.fullName}"></td>
-    </tr>
-    </tbody>
-</table>
-
-
-
-
-
-
-
+<div class="content">
+    <table>
+        <thead>
+        <tr>
+            <th>Login</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Group</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.login}"></td>
+            <td th:text="${user.firstname}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.ownerGroup.name}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 
 <script>
@@ -136,5 +132,6 @@
         modal.style.display = "none";
     }
 </script>
+
 </body>
 </html>

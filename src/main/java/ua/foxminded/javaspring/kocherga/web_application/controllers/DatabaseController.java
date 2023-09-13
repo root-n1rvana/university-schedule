@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.foxminded.javaspring.kocherga.web_application.models.*;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.*;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class DatabaseController {
 
     @GetMapping("/courses")
     public String getCourses(Model model) {
-        List<Course> courses = courseService.getAllCourses();
+        List<CourseDto> courses = courseService.getAllCourses();
         model.addAttribute("courses", courses);
         return "db/courses";
     }

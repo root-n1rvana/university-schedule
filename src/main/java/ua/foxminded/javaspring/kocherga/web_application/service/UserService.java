@@ -15,6 +15,7 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepositor
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -77,7 +78,17 @@ public class UserService {
         }
     }
 
-    public List<User> getUsersByRole(RoleName roleName) {
-        return userRepository.findByRoles(roleName);
+    public boolean existByLoginName(String loginName) {
+        return userRepository.existsByLogin(loginName);
+    }
+
+    public List<User> getStudentUsers() {
+        List<User> allUsers = userRepository.findAll();
+        return allUsers.stream()
+                .filter(user -> user.getRoles().stream()
+                        .anyMatch(role -> role.getRoleName().equals(RoleName.STUDENT)))
+                .filter(user -> user.getRoles().stream()
+                        .noneMatch(role -> role.getRoleName().equals(RoleName.ADMIN)))
+                .collect(Collectors.toList());
     }
 }

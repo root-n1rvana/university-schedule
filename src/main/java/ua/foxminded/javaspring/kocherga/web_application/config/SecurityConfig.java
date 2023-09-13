@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.kocherga.web_application.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,9 +21,10 @@ public class SecurityConfig {
                         .requestMatchers("/register/**")
                         .permitAll()
                         .requestMatchers("/user/management/**").hasAuthority("ADMIN")
-                        .requestMatchers("/find-by-name").hasAuthority("ADMIN")
                         .requestMatchers("/course/addCourse").hasAnyAuthority("ADMIN", "PROFESSOR")
-                        .requestMatchers("/course/deleteCourse").hasAuthority("ADMIN")
+                        .requestMatchers("/group/addGroup").hasAnyAuthority("ADMIN", "PROFESSOR")
+                        .requestMatchers("/course/delete").hasAuthority("ADMIN")
+                        .requestMatchers("/group/delete").hasAuthority("ADMIN")
                         .anyRequest()
                         .authenticated()
                 ).formLogin(
@@ -40,7 +40,6 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

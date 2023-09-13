@@ -1,5 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,16 +8,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.Group;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
 @RequestMapping("/group")
 public class GroupController {
 
+    private final static String GROUP_MANAGEMENT_PAGE = "management/group-management";
+    private final static String REDIRECT_TO_GROUP_MANAGEMENT_PAGE = "redirect:/group/management";
     private final GroupService groupService;
 
     public GroupController(GroupService groupService) {
@@ -25,35 +28,33 @@ public class GroupController {
 
     @GetMapping("/management")
     public String showManagementPage(Model model) {
-        List<Group> groups = groupService.getAllGroups();
-        groups.sort(Comparator.comparing(Group::getId));
+        List<GroupDto> groups = groupService.GetAllGroupsForManagement();
         model.addAttribute("groups", groups);
-        return "management/group-management";
+        return GROUP_MANAGEMENT_PAGE;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/update")
     public String updateGroupName(@RequestParam("groupId") long groupId, @RequestParam("newName") String newName) {
-        Group group = groupService.getGroupById(groupId);
-        group.setName(newName);
-        groupService.save(group);
-        return "redirect:/group/management";
+        GroupDto groupDto = groupService.getGroupDtoById(groupId);
+        groupDto.setName(newName);
+        groupService.save(groupDto);
+        return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PROFESSOR')")
     @PostMapping("/addGroup")
     public String addGroup(@RequestParam String newGroupName, RedirectAttributes redirectAttributes) {
-        if (groupService.existsByGroupName(newGroupName)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Group with the same name already exists.");
-        } else {
-            Group newGroup = new Group();
-            newGroup.setName(newGroupName);
-            groupService.save(newGroup);
-        }
-        return "redirect:/group/management";
+        RedirectAttributesDto redirAttrDto = groupService.saveWithRedirAttr(newGroupName);
+        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/delete")
-    public String deleteGroup(@RequestParam("groupId") long groupId) {
-        groupService.deleteGroupById(groupId);
-        return "redirect:/group/management";
+    public String deleteGroup(@RequestParam long groupId, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = groupService.deleteWithRedirAttr(groupId);
+        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }
 }

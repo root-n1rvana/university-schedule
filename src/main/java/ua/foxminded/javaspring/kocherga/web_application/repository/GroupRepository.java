@@ -10,4 +10,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     Group getGroupById(long groupId);
 
     boolean existsByName(String groupName);
+
+    void deleteByName(String groupName);
 }

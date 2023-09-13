@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import static org.hamcrest.Matchers.*;
@@ -43,17 +44,6 @@ class CourseControllerIntegrationTest {
                 )));
     }
 
-    @WithMockUser(authorities = "ADMIN")
-    @Test
-    public void testFindCourse_AdminAccess() throws Exception {
-        String courseName = "Math";
-        mockMvc.perform(get("/course/find-by-name")
-                        .param("courseName", courseName))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("management/course-management"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("course"));
-    }
-
     @WithMockUser(authorities = "STUDENT")
     @Test
     public void testFindCourse_StudentAccess() throws Exception {
@@ -72,23 +62,23 @@ class CourseControllerIntegrationTest {
         testCourse.setCourseName("Test Course");
         testCourse.setCourseDescription("Description");
         courseService.save(testCourse);
-        Course savedCourse = courseService.findByCourseName("Test Course");
+        CourseDto savedCourse = courseService.findByCourseName("Test Course");
 
         // Prepare the updated data
-        String updatedCourseName = "Updated Course Name";
-        String updatedCourseDescription = "Updated Description";
+        String expectedCourseName = "Updated Course Name";
+        String expectedCourseDescription = "Updated Description";
 
-        mockMvc.perform(post("/course")
+        mockMvc.perform(post("/course/update")
                         .param("courseId", String.valueOf(savedCourse.getId()))
-                        .param("courseName", updatedCourseName)
-                        .param("courseDescription", updatedCourseDescription))
+                        .param("courseName", expectedCourseName)
+                        .param("courseDescription", expectedCourseDescription))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course/management"));
 
         // Verify that the course was updated in the database
-        Course updatedCourse = courseService.getCourseById(savedCourse.getId());
-        assertEquals(updatedCourseName, updatedCourse.getCourseName());
-        assertEquals(updatedCourseDescription, updatedCourse.getCourseDescription());
+        CourseDto actualCourse = courseService.getCourseById(savedCourse.getId());
+        assertEquals(expectedCourseName, actualCourse.getCourseName());
+        assertEquals(expectedCourseDescription, actualCourse.getCourseDescription());
 
         // Cleaning after test
         courseService.deleteByCourseName("Updated Course Name");
@@ -96,7 +86,7 @@ class CourseControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = "PROFESSOR")
-    public void testAddCourse_AdminOrProfessorAccess() throws Exception {
+    public void testAddCourse_ProfessorAccess() throws Exception {
         String newCourseName = "New Course";
         String newCourseDescription = "New Course Description";
 
@@ -117,6 +107,21 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void testAddExistingCourse() throws Exception {
+        String newCourseName = "Math";
+        String newCourseDescription = "New Course Description";
+
+        mockMvc.perform(post("/course/addCourse")
+                        .param("newCourseName", newCourseName)
+                        .param("newCourseDescription", newCourseDescription))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/course/management"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Course with the same name already exists."));
+    }
+
+    @Test
     @WithMockUser(authorities = "STUDENT")
     public void testAddCourse_StudentAccess() throws Exception {
         String newCourseName = "New Course";
@@ -131,37 +136,24 @@ class CourseControllerIntegrationTest {
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void testDeleteCourse_AdminAccess() throws Exception {
-        String courseNameToDelete = "CourseToDelete";
-        String courseDescriptionToDelete = "CourseDescriptionToDelete";
-
         // Create a test course to be deleted
         Course testCourse = new Course();
-        testCourse.setCourseName(courseNameToDelete);
-        testCourse.setCourseDescription(courseDescriptionToDelete);
+        testCourse.setCourseName("CourseToDelete");
+        testCourse.setCourseDescription("CourseDescriptionToDelete");
         courseService.save(testCourse);
 
-        mockMvc.perform(post("/course/deleteCourse")
-                        .param("courseNameToDelete", courseNameToDelete))
+        // Verify that the course was saved to database
+        assertTrue(courseService.existsByCourseName(testCourse.getCourseName()));
+
+        mockMvc.perform(post("/course/delete")
+                        .param("courseId", String.valueOf(testCourse.getId())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course/management"))
                 .andExpect(flash().attributeExists("deletionSucceeded"))
                 .andExpect(flash().attribute("deletionSucceeded", "Course deleted successfully!"));
 
         // Verify that the course was deleted from the database
-        assertFalse(courseService.existsByCourseName(courseNameToDelete));
-    }
-
-    @Test
-    @WithMockUser(authorities = "ADMIN")
-    public void testDeleteCourse_CourseNotFound() throws Exception {
-        String courseNameToDelete = "NonExistentCourse";
-
-        mockMvc.perform(post("/course/deleteCourse")
-                        .param("courseNameToDelete", courseNameToDelete))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/course/management"))
-                .andExpect(flash().attributeExists("deletionError"))
-                .andExpect(flash().attribute("deletionError", "Course not found or could not be deleted."));
+        assertFalse(courseService.existsByCourseName(testCourse.getCourseName()));
     }
 
     @Test
@@ -169,9 +161,8 @@ class CourseControllerIntegrationTest {
     public void testDeleteCourse_StudentAccess() throws Exception {
         String courseNameToDelete = "CourseToDelete";
 
-        mockMvc.perform(post("/course/deleteCourse")
+        mockMvc.perform(post("/course/delete")
                         .param("courseNameToDelete", courseNameToDelete))
                 .andExpect(status().isForbidden()); // Expect a 403 Forbidden response
     }
-
 }
