@@ -78,10 +78,10 @@
         <span th:text="${deletionSucceeded}"></span>
     </div>
 </div>
-<div sec:authorize="hasAnyAuthority('ADMIN', 'PROFESSOR')" data-bs-toggle="modal" data-bs-target="#AddNewGroupModal">
+<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal" data-bs-target="#AddNewGroupModal">
     <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
 </div>
-<div sec:authorize="hasAnyAuthority('ADMIN', 'PROFESSOR')" class="modal fade" id="AddNewGroupModal">
+<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewGroupModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -109,14 +109,14 @@
     <thead>
     <tr>
         <th>Group Name</th>
-        <th sec:authorize="hasAuthority('ADMIN')">Edit</th>
-        <th sec:authorize="hasAuthority('ADMIN')">Delete</th>
+        <th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
+        <th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="group : ${groups}">
         <td th:text="${group.name}"></td>
-        <td sec:authorize="hasAuthority('ADMIN')">
+        <td sec:authorize="hasRole('ROLE_ADMIN')">
             <div style="text-align: center">
                 <i class="fa-regular fa-pen-to-square" data-bs-toggle="modal"
                    th:data-bs-target="'#EditGroupModal_' + ${group.id}"></i>
@@ -148,7 +148,7 @@
                 </div>
             </div>
         </td>
-        <td sec:authorize="hasAuthority('ADMIN')">
+        <td sec:authorize="hasRole('ROLE_ADMIN')">
             <div style="text-align: center">
                 <i class="fa-regular fa-trash-can" data-bs-toggle="modal"
                    th:data-bs-target="'#DeleteGroupModal_' + ${group.id}"></i>

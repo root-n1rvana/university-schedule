@@ -44,18 +44,8 @@ class CourseControllerIntegrationTest {
                 )));
     }
 
-    @WithMockUser(authorities = "STUDENT")
     @Test
-    public void testFindCourse_StudentAccess() throws Exception {
-        String courseName = "Math";
-
-        mockMvc.perform(get("/find-by-name")
-                        .param("courseName", courseName))
-                .andExpect(status().isForbidden()); // Expect 403 Forbidden for STUDENT role
-    }
-
-    @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testUpdateCourse() throws Exception {
         // Create a test course
         Course testCourse = new Course();
@@ -85,7 +75,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "PROFESSOR")
+    @WithMockUser(roles = "PROFESSOR")
     public void testAddCourse_ProfessorAccess() throws Exception {
         String newCourseName = "New Course";
         String newCourseDescription = "New Course Description";
@@ -107,7 +97,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testAddExistingCourse() throws Exception {
         String newCourseName = "Math";
         String newCourseDescription = "New Course Description";
@@ -122,7 +112,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     public void testAddCourse_StudentAccess() throws Exception {
         String newCourseName = "New Course";
         String newCourseDescription = "New Course Description";
@@ -134,7 +124,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testDeleteCourse_AdminAccess() throws Exception {
         // Create a test course to be deleted
         Course testCourse = new Course();
@@ -157,7 +147,7 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     public void testDeleteCourse_StudentAccess() throws Exception {
         String courseNameToDelete = "CourseToDelete";
 

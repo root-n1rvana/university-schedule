@@ -44,7 +44,7 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testUpdateGroup() throws Exception {
         // Create a test group
         Group testGroup = new Group();
@@ -70,7 +70,7 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "PROFESSOR")
+    @WithMockUser(roles = "PROFESSOR")
     public void testAddGroup_ProfessorAccess() throws Exception {
         String newGroupName = "New Course";
 
@@ -90,7 +90,7 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testAddGroupError() throws Exception {
         String newGroupName = "admin";
 
@@ -106,7 +106,7 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     public void testAddGroup_StudentAccess() throws Exception {
         String newGroupName = "New Group";
 
@@ -116,7 +116,7 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void testDeleteGroup_AdminAccess() throws Exception {
         // Create a test group to be deleted
         Group testGroup = new Group();
@@ -138,7 +138,7 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     public void testDeleteGroup_StudentAccess() throws Exception {
         String groupNameToDelete = "ToDelete";
 

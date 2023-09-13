@@ -61,21 +61,6 @@
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         }
 
-        /* Close button */
-        .close {
-            float: right;
-            cursor: pointer;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
         th, td {
             padding: 5px;
             border-bottom: 1px solid #ddd;
@@ -119,19 +104,5 @@
         </tbody>
     </table>
 </div>
-
-
-<script>
-    function openModal(button) {
-        const modal = button.nextElementSibling;
-        modal.style.display = "block";
-    }
-
-    function closeModal(closeButton) {
-        const modal = closeButton.parentElement.parentElement;
-        modal.style.display = "none";
-    }
-</script>
-
 </body>
 </html>

@@ -54,10 +54,10 @@ public class UserService {
         user.setLastname(userDto.getLastName());
         user.setLogin(userDto.getLoginName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
-//        Role role = roleRepository.getRoleByRoleName(RoleName.STUDENT);
+//        Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
+        Role role = roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT);
         user.setRoles(new HashSet<>(Collections.singletonList(role)));
-        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - 'No Group'
+        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - default 'No Group'
         userRepository.save(user);
     }
 
@@ -86,9 +86,9 @@ public class UserService {
         List<User> allUsers = userRepository.findAll();
         return allUsers.stream()
                 .filter(user -> user.getRoles().stream()
-                        .anyMatch(role -> role.getRoleName().equals(RoleName.STUDENT)))
+                        .anyMatch(role -> role.getRoleName().equals(RoleName.ROLE_STUDENT)))
                 .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName().equals(RoleName.ADMIN)))
+                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
                 .collect(Collectors.toList());
     }
 }

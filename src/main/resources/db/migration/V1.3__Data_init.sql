@@ -31,7 +31,7 @@ INSERT INTO rooms (label, description) VALUES ('A8', 'Some description');
 INSERT INTO rooms (label, description) VALUES ('A9', 'Some description');
 INSERT INTO rooms (label, description) VALUES ('A0', 'Some description');
 
-INSERT INTO roles (name) VALUES ('ADMIN'), ('STUDENT'), ('PROFESSOR');
+INSERT INTO roles (name) VALUES ('ROLE_ADMIN'), ('ROLE_STUDENT'), ('ROLE_PROFESSOR');
 
 INSERT INTO lessons_time (lesson_time) VALUES ('8:00-9:30'), ('9:45-11:15'), ('11:30-13:00'), ('13:30-15:00'), ('15:15-16:45');
 

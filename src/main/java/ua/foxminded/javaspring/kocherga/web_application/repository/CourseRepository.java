@@ -14,9 +14,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     boolean existsByCourseName(String courseName);
 
-    boolean existsById(Long courseId);
+    boolean existsById(@NonNull Long courseId);
 
     void deleteByCourseName(String courseName);
 
-    void deleteById(Long courseId);
+    void deleteById(@NonNull Long courseId);
 }

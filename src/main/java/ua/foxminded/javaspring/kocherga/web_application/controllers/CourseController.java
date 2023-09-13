@@ -33,7 +33,7 @@ public class CourseController {
         return COURSE_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/update")
     public String updateCourse(@RequestParam("courseId") long courseId, @RequestParam("courseName") String courseName,
                                @RequestParam("courseDescription") String courseDescription) {
@@ -44,7 +44,7 @@ public class CourseController {
         return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addCourse")
     public String addCourse(@RequestParam String newCourseName, @RequestParam String newCourseDescription, RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = courseService.saveWithRedirAttr(newCourseName, newCourseDescription);
@@ -52,7 +52,7 @@ public class CourseController {
         return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")
     public String deleteCourse(@RequestParam long courseId, RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = courseService.deleteWithRedirAttr(courseId);
