@@ -14,7 +14,6 @@ import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -54,7 +53,7 @@ class CourseControllerIntegrationTest {
         courseService.save(testCourse);
         CourseDto savedCourse = courseService.findByCourseName("Test Course");
 
-        // Prepare the updated data
+        // Prepare data to replace in database
         String expectedCourseName = "Updated Course Name";
         String expectedCourseDescription = "Updated Description";
 

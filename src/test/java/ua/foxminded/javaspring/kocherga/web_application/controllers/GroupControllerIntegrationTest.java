@@ -138,6 +138,39 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testDeleteGroupError() throws Exception {
+        long nonExistingGroupId = 77L;
+
+        // Verify that Student does not exist in database
+        assertFalse(groupService.existByGroupId(nonExistingGroupId));
+
+        mockMvc.perform(post("/group/delete")
+                        .param("groupId", String.valueOf(nonExistingGroupId)))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"))
+                .andExpect(flash().attributeExists("deletionError"))
+                .andExpect(flash().attribute("deletionError", "Course not found or could not be deleted"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testSaveGroupOrIgnoreIfExists_caseGroupNotExisting() {
+        String newGroupName = "NewTestGR";
+
+        // Verify that Group does not exist in database
+        assertFalse(groupService.existByGroupName(newGroupName));
+
+        groupService.saveGroupOrIgnoreIfExists(newGroupName);
+
+        // Verify that Group was added to database
+        assertTrue(groupService.existByGroupName(newGroupName));
+
+        // Cleaning after test
+        groupService.deleteGroupByName(newGroupName);
+    }
+
+    @Test
     @WithMockUser(roles = "STUDENT")
     public void testDeleteGroup_StudentAccess() throws Exception {
         String groupNameToDelete = "ToDelete";

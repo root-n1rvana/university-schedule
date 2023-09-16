@@ -25,6 +25,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    //Temporal method, will be changed in next tasks
     @GetMapping("/{groupId}")
     public String getUsersByGroupId(@PathVariable int groupId, Model model) {
         List<User> users = userService.getUsersByGroupId(groupId);
@@ -75,7 +76,7 @@ public class UserController {
                                     @RequestParam String login,
                                     @RequestParam String password,
                                     RedirectAttributes redirectAttributes
-                                    ) {
+    ) {
         RedirectAttributesDto redirAttrDto = userService.userCredentialsUpdate(userId, login, password);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;

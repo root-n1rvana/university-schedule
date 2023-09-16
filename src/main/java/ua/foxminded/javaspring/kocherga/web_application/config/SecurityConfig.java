@@ -23,8 +23,12 @@ public class SecurityConfig {
                         .requestMatchers("/user/management/**").hasRole("ADMIN")
                         .requestMatchers("/course/addCourse").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/group/addGroup").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/user/addStudent").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/user/updateStudent").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/course/delete").hasRole("ADMIN")
                         .requestMatchers("/group/delete").hasRole("ADMIN")
+                        .requestMatchers("/user/deleteStudent").hasRole("ADMIN")
+                        .requestMatchers("/user/updateCredentials").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()
                 ).formLogin(

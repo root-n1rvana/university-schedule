@@ -73,12 +73,6 @@
     <div th:if="${successMessage}" class="alert alert-info">
         <span th:text="${successMessage}"></span>
     </div>
-    <div th:if="${deletionError}" class="alert alert-danger">
-        <span th:text="${deletionError}"></span>
-    </div>
-    <div th:if="${deletionSucceeded}" class="alert alert-info">
-        <span th:text="${deletionSucceeded}"></span>
-    </div>
 </div>
 
 <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"

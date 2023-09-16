@@ -23,7 +23,6 @@ public class Role implements Serializable {
                     @Parameter(name = "enumClass", value = "ua.foxminded.javaspring.kocherga.web_application.models.RoleName")
             })
     @Column(name = "name", nullable = false, unique = true, columnDefinition = "role_name")
-
     private RoleName roleName;
 
     @ManyToMany(mappedBy = "roles")

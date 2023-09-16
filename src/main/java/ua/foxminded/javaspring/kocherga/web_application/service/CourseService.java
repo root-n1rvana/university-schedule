@@ -28,17 +28,17 @@ public class CourseService {
         return courseMapper.courseToCourseDto(course);
     }
 
+    public CourseDto findByCourseName(String courseName) {
+        Course course = courseRepository.getCourseByCourseName(courseName);
+        return courseMapper.courseToCourseDto(course);
+    }
+
     public List<CourseDto> getAllCourses() {
         List<Course> courses = courseRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(Course::getId))
                 .collect(Collectors.toList());
         return courseMapper.courseListToCourseDtoList(courses);
-    }
-
-    public CourseDto findByCourseName(String courseName) {
-        Course course = courseRepository.getCourseByCourseName(courseName);
-        return courseMapper.courseToCourseDto(course);
     }
 
     @Transactional

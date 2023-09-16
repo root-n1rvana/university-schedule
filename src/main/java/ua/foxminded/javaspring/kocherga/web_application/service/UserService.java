@@ -11,7 +11,6 @@ import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
-import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 
@@ -29,19 +28,27 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final GroupRepository groupRepository;
+    private final GroupService groupService;
     private final UserMapper userMapper;
 
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository,
-                       GroupRepository groupRepository,
+                       GroupService groupService,
                        UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
-        this.groupRepository = groupRepository;
+        this.groupService = groupService;
         this.userMapper = userMapper;
+    }
+
+    public User getUserById(long id) {
+        return userRepository.getUserById(id);
+    }
+
+    public User findUserByLoginName(String loginName) {
+        return userRepository.findByLogin(loginName);
     }
 
     public List<User> getUsersByGroupId(long groupId) {
@@ -50,6 +57,27 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public boolean existsByLogin(String login) {
+        return userRepository.existsByLogin(login);
+    }
+
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
+    public void checkIfUserExists(UserDto userDto, BindingResult result) {
+        User existingUser = this.findUserByLoginName(userDto.getLogin());
+
+        if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
+            result.rejectValue("loginName", "account.exists", USER_LOGIN_EXISTS_ERROR);
+        }
+    }
+
+    @Transactional
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     @Transactional
@@ -61,25 +89,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT);
         user.setRoles(new HashSet<>(Collections.singletonList(role)));
-        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - default 'No Group'
+        user.setOwnerGroup(groupService.getGroupById(9L)); //id 9L - default 'No Group'
         userRepository.save(user);
-    }
-
-    public User findUserByLoginName(String loginName) {
-        return userRepository.findByLogin(loginName);
-    }
-
-    @Transactional
-    public void save(User user) {
-        userRepository.save(user);
-    }
-
-    public void checkIfUserExists(UserDto userDto, BindingResult result) {
-        User existingUser = this.findUserByLoginName(userDto.getLogin());
-
-        if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
-            result.rejectValue("loginName", "account.exists", USER_LOGIN_EXISTS_ERROR);
-        }
     }
 
     public List<UserDto> getAllStudentUsers() {
@@ -95,17 +106,6 @@ public class UserService {
     }
 
     @Transactional
-    public Group saveGroupOrIgnoreIfExists(String groupName) {
-        Group existingGroup = groupRepository.findByName(groupName);
-        if (existingGroup != null) {
-            return existingGroup;
-        }
-        Group newGroup = new Group();
-        newGroup.setName(groupName);
-        return groupRepository.save(newGroup);
-    }
-
-    @Transactional
     public RedirectAttributesDto saveStudentWithRedirAttr(String firstname, String lastname, String login, String password, String groupName) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto(login);
         if (userRepository.existsByLogin(login)) {
@@ -117,7 +117,7 @@ public class UserService {
             user.setLastname(lastname);
             user.setLogin(login);
             user.setPassword(passwordEncoder.encode(password));
-            Group group = saveGroupOrIgnoreIfExists(groupName);
+            Group group = groupService.saveGroupOrIgnoreIfExists(groupName);
             user.setOwnerGroup(group);
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
@@ -135,7 +135,7 @@ public class UserService {
         User userToEdit = userRepository.getUserById(userId);
         userToEdit.setFirstname(firstname);
         userToEdit.setLastname(lastname);
-        Group group = saveGroupOrIgnoreIfExists(groupName);
+        Group group = groupService.saveGroupOrIgnoreIfExists(groupName);
         userToEdit.setOwnerGroup(group);
         save(userToEdit);
         redirectAttributesDto.setName(SUCCESS_MSG);
@@ -148,13 +148,18 @@ public class UserService {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
-            redirectAttributesDto.setName("deletionSucceeded");
+            redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Student deleted successfully!");
         } else {
-            redirectAttributesDto.setName("deletionError");
+            redirectAttributesDto.setName(ERROR_MSG);
             redirectAttributesDto.setValue("Student not found or could not be deleted");
         }
         return redirectAttributesDto;
+    }
+
+    @Transactional
+    public void deleteUserByLogin(String login) {
+        userRepository.deleteByLogin(login);
     }
 
     @Transactional

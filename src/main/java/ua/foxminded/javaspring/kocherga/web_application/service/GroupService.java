@@ -23,7 +23,6 @@ public class GroupService {
         this.groupMapper = groupMapper;
     }
 
-    @Deprecated
     public Group getGroupById(long groupId) {
         return groupRepository.getGroupById(groupId);
     }
@@ -44,6 +43,14 @@ public class GroupService {
                 .collect(Collectors.toList());
     }
 
+    public boolean existByGroupName(String groupName) {
+        return groupRepository.existsByName(groupName);
+    }
+
+    public boolean existByGroupId(Long groupId) {
+        return groupRepository.existsById(groupId);
+    }
+
     @Transactional
     public void save(Group group) {
         groupRepository.save(group);
@@ -56,15 +63,26 @@ public class GroupService {
     }
 
     @Transactional
+    public Group saveGroupOrIgnoreIfExists(String groupName) {
+        Group existingGroup = groupRepository.findByName(groupName);
+        if (existingGroup != null) {
+            return existingGroup;
+        }
+        Group newGroup = new Group();
+        newGroup.setName(groupName);
+        return groupRepository.save(newGroup);
+    }
+
+    @Transactional
     public RedirectAttributesDto saveWithRedirAttr(String newGroupName) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto(newGroupName);
         if (groupRepository.existsByName(newGroupName)) {
             redirectAttributesDto.setName("errorMessage");
             redirectAttributesDto.setValue("Group with the same name already exists.");
         } else {
-            GroupDto groupDto = new GroupDto();
-            groupDto.setName(newGroupName);
-            save(groupDto);
+            Group group = new Group();
+            group.setName(newGroupName);
+            save(group);
             redirectAttributesDto.setName("successMessage");
             redirectAttributesDto.setValue("Group added successfully!");
         }
@@ -88,9 +106,5 @@ public class GroupService {
             redirectAttributesDto.setValue("Course not found or could not be deleted");
         }
         return redirectAttributesDto;
-    }
-
-    public boolean existByGroupName(String groupName) {
-        return groupRepository.existsByName(groupName);
     }
 }
