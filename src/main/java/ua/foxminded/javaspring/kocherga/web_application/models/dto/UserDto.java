@@ -1,32 +1,42 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import ua.foxminded.javaspring.kocherga.web_application.models.Course;
+import ua.foxminded.javaspring.kocherga.web_application.models.Group;
+import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+
+import java.util.Set;
 
 public class UserDto {
 
     private Long id;
 
     @NotEmpty
-    private String firstName;
-
+    private String firstname;
     @NotEmpty
-    private String lastName;
-
+    private String lastname;
     @NotEmpty
-    private String loginName;
-
+    private String login;
     @NotEmpty(message = "Password should not be empty")
     private String password;
+    private Group ownerGroup;
+    private Set<Role> roles;
+    private Set<Course> userCourses;
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String firstName, String lastName, String loginName, String password) {
+    public UserDto(Long id, String firstname, String lastname,
+                   String login, String password,
+                   Group ownerGroup, Set<Role> roles, Set<Course> userCourses) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.loginName = loginName;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.login = login;
         this.password = password;
+        this.ownerGroup = ownerGroup;
+        this.roles = roles;
+        this.userCourses = userCourses;
     }
 
     public Long getId() {
@@ -37,28 +47,28 @@ public class UserDto {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getLogin() {
+        return login;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -67,5 +77,43 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Group getOwnerGroup() {
+        return ownerGroup;
+    }
+
+    public void setOwnerGroup(Group ownerGroup) {
+        this.ownerGroup = ownerGroup;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<Course> getUserCourses() {
+        return userCourses;
+    }
+
+    public void setUserCourses(Set<Course> userCourses) {
+        this.userCourses = userCourses;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", ownerGroup=" + ownerGroup +
+                ", roles=" + roles +
+                ", userCourses=" + userCourses +
+                '}';
     }
 }

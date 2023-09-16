@@ -23,6 +23,7 @@ public class GroupService {
         this.groupMapper = groupMapper;
     }
 
+    @Deprecated
     public Group getGroupById(long groupId) {
         return groupRepository.getGroupById(groupId);
     }

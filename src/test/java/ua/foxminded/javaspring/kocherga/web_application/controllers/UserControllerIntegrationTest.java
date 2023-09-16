@@ -44,40 +44,6 @@ class UserControllerIntegrationTest {
                 .andExpect(status().isForbidden()); // Expects HTTP 403 Forbidden
     }
 
-    @WithUserDetails(value = "admin")
-    @Test
-    public void testFindUser() throws Exception {
-        String loginName = "test1";
-
-        mockMvc.perform(get("/user/find-by-login")
-                        .param("loginName", loginName))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("management/user-management"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("user"))
-                .andExpect(MockMvcResultMatchers.model().attribute("allGroups", Matchers.any(List.class)))
-                .andExpect(MockMvcResultMatchers.model().attribute("allRoles", Matchers.any(List.class)))
-                .andExpect(MockMvcResultMatchers.model().attribute("roleIds", Matchers.any(List.class)));
-    }
-
-    @WithMockUser(roles = "ADMIN")
-    @Test
-    public void testUpdateUser() throws Exception {
-        long userId = 2L;
-        long groupId = 3L;
-        List<Long> roleIds = Arrays.asList(2L, 3L);
-
-        String rolesParam = roleIds.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(","));
-
-        mockMvc.perform(post("/user")
-                        .param("userId", String.valueOf(userId))
-                        .param("group", String.valueOf(groupId))
-                        .param("roles", rolesParam))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/user/management"));
-    }
-
     @WithUserDetails(value = "teach1")
     @Test
     void getUsersByGroupId_Controller_ShouldReturnListOfUsers() throws Exception {

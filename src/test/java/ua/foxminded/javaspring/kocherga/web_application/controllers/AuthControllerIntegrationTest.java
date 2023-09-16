@@ -45,9 +45,9 @@ public class AuthControllerIntegrationTest {
     @Test
     public void testRegistrationSuccess() throws Exception {
         mockMvc.perform(post("/register/save")
-                                .param("firstName", "testuser123")
-                                .param("lastName", "testuser123")
-                                .param("loginName", "testuser123")
+                                .param("firstname", "testuser123")
+                                .param("lastname", "testuser123")
+                                .param("login", "testuser123")
                                 .param("password", "testpassword")
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())

@@ -56,7 +56,6 @@
 <!-- Menu bar -->
 <div class="menu">
     <a href="/" class="menu-item" style="color: white">Home</a>
-    <a href="/management" class="menu-item" style="color: white">Management</a>
     <div style="margin-left: auto;">
         <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
         <a href="/logout" class="logout-btn">Logout</a>
@@ -85,6 +84,7 @@
 <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal" data-bs-target="#AddNewCourseModal">
     <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
 </div>
+
 <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewCourseModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

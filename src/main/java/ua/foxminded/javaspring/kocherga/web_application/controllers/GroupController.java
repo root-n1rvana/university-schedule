@@ -33,7 +33,7 @@ public class GroupController {
         return GROUP_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/update")
     public String updateGroupName(@RequestParam("groupId") long groupId, @RequestParam("newName") String newName) {
         GroupDto groupDto = groupService.getGroupDtoById(groupId);
@@ -42,7 +42,7 @@ public class GroupController {
         return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addGroup")
     public String addGroup(@RequestParam String newGroupName, RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = groupService.saveWithRedirAttr(newGroupName);
@@ -50,7 +50,7 @@ public class GroupController {
         return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")
     public String deleteGroup(@RequestParam long groupId, RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = groupService.deleteWithRedirAttr(groupId);
