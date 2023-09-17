@@ -35,10 +35,20 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    public List<GroupDto> GetAllGroupsForManagement() {
+    public List<GroupDto> getAllGroupsForManagement() {
         return groupMapper.groupListToGroupDtoList(groupRepository.findAll())
                 .stream()
                 .filter(group -> group.getId() != 9L) //excluding default empty Group for new users
+                .sorted(Comparator.comparing(GroupDto::getId))
+                .collect(Collectors.toList());
+    }
+
+    public List<GroupDto> getAllGroupsForStudents() {
+        return groupMapper.groupListToGroupDtoList(groupRepository.findAll())
+                .stream()
+                .filter(group -> group.getId() != 1L) //excluding admin Group for new Students
+                .filter(group -> group.getId() != 2L) //excluding professor Group for new Students
+                .filter(group -> group.getId() != 9L) //excluding empty default Group
                 .sorted(Comparator.comparing(GroupDto::getId))
                 .collect(Collectors.toList());
     }

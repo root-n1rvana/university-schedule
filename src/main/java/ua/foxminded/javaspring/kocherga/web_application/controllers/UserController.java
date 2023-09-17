@@ -6,8 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
 import java.util.List;
@@ -20,9 +22,11 @@ public class UserController {
     private final static String STUDENT_MANAGEMENT_PAGE = "management/student-management";
 
     private final UserService userService;
+    private final GroupService groupService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, GroupService groupService) {
         this.userService = userService;
+        this.groupService = groupService;
     }
 
     //Temporal method, will be changed in next tasks
@@ -41,7 +45,9 @@ public class UserController {
     @GetMapping("/student-management")
     public String getStudentUsers(Model model) {
         List<UserDto> users = userService.getAllStudentUsers();
+        List<GroupDto> groups = groupService.getAllGroupsForStudents();
         model.addAttribute("users", users);
+        model.addAttribute("groups", groups);
         return STUDENT_MANAGEMENT_PAGE;
     }
 
@@ -51,9 +57,9 @@ public class UserController {
                              @RequestParam String lastname,
                              @RequestParam String login,
                              @RequestParam String password,
-                             @RequestParam String groupName,
+                             @RequestParam Long groupId,
                              RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = userService.saveStudentWithRedirAttr(firstname, lastname, login, password, groupName);
+        RedirectAttributesDto redirAttrDto = userService.saveStudentWithRedirAttr(firstname, lastname, login, password, groupId);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;
     }
@@ -63,9 +69,9 @@ public class UserController {
     public String updateStudent(@RequestParam Long userId,
                                 @RequestParam String firstname,
                                 @RequestParam String lastname,
-                                @RequestParam String groupName,
+                                @RequestParam Long groupId,
                                 RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = userService.updateStudentWithRedirAttr(userId, firstname, lastname, groupName);
+        RedirectAttributesDto redirAttrDto = userService.updateStudentWithRedirAttr(userId, firstname, lastname, groupId);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;
     }
@@ -75,8 +81,7 @@ public class UserController {
     public String updateCredentials(@RequestParam Long userId,
                                     @RequestParam String login,
                                     @RequestParam String password,
-                                    RedirectAttributes redirectAttributes
-    ) {
+                                    RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = userService.userCredentialsUpdate(userId, login, password);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;

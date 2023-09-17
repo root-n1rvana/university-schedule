@@ -28,7 +28,7 @@ public class GroupController {
 
     @GetMapping("/management")
     public String showManagementPage(Model model) {
-        List<GroupDto> groups = groupService.GetAllGroupsForManagement();
+        List<GroupDto> groups = groupService.getAllGroupsForManagement();
         model.addAttribute("groups", groups);
         return GROUP_MANAGEMENT_PAGE;
     }

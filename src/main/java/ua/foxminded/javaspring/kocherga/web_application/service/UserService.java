@@ -106,7 +106,7 @@ public class UserService {
     }
 
     @Transactional
-    public RedirectAttributesDto saveStudentWithRedirAttr(String firstname, String lastname, String login, String password, String groupName) {
+    public RedirectAttributesDto saveStudentWithRedirAttr(String firstname, String lastname, String login, String password, Long groupId) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto(login);
         if (userRepository.existsByLogin(login)) {
             redirectAttributesDto.setName(ERROR_MSG);
@@ -117,7 +117,7 @@ public class UserService {
             user.setLastname(lastname);
             user.setLogin(login);
             user.setPassword(passwordEncoder.encode(password));
-            Group group = groupService.saveGroupOrIgnoreIfExists(groupName);
+            Group group = groupService.getGroupById(groupId);
             user.setOwnerGroup(group);
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
@@ -130,12 +130,12 @@ public class UserService {
     }
 
     @Transactional
-    public RedirectAttributesDto updateStudentWithRedirAttr(Long userId, String firstname, String lastname, String groupName) {
+    public RedirectAttributesDto updateStudentWithRedirAttr(Long userId, String firstname, String lastname, long groupId) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         User userToEdit = userRepository.getUserById(userId);
         userToEdit.setFirstname(firstname);
         userToEdit.setLastname(lastname);
-        Group group = groupService.saveGroupOrIgnoreIfExists(groupName);
+        Group group = groupService.getGroupById(groupId);
         userToEdit.setOwnerGroup(group);
         save(userToEdit);
         redirectAttributesDto.setName(SUCCESS_MSG);
