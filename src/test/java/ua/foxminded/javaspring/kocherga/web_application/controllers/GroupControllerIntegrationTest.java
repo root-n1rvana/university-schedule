@@ -154,23 +154,6 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
-    public void testSaveGroupOrIgnoreIfExists_caseGroupNotExisting() {
-        String newGroupName = "NewTestGR";
-
-        // Verify that Group does not exist in database
-        assertFalse(groupService.existByGroupName(newGroupName));
-
-        groupService.saveGroupOrIgnoreIfExists(newGroupName);
-
-        // Verify that Group was added to database
-        assertTrue(groupService.existByGroupName(newGroupName));
-
-        // Cleaning after test
-        groupService.deleteGroupByName(newGroupName);
-    }
-
-    @Test
     @WithMockUser(roles = "STUDENT")
     public void testDeleteGroup_StudentAccess() throws Exception {
         String groupNameToDelete = "ToDelete";

@@ -73,17 +73,6 @@ public class GroupService {
     }
 
     @Transactional
-    public Group saveGroupOrIgnoreIfExists(String groupName) {
-        Group existingGroup = groupRepository.findByName(groupName);
-        if (existingGroup != null) {
-            return existingGroup;
-        }
-        Group newGroup = new Group();
-        newGroup.setName(groupName);
-        return groupRepository.save(newGroup);
-    }
-
-    @Transactional
     public RedirectAttributesDto saveWithRedirAttr(String newGroupName) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto(newGroupName);
         if (groupRepository.existsByName(newGroupName)) {
