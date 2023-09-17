@@ -16,7 +16,7 @@ public class User {
     @Column(name = "firstname", length = 50)
     private String firstname;
 
-    @Column(name = "lastname",length = 50)
+    @Column(name = "lastname", length = 50)
     private String lastname;
 
     @Column(name = "login", length = 20, nullable = false, unique = true)
@@ -29,11 +29,11 @@ public class User {
     @JoinColumn(name = "group_id", nullable = false)
     private Group ownerGroup;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(
-            name="users_roles",
-            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> roles;
 
     @ManyToMany(fetch = FetchType.EAGER)
