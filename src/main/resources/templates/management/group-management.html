@@ -91,7 +91,7 @@
                 <form th:action="@{addGroup}" method="post">
                     <div class="mb-3">
                         <label for="newGroupName" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="newGroupName" name="newGroupName" required/>
+                        <input type="text" class="form-control" id="newGroupName" name="newGroupName" maxlength="10" required/>
                     </div>
                     <br>
                     <div class="modal-footer">
@@ -133,7 +133,7 @@
                                     <input type="hidden" th:name="groupId" th:value="${group.id}"/>
                                     <label for="newName" class="col-form-label">Name:</label>
                                     <input type="text" class="form-control" id="newName" name="newName"
-                                           th:value="${group.name}" required/>
+                                           th:value="${group.name}" maxlength="10" required/>
                                 </div>
                                 <br>
                                 <div class="modal-footer">

@@ -91,15 +91,15 @@
                 <form th:action="@{addStudent}" method="post">
                     <div class="mb-3">
                         <label for="newFirstname" class="col-form-label">First Name:</label>
-                        <input type="text" class="form-control" id="newFirstname" name="firstname" required/>
+                        <input type="text" class="form-control" id="newFirstname" name="firstname" maxlength="50" required/>
                     </div>
                     <div class="mb-3">
                         <label for="newLastname" class="col-form-label">Last Name:</label>
-                        <input type="text" class="form-control" id="newLastname" name="lastname" required/>
+                        <input type="text" class="form-control" id="newLastname" name="lastname" maxlength="50" required/>
                     </div>
                     <div class="mb-3">
                         <label for="newLogin" class="col-form-label">Login:</label>
-                        <input type="text" class="form-control" id="newLogin" name="login" required/>
+                        <input type="text" class="form-control" id="newLogin" name="login" maxlength="20" required/>
                     </div>
                     <div class="mb-3">
                         <label for="newPassword" class="col-form-label">Password:</label>
@@ -161,12 +161,12 @@
                                         <input type="hidden" th:name="userId" th:value="${user.id}"/>
                                         <label for="firstnameEdit" class="col-form-label">Firstname:</label>
                                         <input type="text" class="form-control" id="firstnameEdit" name="firstname"
-                                               th:value="${user.firstname}" required/>
+                                               th:value="${user.firstname}" maxlength="50" required/>
                                     </div>
                                     <div class="mb-3">
                                         <label for="lastnameEdit" class="col-form-label">Last Name:</label>
                                         <input type="text" class="form-control" id="lastnameEdit" name="lastname"
-                                               th:value="${user.lastname}" required/>
+                                               th:value="${user.lastname}" maxlength="50" required/>
                                     </div>
                                     <div class="mb-3">
                                         <label for="groupNameEdit" class="col-form-label">Choose Group</label>
@@ -206,7 +206,7 @@
                                         <input type="hidden" th:name="userId" th:value="${user.id}"/>
                                         <label for="loginEdit" class="col-form-label">Login:</label>
                                         <input type="text" class="form-control" id="loginEdit" name="login"
-                                               th:value="${user.login}" required/>
+                                               th:value="${user.login}" maxlength="20" required/>
                                     </div>
                                     <div class="mb-3">
                                         <label for="passwordEdit" class="col-form-label">Password:</label>
