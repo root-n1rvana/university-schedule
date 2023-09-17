@@ -68,14 +68,14 @@ class UserControllerIntegrationTest {
         String lastname = "TestStd";
         String login = "teststd1";
         String password = "pass";
-        String groupName = "GR-1";
+        Long groupId = 3L;
 
         mockMvc.perform(post("/user/addStudent")
                         .param("firstname", firstname)
                         .param("lastname", lastname)
                         .param("login", login)
                         .param("password", password)
-                        .param("groupName", groupName))
+                        .param("groupId", String.valueOf(groupId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
                 .andExpect(flash().attributeExists("successMessage"))
@@ -96,14 +96,14 @@ class UserControllerIntegrationTest {
         String lastname = "TestStd";
         String login = "test1";
         String password = "pass";
-        String groupName = "GR-99";
+        Long groupId = 3L;
 
         mockMvc.perform(post("/user/addStudent")
                         .param("firstname", firstname)
                         .param("lastname", lastname)
                         .param("login", login)
                         .param("password", password)
-                        .param("groupName", groupName))
+                        .param("groupId", String.valueOf(groupId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
                 .andExpect(flash().attributeExists("errorMessage"))
@@ -137,18 +137,18 @@ class UserControllerIntegrationTest {
         // Prepare data to replace in database
         String expectedFirstname = "newFirstname";
         String expectedLastname = "newLastname";
-        String expectedGroupName = "GR-2";
+        Long expectedGroupId = 4L;
 
         // Confirm what data to update is different from actual
         assertNotEquals(expectedFirstname, userBeforeTest.getFirstname());
         assertNotEquals(expectedLastname, userBeforeTest.getLastname());
-        assertNotEquals(expectedGroupName, userBeforeTest.getOwnerGroup().getName());
+        assertNotEquals(expectedGroupId, userBeforeTest.getOwnerGroup().getName());
 
         mockMvc.perform(post("/user/updateStudent")
                         .param("userId", String.valueOf(userId))
                         .param("firstname", expectedFirstname)
                         .param("lastname", expectedLastname)
-                        .param("groupName", expectedGroupName))
+                        .param("groupId", String.valueOf(expectedGroupId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"));
 
@@ -158,7 +158,7 @@ class UserControllerIntegrationTest {
         // Verify that Student data was updated in the database
         assertEquals(expectedFirstname, actualUser.getFirstname());
         assertEquals(expectedLastname, actualUser.getLastname());
-        assertEquals(expectedGroupName, actualUser.getOwnerGroup().getName());
+        assertEquals(expectedGroupId, actualUser.getOwnerGroup().getId());
 
         // Revert changes
         actualUser.setFirstname("alex");
