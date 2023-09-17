@@ -20,7 +20,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register/**")
                         .permitAll()
-                        .requestMatchers("/user/management/**").hasAuthority("ADMIN")
+                        .requestMatchers("/user/management/**").hasRole("ADMIN")
+                        .requestMatchers("/course/addCourse").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/group/addGroup").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/course/delete").hasRole("ADMIN")
+                        .requestMatchers("/group/delete").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()
                 ).formLogin(
@@ -36,7 +40,6 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

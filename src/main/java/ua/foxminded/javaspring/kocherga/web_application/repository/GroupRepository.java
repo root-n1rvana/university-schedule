@@ -8,4 +8,8 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
     Group getGroupById(long groupId);
+
+    boolean existsByName(String groupName);
+
+    void deleteByName(String groupName);
 }

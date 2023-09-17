@@ -29,15 +29,15 @@ class UserControllerIntegrationTest {
 
     int groupId = 1;
 
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     @Test
     public void testManagementPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/management"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("management"));
+                .andExpect(MockMvcResultMatchers.view().name("management/user-management"));
     }
 
-    @WithMockUser(authorities = "STUDENT")
+    @WithMockUser(roles = "STUDENT")
     @Test
     public void testShowManagementPageUnauthorized() throws Exception {
         mockMvc.perform(get("/user/management"))
@@ -52,14 +52,14 @@ class UserControllerIntegrationTest {
         mockMvc.perform(get("/user/find-by-login")
                         .param("loginName", loginName))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("management"))
+                .andExpect(MockMvcResultMatchers.view().name("management/user-management"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("user"))
                 .andExpect(MockMvcResultMatchers.model().attribute("allGroups", Matchers.any(List.class)))
                 .andExpect(MockMvcResultMatchers.model().attribute("allRoles", Matchers.any(List.class)))
                 .andExpect(MockMvcResultMatchers.model().attribute("roleIds", Matchers.any(List.class)));
     }
 
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     @Test
     public void testUpdateUser() throws Exception {
         long userId = 2L;

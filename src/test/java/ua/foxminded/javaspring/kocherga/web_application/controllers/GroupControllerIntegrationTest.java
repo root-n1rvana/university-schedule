@@ -1,0 +1,149 @@
+package ua.foxminded.javaspring.kocherga.web_application.controllers;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ua.foxminded.javaspring.kocherga.web_application.models.Group;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
+import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class GroupControllerIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private GroupService groupService;
+
+    @WithMockUser("spring")
+    @Test
+    public void testGroupPage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/group/management"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("management/group-management"))
+                .andExpect(model().attributeExists("groups"))
+                .andExpect(model().attribute("groups", hasSize(8)))
+                .andExpect(model().attribute("groups", hasItem(
+                        allOf(
+                                hasProperty("id", is(2L)),
+                                hasProperty("name", is("professor"))
+                        )
+                )));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testUpdateGroup() throws Exception {
+        // Create a test group
+        Group testGroup = new Group();
+        testGroup.setName("Test Group");
+        groupService.save(testGroup);
+        GroupDto savedGroup = groupService.getGroupDtoById(testGroup.getId());
+
+        // Prepare the updated data
+        String expectedGroupName = "New Name";
+
+        mockMvc.perform(post("/group/update")
+                        .param("groupId", String.valueOf(savedGroup.getId()))
+                        .param("newName", expectedGroupName))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"));
+
+        // Verify that the group was updated in the database
+        GroupDto actualGroup = groupService.getGroupDtoById(savedGroup.getId());
+        assertEquals(expectedGroupName, actualGroup.getName());
+
+        // Cleaning after test
+        groupService.deleteGroupByName("New Name");
+    }
+
+    @Test
+    @WithMockUser(roles = "PROFESSOR")
+    public void testAddGroup_ProfessorAccess() throws Exception {
+        String newGroupName = "New Course";
+
+        mockMvc.perform(post("/group/addGroup")
+                        .param("newGroupName", newGroupName))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"))
+                .andExpect(flash().attributeExists("successMessage"))
+                .andExpect(flash().attribute("successMessage", "Group added successfully!"));
+
+        // Verify that the group was added to the database
+        assertTrue(groupService.existByGroupName(newGroupName));
+
+        // Cleaning after test
+        groupService.deleteGroupByName(newGroupName);
+        assertFalse(groupService.existByGroupName(newGroupName));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testAddGroupError() throws Exception {
+        String newGroupName = "admin";
+
+        // Verify that the group already exists
+        assertTrue(groupService.existByGroupName(newGroupName));
+
+        mockMvc.perform(post("/group/addGroup")
+                        .param("newGroupName", newGroupName))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Group with the same name already exists."));
+    }
+
+    @Test
+    @WithMockUser(roles = "STUDENT")
+    public void testAddGroup_StudentAccess() throws Exception {
+        String newGroupName = "New Group";
+
+        mockMvc.perform(post("/group/addGroup")
+                        .param("newGroupName", newGroupName))
+                .andExpect(status().isForbidden()); // Expect a 403 Forbidden response
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testDeleteGroup_AdminAccess() throws Exception {
+        // Create a test group to be deleted
+        Group testGroup = new Group();
+        testGroup.setName("ToDelete");
+        groupService.save(testGroup);
+
+        // Verify that the group was saved to database
+        assertTrue(groupService.existByGroupName(testGroup.getName()));
+
+        mockMvc.perform(post("/group/delete")
+                        .param("groupId", String.valueOf(testGroup.getId())))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"))
+                .andExpect(flash().attributeExists("deletionSucceeded"))
+                .andExpect(flash().attribute("deletionSucceeded", "Group deleted successfully!"));
+
+        // Verify that the group was deleted from the database
+        assertFalse(groupService.existByGroupName(testGroup.getName()));
+    }
+
+    @Test
+    @WithMockUser(roles = "STUDENT")
+    public void testDeleteGroup_StudentAccess() throws Exception {
+        String groupNameToDelete = "ToDelete";
+
+        mockMvc.perform(post("/group/delete")
+                        .param("ToDelete", groupNameToDelete))
+                .andExpect(status().isForbidden()); // Expect a 403 Forbidden response
+    }
+}

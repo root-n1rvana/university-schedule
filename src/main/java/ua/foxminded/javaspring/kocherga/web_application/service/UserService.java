@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
@@ -14,6 +15,7 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepositor
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -52,10 +54,10 @@ public class UserService {
         user.setLastname(userDto.getLastName());
         user.setLogin(userDto.getLoginName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
-//        Role role = roleRepository.getRoleByRoleName(RoleName.STUDENT);
+//        Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
+        Role role = roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT);
         user.setRoles(new HashSet<>(Collections.singletonList(role)));
-        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - 'No Group'
+        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - default 'No Group'
         userRepository.save(user);
     }
 
@@ -74,5 +76,19 @@ public class UserService {
         if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
             result.rejectValue("loginName", "account.exists", "Account with this login already exists");
         }
+    }
+
+    public boolean existByLoginName(String loginName) {
+        return userRepository.existsByLogin(loginName);
+    }
+
+    public List<User> getStudentUsers() {
+        List<User> allUsers = userRepository.findAll();
+        return allUsers.stream()
+                .filter(user -> user.getRoles().stream()
+                        .anyMatch(role -> role.getRoleName().equals(RoleName.ROLE_STUDENT)))
+                .filter(user -> user.getRoles().stream()
+                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
+                .collect(Collectors.toList());
     }
 }
