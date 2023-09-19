@@ -10,7 +10,6 @@ import java.util.Set;
 public class UserDto {
 
     private Long id;
-
     @NotEmpty
     private String firstname;
     @NotEmpty
@@ -85,6 +84,13 @@ public class UserDto {
 
     public void setOwnerGroup(Group ownerGroup) {
         this.ownerGroup = ownerGroup;
+    }
+
+    public void setOwnerGroupId(Long groupId) {
+        if (ownerGroup == null) {
+            ownerGroup = new Group();
+        }
+        ownerGroup.setId(groupId);
     }
 
     public Set<Role> getRoles() {

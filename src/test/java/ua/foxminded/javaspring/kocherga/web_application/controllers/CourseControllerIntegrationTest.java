@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
+import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
 import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import static org.hamcrest.Matchers.*;
@@ -26,6 +27,9 @@ class CourseControllerIntegrationTest {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     @WithMockUser("spring")
     @Test
@@ -58,7 +62,7 @@ class CourseControllerIntegrationTest {
         String expectedCourseDescription = "Updated Description";
 
         mockMvc.perform(post("/course/update")
-                        .param("courseId", String.valueOf(savedCourse.getId()))
+                        .param("id", String.valueOf(savedCourse.getId()))
                         .param("courseName", expectedCourseName)
                         .param("courseDescription", expectedCourseDescription))
                 .andExpect(status().is3xxRedirection())
@@ -70,7 +74,7 @@ class CourseControllerIntegrationTest {
         assertEquals(expectedCourseDescription, actualCourse.getCourseDescription());
 
         // Cleaning after test
-        courseService.deleteByCourseName("Updated Course Name");
+        courseRepository.deleteByCourseName("Updated Course Name");
     }
 
     @Test
@@ -80,8 +84,8 @@ class CourseControllerIntegrationTest {
         String newCourseDescription = "New Course Description";
 
         mockMvc.perform(post("/course/addCourse")
-                        .param("newCourseName", newCourseName)
-                        .param("newCourseDescription", newCourseDescription))
+                        .param("courseName", newCourseName)
+                        .param("courseDescription", newCourseDescription))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course/management"))
                 .andExpect(flash().attributeExists("successMessage"))
@@ -91,7 +95,7 @@ class CourseControllerIntegrationTest {
         assertTrue(courseService.existsByCourseName(newCourseName));
 
         // Cleaning after test
-        courseService.deleteByCourseName(newCourseName);
+        courseRepository.deleteByCourseName(newCourseName);
         assertFalse(courseService.existsByCourseName(newCourseName));
     }
 
@@ -102,8 +106,8 @@ class CourseControllerIntegrationTest {
         String newCourseDescription = "New Course Description";
 
         mockMvc.perform(post("/course/addCourse")
-                        .param("newCourseName", newCourseName)
-                        .param("newCourseDescription", newCourseDescription))
+                        .param("courseName", newCourseName)
+                        .param("courseDescription", newCourseDescription))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course/management"))
                 .andExpect(flash().attributeExists("errorMessage"))

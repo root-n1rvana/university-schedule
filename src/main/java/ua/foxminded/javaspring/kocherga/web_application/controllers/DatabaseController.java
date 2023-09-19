@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.*;
 
 import java.util.List;
@@ -64,7 +65,7 @@ public class DatabaseController {
 
     @GetMapping("/groups")
     public String getGroups(Model model) {
-        List<Group> groups = groupService.getAllGroups();
+        List<GroupDto> groups = groupService.getAllGroups();
         model.addAttribute("groups", groups);
         return "db/groups";
     }

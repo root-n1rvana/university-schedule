@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
@@ -75,7 +76,7 @@ class UserControllerIntegrationTest {
                         .param("lastname", lastname)
                         .param("login", login)
                         .param("password", password)
-                        .param("groupId", String.valueOf(groupId)))
+                        .param("ownerGroup.id", String.valueOf(groupId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
                 .andExpect(flash().attributeExists("successMessage"))
@@ -132,7 +133,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "PROFESSOR")
     public void testUpdateStudent() throws Exception {
         // User data before test
-        User userBeforeTest = userService.getUserById(userId);
+        UserDto userBeforeTest = userService.getUserById(userId);
 
         // Prepare data to replace in database
         String expectedFirstname = "newFirstname";
@@ -145,15 +146,15 @@ class UserControllerIntegrationTest {
         assertNotEquals(expectedGroupId, userBeforeTest.getOwnerGroup().getName());
 
         mockMvc.perform(post("/user/updateStudent")
-                        .param("userId", String.valueOf(userId))
+                        .param("id", String.valueOf(userId))
                         .param("firstname", expectedFirstname)
                         .param("lastname", expectedLastname)
-                        .param("groupId", String.valueOf(expectedGroupId)))
+                        .param("ownerGroup.id", String.valueOf(expectedGroupId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"));
 
         //Retreiving a user database after modification
-        User actualUser = userService.getUserById(userId);
+        UserDto actualUser = userService.getUserById(userId);
 
         // Verify that Student data was updated in the database
         assertEquals(expectedFirstname, actualUser.getFirstname());
@@ -231,7 +232,7 @@ class UserControllerIntegrationTest {
         assertFalse(passwordEncoder.matches(expectedPassword, userService.getUserById(userId).getPassword()));
 
         mockMvc.perform(post("/user/updateCredentials")
-                        .param("userId", String.valueOf(userId))
+                        .param("id", String.valueOf(userId))
                         .param("login", expectedLogin)
                         .param("password", expectedPassword))
                 .andExpect(status().is3xxRedirection())
@@ -240,7 +241,7 @@ class UserControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Credential modification was successful!"));
 
         //Retreiving a user database after modification
-        User actualUser = userService.getUserById(userId);
+        UserDto actualUser = userService.getUserById(userId);
         String actualLogin = actualUser.getLogin();
         String actualPassword = actualUser.getPassword();
 
@@ -262,7 +263,7 @@ class UserControllerIntegrationTest {
         String somePassword = "somePassword";
 
         mockMvc.perform(post("/user/updateCredentials")
-                        .param("userId", String.valueOf(userId))
+                        .param("id", String.valueOf(userId))
                         .param("login", existingLogin)
                         .param("password", somePassword))
                 .andExpect(status().is3xxRedirection())

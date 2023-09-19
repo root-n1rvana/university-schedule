@@ -53,36 +53,24 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addStudent")
-    public String addStudent(@RequestParam String firstname,
-                             @RequestParam String lastname,
-                             @RequestParam String login,
-                             @RequestParam String password,
-                             @RequestParam Long groupId,
-                             RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = userService.saveStudentWithRedirAttr(firstname, lastname, login, password, groupId);
+    public String addStudent(@ModelAttribute UserDto userDto, RedirectAttributes redirectAttributes) { //
+        RedirectAttributesDto redirAttrDto = userService.saveStudentAndgetRedirAttr(userDto);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/updateStudent")
-    public String updateStudent(@RequestParam Long userId,
-                                @RequestParam String firstname,
-                                @RequestParam String lastname,
-                                @RequestParam Long groupId,
-                                RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = userService.updateStudentWithRedirAttr(userId, firstname, lastname, groupId);
+    public String updateStudent(@ModelAttribute UserDto userDto, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = userService.updateStudentAndGetRedirAttr(userDto); //, groupId
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/updateCredentials")
-    public String updateCredentials(@RequestParam Long userId,
-                                    @RequestParam String login,
-                                    @RequestParam String password,
-                                    RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = userService.userCredentialsUpdate(userId, login, password);
+    public String updateCredentials(@ModelAttribute UserDto userDto, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = userService.userCredentialsUpdate(userDto);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;
     }
@@ -90,7 +78,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/deleteStudent")
     public String deleteStudent(@RequestParam long userId, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = userService.deleteStudentWithRedirAttr(userId);
+        RedirectAttributesDto redirAttrDto = userService.deleteStudentAndGetRedirAttr(userId);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;
     }

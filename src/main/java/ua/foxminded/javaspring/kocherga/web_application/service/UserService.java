@@ -43,8 +43,8 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public User getUserById(long id) {
-        return userRepository.getUserById(id);
+    public UserDto getUserById(long id) {
+        return userMapper.userToUserDto(userRepository.getUserById(id));
     }
 
     public User findUserByLoginName(String loginName) {
@@ -81,6 +81,11 @@ public class UserService {
     }
 
     @Transactional
+    public void save(UserDto user) {
+        userRepository.save(userMapper.userDtoToUser(user));
+    }
+
+    @Transactional
     public void saveUser(UserDto userDto) {
         User user = new User();
         user.setFirstname(userDto.getFirstname());
@@ -106,23 +111,19 @@ public class UserService {
     }
 
     @Transactional
-    public RedirectAttributesDto saveStudentWithRedirAttr(String firstname, String lastname, String login, String password, Long groupId) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto(login);
-        if (userRepository.existsByLogin(login)) {
+    public RedirectAttributesDto saveStudentAndgetRedirAttr(UserDto userDto) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+        if (userRepository.existsByLogin(userDto.getLogin())) {
             redirectAttributesDto.setName(ERROR_MSG);
             redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
         } else {
-            User user = new User();
-            user.setFirstname(firstname);
-            user.setLastname(lastname);
-            user.setLogin(login);
-            user.setPassword(passwordEncoder.encode(password));
-            Group group = groupService.getGroupById(groupId);
-            user.setOwnerGroup(group);
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            Group group = groupService.getGroupById(userDto.getOwnerGroup().getId());
+            userDto.setOwnerGroup(group);
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
-            user.setRoles(roles);
-            save(user);
+            userDto.setRoles(roles);
+            save(userDto);
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Student added successfully!");
         }
@@ -130,12 +131,12 @@ public class UserService {
     }
 
     @Transactional
-    public RedirectAttributesDto updateStudentWithRedirAttr(Long userId, String firstname, String lastname, long groupId) {
+    public RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        User userToEdit = userRepository.getUserById(userId);
-        userToEdit.setFirstname(firstname);
-        userToEdit.setLastname(lastname);
-        Group group = groupService.getGroupById(groupId);
+        User userToEdit = userRepository.getUserById(userDto.getId());
+        userToEdit.setFirstname(userDto.getFirstname());
+        userToEdit.setLastname(userDto.getLastname());
+        Group group = groupService.getGroupById(userDto.getOwnerGroup().getId());
         userToEdit.setOwnerGroup(group);
         save(userToEdit);
         redirectAttributesDto.setName(SUCCESS_MSG);
@@ -144,7 +145,7 @@ public class UserService {
     }
 
     @Transactional
-    public RedirectAttributesDto deleteStudentWithRedirAttr(Long id) {
+    public RedirectAttributesDto deleteStudentAndGetRedirAttr(Long id) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
@@ -163,15 +164,15 @@ public class UserService {
     }
 
     @Transactional
-    public RedirectAttributesDto userCredentialsUpdate(Long userId, String login, String password) {
+    public RedirectAttributesDto userCredentialsUpdate(UserDto userDto) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        User userToEdit = userRepository.getUserById(userId);
-        if (userRepository.existsByLogin(login) && !userToEdit.getLogin().equals(login)) {
+        User userToEdit = userRepository.getUserById(userDto.getId());
+        if (userRepository.existsByLogin(userDto.getLogin()) && !userToEdit.getLogin().equals(userDto.getLogin())) {
             redirectAttributesDto.setName(ERROR_MSG);
             redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
         } else {
-            userToEdit.setLogin(login);
-            userToEdit.setPassword(passwordEncoder.encode(password));
+            userToEdit.setLogin(userDto.getLogin());
+            userToEdit.setPassword(passwordEncoder.encode(userDto.getPassword()));
             save(userToEdit);
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Credential modification was successful!");

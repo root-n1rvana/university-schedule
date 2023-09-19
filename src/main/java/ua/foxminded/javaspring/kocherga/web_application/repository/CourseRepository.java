@@ -1,5 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     boolean existsById(@NonNull Long courseId);
 
+    @Transactional
     void deleteByCourseName(String courseName);
 
     void deleteById(@NonNull Long courseId);

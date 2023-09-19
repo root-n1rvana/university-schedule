@@ -4,6 +4,7 @@ public class CourseDto {
 
     private Long id;
     private String courseName;
+
     private String courseDescription;
 
     public CourseDto() {

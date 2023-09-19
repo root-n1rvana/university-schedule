@@ -53,18 +53,35 @@ public class CourseService {
     }
 
     @Transactional
-    public RedirectAttributesDto saveWithRedirAttr(String newCourseName, String newCourseDescription) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto(newCourseName);
-        if (courseRepository.existsByCourseName(newCourseName)) {
+    public RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+        if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
             redirectAttributesDto.setName("errorMessage");
             redirectAttributesDto.setValue("Course with the same name already exists.");
         } else {
-            CourseDto courseDto = new CourseDto();
-            courseDto.setCourseName(newCourseName);
-            courseDto.setCourseDescription(newCourseDescription);
-            save(courseDto);
+            Course newCourse = new Course();
+            newCourse.setCourseName(courseDto.getCourseName());
+            newCourse.setCourseDescription(courseDto.getCourseDescription());
+            save(newCourse);
             redirectAttributesDto.setName("successMessage");
             redirectAttributesDto.setValue("Course added successfully!");
+        }
+        return redirectAttributesDto;
+    }
+
+    @Transactional
+    public RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+        if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
+            redirectAttributesDto.setName("errorMessage");
+            redirectAttributesDto.setValue("Course with the same name already exists.");
+        } else {
+            Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
+            courseToUpdate.setCourseName(courseDto.getCourseName());
+            courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
+            save(courseToUpdate);
+            redirectAttributesDto.setName("successMessage");
+            redirectAttributesDto.setValue("Course updated successfully!");
         }
         return redirectAttributesDto;
     }
@@ -74,12 +91,7 @@ public class CourseService {
     }
 
     @Transactional
-    public void deleteByCourseName(String courseName) {
-        courseRepository.deleteByCourseName(courseName);
-    }
-
-    @Transactional
-    public RedirectAttributesDto deleteWithRedirAttr(Long courseId) {
+    public RedirectAttributesDto deleteAndGetRedirAttr(Long courseId) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (courseRepository.existsById(courseId)) {
             courseRepository.deleteById(courseId);

@@ -33,19 +33,18 @@ public class GroupController {
         return GROUP_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/update")
-    public String updateGroupName(@RequestParam("groupId") long groupId, @RequestParam("newName") String newName) {
-        GroupDto groupDto = groupService.getGroupDtoById(groupId);
-        groupDto.setName(newName);
-        groupService.save(groupDto);
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
+    @PostMapping("/addGroup") //TODO add bad request check from user
+    public String addGroup(@RequestParam String newGroupName, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = groupService.saveAndGetRedirAttr(newGroupName);
+        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
-    @PostMapping("/addGroup")
-    public String addGroup(@RequestParam String newGroupName, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = groupService.saveWithRedirAttr(newGroupName);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/update")
+    public String updateGroupName(GroupDto groupDto, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = groupService.updateAndGetRedirAttr(groupDto);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }
@@ -53,7 +52,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")
     public String deleteGroup(@RequestParam long groupId, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = groupService.deleteWithRedirAttr(groupId);
+        RedirectAttributesDto redirAttrDto = groupService.deleteAndGetRedirAttr(groupId);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_GROUP_MANAGEMENT_PAGE;
     }

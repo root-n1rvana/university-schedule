@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import ua.foxminded.javaspring.kocherga.web_application.models.DefaultGroup;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
@@ -10,6 +11,7 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.GroupReposito
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,24 +33,27 @@ public class GroupService {
         return groupMapper.groupToGroupDto(groupRepository.getGroupById(groupId));
     }
 
-    public List<Group> getAllGroups() {
-        return groupRepository.findAll();
+    public List<GroupDto> getAllGroups() {
+        return groupMapper.groupListToGroupDtoList(groupRepository.findAll());
     }
 
     public List<GroupDto> getAllGroupsForManagement() {
         return groupMapper.groupListToGroupDtoList(groupRepository.findAll())
                 .stream()
-                .filter(group -> group.getId() != 9L) //excluding default empty Group for new users
+                .filter(group -> !Objects.equals(group.getId(), DefaultGroup.UNSELECTED.getId()))
                 .sorted(Comparator.comparing(GroupDto::getId))
                 .collect(Collectors.toList());
+    }
+
+    private boolean adminAndProfessorGroupFilter(GroupDto group) {
+        return !Objects.equals(group.getId(), DefaultGroup.ADMIN.getId()) &&
+                !Objects.equals(group.getId(), DefaultGroup.PROFESSOR.getId());
     }
 
     public List<GroupDto> getAllGroupsForStudents() {
         return groupMapper.groupListToGroupDtoList(groupRepository.findAll())
                 .stream()
-                .filter(group -> group.getId() != 1L) //excluding admin Group for new Students
-                .filter(group -> group.getId() != 2L) //excluding professor Group for new Students
-                .filter(group -> group.getId() != 9L) //excluding empty default Group
+                .filter(this::adminAndProfessorGroupFilter)
                 .sorted(Comparator.comparing(GroupDto::getId))
                 .collect(Collectors.toList());
     }
@@ -62,26 +67,21 @@ public class GroupService {
     }
 
     @Transactional
-    public void save(Group group) {
-        groupRepository.save(group);
-    }
-
-    @Transactional
     public void save(GroupDto groupDto) {
         Group group = groupMapper.groupDtoToGroup(groupDto);
         groupRepository.save(group);
     }
 
     @Transactional
-    public RedirectAttributesDto saveWithRedirAttr(String newGroupName) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto(newGroupName);
+    public RedirectAttributesDto saveAndGetRedirAttr(String newGroupName) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (groupRepository.existsByName(newGroupName)) {
             redirectAttributesDto.setName("errorMessage");
             redirectAttributesDto.setValue("Group with the same name already exists.");
         } else {
             Group group = new Group();
             group.setName(newGroupName);
-            save(group);
+            groupRepository.save(group);
             redirectAttributesDto.setName("successMessage");
             redirectAttributesDto.setValue("Group added successfully!");
         }
@@ -89,12 +89,23 @@ public class GroupService {
     }
 
     @Transactional
-    public void deleteGroupByName(String groupName) {
-        groupRepository.deleteByName(groupName);
+    public RedirectAttributesDto updateAndGetRedirAttr(GroupDto groupDto) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+        if (groupRepository.existsByName(groupDto.getName())) {
+            redirectAttributesDto.setName("errorMessage");
+            redirectAttributesDto.setValue("Group with the same name already exists.");
+        } else {
+            Group groupToUpdate = getGroupById(groupDto.getId());
+            groupToUpdate.setName(groupDto.getName());
+            groupRepository.save(groupToUpdate);
+            redirectAttributesDto.setName("successMessage");
+            redirectAttributesDto.setValue("Group updated successfully!");
+        }
+        return redirectAttributesDto;
     }
 
     @Transactional
-    public RedirectAttributesDto deleteWithRedirAttr(Long groupId) {
+    public RedirectAttributesDto deleteAndGetRedirAttr(Long groupId) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (groupRepository.existsById(groupId)) {
             groupRepository.deleteById(groupId);
