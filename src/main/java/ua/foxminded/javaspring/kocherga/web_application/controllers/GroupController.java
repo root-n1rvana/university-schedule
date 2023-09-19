@@ -34,7 +34,7 @@ public class GroupController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
-    @PostMapping("/addGroup") //TODO add bad request check from user
+    @PostMapping("/addGroup")
     public String addGroup(@RequestParam String newGroupName, RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = groupService.saveAndGetRedirAttr(newGroupName);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
