@@ -1,6 +1,7 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
@@ -11,11 +12,17 @@ public class UserDto {
 
     private Long id;
     @NotEmpty
+    @Size(max = 50)
     private String firstname;
+
     @NotEmpty
+    @Size(max = 50)
     private String lastname;
+
     @NotEmpty
+    @Size(max = 20)
     private String login;
+
     @NotEmpty(message = "Password should not be empty")
     private String password;
     private Group ownerGroup;

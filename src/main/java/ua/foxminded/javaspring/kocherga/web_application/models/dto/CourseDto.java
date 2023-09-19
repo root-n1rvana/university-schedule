@@ -1,10 +1,15 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
+import jakarta.validation.constraints.Size;
+
 public class CourseDto {
 
     private Long id;
+
+    @Size(max = 20)
     private String courseName;
 
+    @Size(max = 100)
     private String courseDescription;
 
     public CourseDto() {
