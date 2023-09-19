@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.CourseServiceImpl;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ public class CourseController {
 
     private final static String COURSE_MANAGEMENT_PAGE = "management/course-management";
     private final static String REDIRECT_TO_COURSE_MANAGEMENT_PAGE = "redirect:/course/management";
-    private final CourseService courseService;
+    private final CourseServiceImpl courseService;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseServiceImpl courseService) {
         this.courseService = courseService;
     }
 

@@ -9,8 +9,8 @@ import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
-import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
 
 import java.util.List;
 
@@ -21,10 +21,10 @@ public class UserController {
     private final static String REDIRECT_TO_STUDENT_MANAGEMENT_PAGE = "redirect:/user/student-management";
     private final static String STUDENT_MANAGEMENT_PAGE = "management/student-management";
 
-    private final UserService userService;
-    private final GroupService groupService;
+    private final UserServiceImpl userService;
+    private final GroupServiceImpl groupService;
 
-    public UserController(UserService userService, GroupService groupService) {
+    public UserController(UserServiceImpl userService, GroupServiceImpl groupService) {
         this.userService = userService;
         this.groupService = groupService;
     }

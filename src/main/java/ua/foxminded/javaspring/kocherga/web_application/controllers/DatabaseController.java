@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.*;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.*;
 
 import java.util.List;
 
@@ -15,18 +15,18 @@ import java.util.List;
 @RequestMapping("/entity")
 public class DatabaseController {
 
-    private final UserService userService;
-    private final CourseService courseService;
-    private final RoomService roomService;
-    private final GroupService groupService;
-    private final LessonService lessonService;
-    private final RoleService roleService;
-    private final LessonTimeService lessonTimeService;
-    private final ScheduleService scheduleService;
+    private final UserServiceImpl userService;
+    private final CourseServiceImpl courseService;
+    private final RoomServiceImpl roomService;
+    private final GroupServiceImpl groupService;
+    private final LessonServiceImpl lessonService;
+    private final RoleServiceImpl roleService;
+    private final LessonTimeServiceImpl lessonTimeService;
+    private final ScheduleServiceImpl scheduleService;
 
-    public DatabaseController(UserService userService, CourseService courseService, RoomService roomService,
-                              GroupService groupService, LessonService lessonService, RoleService roleService,
-                              LessonTimeService lessonTimeService, ScheduleService scheduleService) {
+    public DatabaseController(UserServiceImpl userService, CourseServiceImpl courseService, RoomServiceImpl roomService,
+                              GroupServiceImpl groupService, LessonServiceImpl lessonService, RoleServiceImpl roleService,
+                              LessonTimeServiceImpl lessonTimeService, ScheduleServiceImpl scheduleService) {
         this.userService = userService;
         this.courseService = courseService;
         this.roomService = roomService;

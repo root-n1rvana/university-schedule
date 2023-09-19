@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
-import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +27,7 @@ class GroupControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GroupService groupService;
+    private GroupServiceImpl groupService;
 
     @Autowired
     private GroupRepository groupRepository;

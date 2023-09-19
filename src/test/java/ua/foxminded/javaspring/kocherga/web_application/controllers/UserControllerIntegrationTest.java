@@ -12,8 +12,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
-import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +28,9 @@ class UserControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
     @Autowired
-    private GroupService groupService;
+    private GroupServiceImpl groupService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 

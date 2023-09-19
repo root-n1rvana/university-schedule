@@ -108,7 +108,8 @@
                     <div class="mb-3">
                         <label for="newGroupName" class="col-form-label">Choose Group</label>
                         <select class="form-select" id="newGroupName" name="ownerGroup.id">
-                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}"></option>
+                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}"
+                                    th:selected="${group.id == 9}"></option>
                         </select>
                     </div>
                     <br>

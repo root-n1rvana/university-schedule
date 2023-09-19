@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
-import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.CourseServiceImpl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +26,7 @@ class CourseControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CourseService courseService;
+    private CourseServiceImpl courseService;
 
     @Autowired
     private CourseRepository courseRepository;
