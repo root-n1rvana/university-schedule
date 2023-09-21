@@ -17,15 +17,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 public class AuthControllerIntegrationTest {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    private  MockMvc mockMvc;
-
-    @Autowired
-    public AuthControllerIntegrationTest(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private MockMvc mockMvc;
 
     @Test
     public void testLoginPage() throws Exception {
@@ -45,10 +41,10 @@ public class AuthControllerIntegrationTest {
     @Test
     public void testRegistrationSuccess() throws Exception {
         mockMvc.perform(post("/register/save")
-                                .param("firstName", "testuser123")
-                                .param("lastName", "testuser123")
-                                .param("loginName", "testuser123")
-                                .param("password", "testpassword")
+                        .param("firstname", "testuser123")
+                        .param("lastname", "testuser123")
+                        .param("login", "testuser123")
+                        .param("password", "testpassword")
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("login"));

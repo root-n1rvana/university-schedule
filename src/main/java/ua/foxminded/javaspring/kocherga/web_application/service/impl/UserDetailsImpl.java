@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.kocherga.web_application.service;
+package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

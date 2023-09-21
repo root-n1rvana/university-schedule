@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
 
 @Controller
 public class AuthController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -40,7 +40,7 @@ public class AuthController {
             return "register";
         }
 
-        userService.saveUser(userDto);
+        userService.saveNewRegisteredUser(userDto);
         return "login";
     }
 

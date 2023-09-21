@@ -77,19 +77,19 @@
     </div>
     <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
         <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input class="form-control" id="firstName" name="firstName" placeholder="Enter first name" th:field="*{firstName}" type="text" />
-            <p th:errors="*{firstName}" class="alert alert-info" th:if="${#fields.hasErrors('firstName')}"></p>
+            <label for="firstname">First Name</label>
+            <input class="form-control" id="firstname" name="firstname" placeholder="Enter first name" th:field="*{firstname}" type="text" />
+            <p th:errors="*{firstname}" class="alert alert-info" th:if="${#fields.hasErrors('firstname')}"></p>
         </div>
         <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input class="form-control" id="lastName" name="lastName" placeholder="Enter last name" th:field="*{lastName}" type="text" />
-            <p th:errors="*{lastName}" class="alert alert-info" th:if="${#fields.hasErrors('lastName')}"></p>
+            <label for="lastname">Last Name</label>
+            <input class="form-control" id="lastname" name="lastname" placeholder="Enter last name" th:field="*{lastname}" type="text" />
+            <p th:errors="*{lastname}" class="alert alert-info" th:if="${#fields.hasErrors('lastname')}"></p>
         </div>
         <div class="form-group">
             <label class="form-label">Login</label>
-            <input class="form-control" id="loginName" name="loginName" placeholder="Enter Login name" th:field="*{loginName}" type="loginName" />
-            <p th:errors="*{loginName}" class="alert alert-info" th:if="${#fields.hasErrors('loginName')}"></p>
+            <input class="form-control" id="login" name="login" placeholder="Enter Login name" th:field="*{login}" type="login" />
+            <p th:errors="*{login}" class="alert alert-info" th:if="${#fields.hasErrors('login')}"></p>
         </div>
         <div class="form-group">
             <label class="form-label">Password</label>

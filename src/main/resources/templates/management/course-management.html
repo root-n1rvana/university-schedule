@@ -56,7 +56,6 @@
 <!-- Menu bar -->
 <div class="menu">
     <a href="/" class="menu-item" style="color: white">Home</a>
-    <a href="/management" class="menu-item" style="color: white">Management</a>
     <div style="margin-left: auto;">
         <a sec:authentication="name" href="/#" class="menu-item" style="color: white;">User</a>
         <a href="/logout" class="logout-btn">Logout</a>
@@ -85,6 +84,7 @@
 <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal" data-bs-target="#AddNewCourseModal">
     <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
 </div>
+
 <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewCourseModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -96,11 +96,11 @@
                 <form th:action="@{addCourse}" method="post">
                     <div class="mb-3">
                         <label for="newCourseName" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="newCourseName" name="newCourseName" required/>
+                        <input type="text" class="form-control" id="newCourseName" name="courseName" maxlength="20" required/>
                     </div>
                     <div class="mb-3">
                         <label for="newCourseDescription" class="col-form-label">Description:</label>
-                        <input type="text" class="form-control" id="newCourseDescription" name="newCourseDescription"
+                        <input type="text" class="form-control" id="newCourseDescription" name="courseDescription" maxlength="100"
                                required/>
                     </div>
                     <br>
@@ -142,15 +142,15 @@
                         <div class="modal-body">
                             <form th:action="@{/course/update}" method="post">
                                 <div class="mb-3">
-                                    <input type="hidden" th:name="courseId" th:value="${course.id}"/>
+                                    <input type="hidden" th:name="id" th:value="${course.id}"/>
                                     <label for="courseName" class="col-form-label">Name:</label>
                                     <input type="text" class="form-control" id="courseName" name="courseName"
-                                           th:value="${course.courseName}" required/>
+                                           th:value="${course.courseName}" maxlength="20" required/>
                                 </div>
                                 <div class="mb-3">
                                     <label for="courseDescription" class="col-form-label">Description:</label>
                                     <input type="text" class="form-control" id="courseDescription"
-                                           name="courseDescription" th:value="${course.courseDescription}"
+                                           name="courseDescription" th:value="${course.courseDescription}" maxlength="100"
                                            required/>
                                 </div>
                                 <br>

@@ -1,94 +1,45 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
-import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
-import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
-import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
-public class UserService {
+public interface UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
-    private final GroupRepository groupRepository;
+    UserDto getUserById(long id);
 
-    public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder,
-                       RoleRepository roleRepository,
-                       GroupRepository groupRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-        this.groupRepository = groupRepository;
-    }
+    User findUserByLoginName(String loginName);
 
-    public List<User> getUsersByGroupId(long groupId) {
-        return userRepository.findByOwnerGroupId(groupId);
-    }
+    List<User> getAllUsers();
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+    List<UserDto> getAllStudentUsers();
 
-    public User getUserByUserId(long userId) {
-        return userRepository.getUserById(userId);
-    }
+    List<User> getUsersByGroupId(long groupId);
 
-    @Transactional
-    public void saveUser(UserDto userDto) {
-        User user = new User();
-        user.setFirstname(userDto.getFirstName());
-        user.setLastname(userDto.getLastName());
-        user.setLogin(userDto.getLoginName());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-//        Role role = roleRepository.getRoleById(2L); //id 2L - 'STUDENT' role
-        Role role = roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT);
-        user.setRoles(new HashSet<>(Collections.singletonList(role)));
-        user.setOwnerGroup(groupRepository.getGroupById(9L)); //id 9L - default 'No Group'
-        userRepository.save(user);
-    }
+    boolean existsByLogin(String login);
 
-    public User findUserByLoginName(String loginName) {
-        return userRepository.findByLogin(loginName);
-    }
+    boolean existsById(Long id);
 
-    @Transactional
-    public void save(User user) {
-        userRepository.save(user);
-    }
+    void save(User user);
 
-    public void checkIfUserExists(UserDto userDto, BindingResult result) {
-        User existingUser = this.findUserByLoginName(userDto.getLoginName());
+    void save(UserDto user);
 
-        if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
-            result.rejectValue("loginName", "account.exists", "Account with this login already exists");
-        }
-    }
+    void saveNewRegisteredUser(UserDto userDto);
 
-    public boolean existByLoginName(String loginName) {
-        return userRepository.existsByLogin(loginName);
-    }
+    RedirectAttributesDto saveStudentAndgetRedirAttr(UserDto userDto);
 
-    public List<User> getStudentUsers() {
-        List<User> allUsers = userRepository.findAll();
-        return allUsers.stream()
-                .filter(user -> user.getRoles().stream()
-                        .anyMatch(role -> role.getRoleName().equals(RoleName.ROLE_STUDENT)))
-                .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
-                .collect(Collectors.toList());
-    }
+    RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto);
+
+    RedirectAttributesDto userCredentialsUpdate(UserDto userDto);
+
+    RedirectAttributesDto deleteStudentAndGetRedirAttr(Long id);
+
+    void deleteUserByLogin(String login);
+
+
+
+
+
 }

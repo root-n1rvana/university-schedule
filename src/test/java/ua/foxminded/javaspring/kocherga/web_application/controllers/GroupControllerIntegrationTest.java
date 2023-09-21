@@ -10,10 +10,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
+import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,7 +27,10 @@ class GroupControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GroupService groupService;
+    private GroupServiceImpl groupService;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
     @WithMockUser("spring")
     @Test
@@ -49,15 +54,15 @@ class GroupControllerIntegrationTest {
         // Create a test group
         Group testGroup = new Group();
         testGroup.setName("Test Group");
-        groupService.save(testGroup);
+        groupRepository.save(testGroup);
         GroupDto savedGroup = groupService.getGroupDtoById(testGroup.getId());
 
         // Prepare the updated data
         String expectedGroupName = "New Name";
 
         mockMvc.perform(post("/group/update")
-                        .param("groupId", String.valueOf(savedGroup.getId()))
-                        .param("newName", expectedGroupName))
+                        .param("id", String.valueOf(savedGroup.getId()))
+                        .param("name", expectedGroupName))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/group/management"));
 
@@ -66,7 +71,7 @@ class GroupControllerIntegrationTest {
         assertEquals(expectedGroupName, actualGroup.getName());
 
         // Cleaning after test
-        groupService.deleteGroupByName("New Name");
+        groupRepository.deleteByName("New Name");
     }
 
     @Test
@@ -85,7 +90,7 @@ class GroupControllerIntegrationTest {
         assertTrue(groupService.existByGroupName(newGroupName));
 
         // Cleaning after test
-        groupService.deleteGroupByName(newGroupName);
+        groupRepository.deleteByName(newGroupName);
         assertFalse(groupService.existByGroupName(newGroupName));
     }
 
@@ -121,7 +126,7 @@ class GroupControllerIntegrationTest {
         // Create a test group to be deleted
         Group testGroup = new Group();
         testGroup.setName("ToDelete");
-        groupService.save(testGroup);
+        groupRepository.save(testGroup);
 
         // Verify that the group was saved to database
         assertTrue(groupService.existByGroupName(testGroup.getName()));
@@ -135,6 +140,22 @@ class GroupControllerIntegrationTest {
 
         // Verify that the group was deleted from the database
         assertFalse(groupService.existByGroupName(testGroup.getName()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testDeleteGroupError() throws Exception {
+        long nonExistingGroupId = 77L;
+
+        // Verify that Student does not exist in database
+        assertFalse(groupService.existByGroupId(nonExistingGroupId));
+
+        mockMvc.perform(post("/group/delete")
+                        .param("groupId", String.valueOf(nonExistingGroupId)))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"))
+                .andExpect(flash().attributeExists("deletionError"))
+                .andExpect(flash().attribute("deletionError", "Course not found or could not be deleted"));
     }
 
     @Test

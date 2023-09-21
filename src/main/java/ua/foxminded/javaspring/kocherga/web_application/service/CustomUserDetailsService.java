@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserDetailsImpl;
 
 import java.util.Optional;
 
