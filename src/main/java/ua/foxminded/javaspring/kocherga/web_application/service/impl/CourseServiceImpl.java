@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
@@ -15,6 +16,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
+
+    private static final int MAX_COURSE_NAME_LENGTH = 30;
+    private static final int MAX_COURSE_DESCRIPTION_LENGTH = 100;
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
@@ -60,36 +64,50 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional
     @Override
-    public RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
-            redirectAttributesDto.setName("errorMessage");
-            redirectAttributesDto.setValue("Course with the same name already exists.");
-        } else {
-            Course newCourse = new Course();
-            newCourse.setCourseName(courseDto.getCourseName());
-            newCourse.setCourseDescription(courseDto.getCourseDescription());
-            save(newCourse);
-            redirectAttributesDto.setName("successMessage");
-            redirectAttributesDto.setValue("Course added successfully!");
+    public RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult) {
+        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
+        if (redirectAttributesDto.getValue() == null) { //TODO check if this validation method is acceptable
+            if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
+                redirectAttributesDto.setName("errorMessage");
+                redirectAttributesDto.setValue("Course with the same name already exists.");
+            } else {
+                Course newCourse = new Course();
+                newCourse.setCourseName(courseDto.getCourseName());
+                newCourse.setCourseDescription(courseDto.getCourseDescription());
+                save(newCourse);
+                redirectAttributesDto.setName("successMessage");
+                redirectAttributesDto.setValue("Course added successfully!");
+            }
         }
         return redirectAttributesDto;
     }
 
+    private RedirectAttributesDto checkErrorsAndHandle(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+            redirectAttributesDto.setName("errorMessage");
+            redirectAttributesDto.setValue("The number of allowed characters has been exceeded");
+            return redirectAttributesDto;
+        }
+        return new RedirectAttributesDto();
+    }
+
     @Transactional
     @Override
-    public RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
-            redirectAttributesDto.setName("errorMessage");
-            redirectAttributesDto.setValue("Course with the same name already exists.");
-        } else {
-            Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
-            courseToUpdate.setCourseName(courseDto.getCourseName());
-            courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
-            save(courseToUpdate);
-            redirectAttributesDto.setName("successMessage");
-            redirectAttributesDto.setValue("Course updated successfully!");
+    public RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult) {
+        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
+        if (redirectAttributesDto.getValue() == null) {
+            if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
+                redirectAttributesDto.setName("errorMessage");
+                redirectAttributesDto.setValue("Course with the same name already exists.");
+            } else {
+                Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
+                courseToUpdate.setCourseName(courseDto.getCourseName());
+                courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
+                save(courseToUpdate);
+                redirectAttributesDto.setName("successMessage");
+                redirectAttributesDto.setValue("Course updated successfully!");
+            }
         }
         return redirectAttributesDto;
     }

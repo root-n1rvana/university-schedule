@@ -93,8 +93,8 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/updateCredentials")
-    public String updateCredentials(@ModelAttribute UserDto userDto, RedirectAttributes redirectAttributes) {
+    @PostMapping("/updateStudentCredentials")
+    public String updateStudentCredentials(@ModelAttribute UserDto userDto, RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = userService.userCredentialsUpdate(userDto);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_STUDENT_MANAGEMENT_PAGE;

@@ -1,8 +1,10 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
@@ -32,16 +34,16 @@ public class CourseController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addCourse")
-    public String addCourse(@ModelAttribute CourseDto courseDto, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = courseService.saveAndGetRedirAttr(courseDto);
-        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+    public String addCourse(@ModelAttribute @Valid CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+            RedirectAttributesDto redirAttrDto = courseService.saveAndGetRedirAttr(courseDto, bindingResult);
+            redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/update")
-    public String updateCourse(CourseDto courseDto, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = courseService.updateAndGetRedirAttr(courseDto);
+    public String updateCourse(CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = courseService.updateAndGetRedirAttr(courseDto, bindingResult);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }

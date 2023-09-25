@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/group/delete").hasRole("ADMIN")
                         .requestMatchers("/user/deleteStudent").hasRole("ADMIN")
                         .requestMatchers("/user/deleteTeacher").hasRole("ADMIN")
-                        .requestMatchers("/user/updateCredentials").hasRole("ADMIN")
+                        .requestMatchers("/user/updateStudentCredentials").hasRole("ADMIN")
                         .requestMatchers("/user/updateTeacherCredentials").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()

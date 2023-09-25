@@ -205,7 +205,7 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form th:action="@{/user/updateCredentials}" method="post">
+                                <form th:action="@{/user/updateStudentCredentials}" method="post">
                                     <div class="mb-3">
                                         <input type="hidden" th:name="id" th:value="${user.id}"/>
                                         <label for="loginEdit" class="col-form-label">Login:</label>

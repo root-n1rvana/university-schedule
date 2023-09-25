@@ -379,7 +379,7 @@ class UserControllerIntegrationTest {
         assertNotEquals(expectedLogin, userService.getUserById(userId).getLogin());
         assertFalse(passwordEncoder.matches(expectedPassword, userService.getUserById(userId).getPassword()));
 
-        mockMvc.perform(post("/user/updateCredentials")
+        mockMvc.perform(post("/user/updateStudentCredentials")
                         .param("id", String.valueOf(userId))
                         .param("login", expectedLogin)
                         .param("password", expectedPassword))
@@ -445,7 +445,7 @@ class UserControllerIntegrationTest {
         String existingLogin = userService.getUserById(1).getLogin();
         String somePassword = "somePassword";
 
-        mockMvc.perform(post("/user/updateCredentials")
+        mockMvc.perform(post("/user/updateStudentCredentials")
                         .param("id", String.valueOf(userId))
                         .param("login", existingLogin)
                         .param("password", somePassword))
@@ -462,7 +462,7 @@ class UserControllerIntegrationTest {
         String expectedLogin = "newLogin";
         String expectedPassword = "newPass";
 
-        mockMvc.perform(post("/user/updateCredentials")
+        mockMvc.perform(post("/user/updateStudentCredentials")
                         .param("userId", String.valueOf(userId))
                         .param("login", expectedLogin)
                         .param("password", expectedPassword))

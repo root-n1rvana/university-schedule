@@ -1,5 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
+import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
@@ -18,9 +19,9 @@ public interface CourseService {
 
     List<CourseDto> getAllCourses();
 
-    RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto);
+    RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult);
 
-    RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto);
+    RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult);
 
     boolean existsByCourseName(String courseName);
 
