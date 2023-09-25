@@ -16,6 +16,8 @@ public interface UserService {
 
     List<UserDto> getAllStudentUsers();
 
+    List<UserDto> getAllTeacherUsers();
+
     List<User> getUsersByGroupId(long groupId);
 
     boolean existsByLogin(String login);
@@ -28,13 +30,17 @@ public interface UserService {
 
     void saveNewRegisteredUser(UserDto userDto);
 
-    RedirectAttributesDto saveStudentAndgetRedirAttr(UserDto userDto);
+    RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto);
+
+    RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto);
 
     RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto);
 
+    RedirectAttributesDto updateTeacherAndGetRedirAttr(UserDto userDto);
+
     RedirectAttributesDto userCredentialsUpdate(UserDto userDto);
 
-    RedirectAttributesDto deleteStudentAndGetRedirAttr(Long id);
+    RedirectAttributesDto deleteUserAndGetRedirAttr(Long id);
 
     void deleteUserByLogin(String login);
 

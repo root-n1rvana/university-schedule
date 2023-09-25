@@ -115,6 +115,23 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testUpdateCourse_Error() throws Exception {
+        CourseDto existingCourse = courseService.findByCourseName("History");
+
+        // Prepare data to replace in database
+        String expectedCourseName = "Math";
+
+        mockMvc.perform(post("/course/update")
+                        .param("id", String.valueOf(existingCourse.getId()))
+                        .param("courseName", expectedCourseName))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/course/management"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Course with the same name already exists."));
+    }
+
+    @Test
     @WithMockUser(roles = "STUDENT")
     public void testAddCourse_StudentAccess() throws Exception {
         String newCourseName = "New Course";
@@ -147,6 +164,23 @@ class CourseControllerIntegrationTest {
 
         // Verify that the course was deleted from the database
         assertFalse(courseService.existsByCourseName(testCourse.getCourseName()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testDeleteCourse_Error() throws Exception {
+        Long nonExistingCourseId = 99L;
+
+        // Verify that the course not exist
+        assertFalse(courseService.existByCourseId(nonExistingCourseId));
+
+        mockMvc.perform(post("/course/delete")
+                        .param("courseId", String.valueOf(nonExistingCourseId)))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/course/management"))
+                .andExpect(flash().attributeExists("deletionError"))
+                .andExpect(flash().attribute("deletionError", "Course not found or could not be deleted"));
+
     }
 
     @Test

@@ -24,5 +24,7 @@ public interface CourseService {
 
     boolean existsByCourseName(String courseName);
 
+    boolean existByCourseId(Long courseid);
+
     RedirectAttributesDto deleteAndGetRedirAttr(Long courseId);
 }

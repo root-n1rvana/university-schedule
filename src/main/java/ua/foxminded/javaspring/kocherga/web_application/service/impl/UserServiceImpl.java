@@ -4,10 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import ua.foxminded.javaspring.kocherga.web_application.models.Group;
-import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
+import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
@@ -122,9 +119,22 @@ public class UserServiceImpl implements UserService {
         return userMapper.userListToUserDtoList(students);
     }
 
+    @Override
+    public List<UserDto> getAllTeacherUsers() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
+        List<User> students = userRepository.findAllByRolesIn(roles)
+                .stream()
+                .filter(user -> user.getRoles().stream()
+                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
+                .sorted(Comparator.comparing(User::getId))
+                .collect(Collectors.toList());
+        return userMapper.userListToUserDtoList(students);
+    }
+
     @Transactional
     @Override
-    public RedirectAttributesDto saveStudentAndgetRedirAttr(UserDto userDto) {
+    public RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (userRepository.existsByLogin(userDto.getLogin())) {
             redirectAttributesDto.setName(ERROR_MSG);
@@ -139,6 +149,27 @@ public class UserServiceImpl implements UserService {
             save(userDto);
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Student added successfully!");
+        }
+        return redirectAttributesDto;
+    }
+
+    @Transactional
+    @Override
+    public RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+        if (userRepository.existsByLogin(userDto.getLogin())) {
+            redirectAttributesDto.setName(ERROR_MSG);
+            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
+        } else {
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            Group group = groupService.getGroupById(DefaultGroup.PROFESSOR.getId());
+            userDto.setOwnerGroup(group);
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
+            userDto.setRoles(roles);
+            save(userDto);
+            redirectAttributesDto.setName(SUCCESS_MSG);
+            redirectAttributesDto.setValue("Teacher added successfully!");
         }
         return redirectAttributesDto;
     }
@@ -160,23 +191,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public RedirectAttributesDto deleteStudentAndGetRedirAttr(Long id) {
+    public RedirectAttributesDto updateTeacherAndGetRedirAttr(UserDto userDto) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("Student deleted successfully!");
-        } else {
-            redirectAttributesDto.setName(ERROR_MSG);
-            redirectAttributesDto.setValue("Student not found or could not be deleted");
-        }
+        User userToEdit = userRepository.getUserById(userDto.getId());
+        userToEdit.setFirstname(userDto.getFirstname());
+        userToEdit.setLastname(userDto.getLastname());
+        save(userToEdit);
+        redirectAttributesDto.setName(SUCCESS_MSG);
+        redirectAttributesDto.setValue("Teacher info was modificated successfully!");
         return redirectAttributesDto;
-    }
-
-    @Transactional
-    @Override
-    public void deleteUserByLogin(String login) {
-        userRepository.deleteByLogin(login);
     }
 
     @Transactional
@@ -195,5 +218,26 @@ public class UserServiceImpl implements UserService {
             redirectAttributesDto.setValue("Credential modification was successful!");
         }
         return redirectAttributesDto;
+    }
+
+    @Transactional
+    @Override
+    public RedirectAttributesDto deleteUserAndGetRedirAttr(Long id) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            redirectAttributesDto.setName(SUCCESS_MSG);
+            redirectAttributesDto.setValue("Account deleted successfully!");
+        } else {
+            redirectAttributesDto.setName(ERROR_MSG);
+            redirectAttributesDto.setValue("Account not found or could not be deleted");
+        }
+        return redirectAttributesDto;
+    }
+
+    @Transactional
+    @Override
+    public void deleteUserByLogin(String login) {
+        userRepository.deleteByLogin(login);
     }
 }

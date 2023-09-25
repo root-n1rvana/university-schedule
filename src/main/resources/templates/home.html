@@ -71,10 +71,11 @@
     <h1 style="text-align: center;">Welcome to our University</h1>
     <a href="/schedule" class="btn">Schedule</a>
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/entity" class="btn">Database</a>
-    <a href="user/management" class="btn">User Management</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" href="user/management" class="btn">User Management</a>
     <a href="course/management" class="btn">Course Management</a>
     <a href="group/management" class="btn">Group Management</a>
     <a href="user/student-management" class="btn">Student Management</a>
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" href="user/teacher-management" class="btn">Teacher Management</a>
 </div>
 </body>
 </html>

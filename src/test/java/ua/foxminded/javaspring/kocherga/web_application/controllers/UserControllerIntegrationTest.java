@@ -62,6 +62,22 @@ class UserControllerIntegrationTest {
                 )));
     }
 
+    @WithMockUser(roles = "ADMIN")
+    @Test
+    public void testTeacherManagementPage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/teacher-management"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("management/teacher-management"))
+                .andExpect(model().attributeExists("teachers"))
+                .andExpect(model().attribute("teachers", hasSize(5)))
+                .andExpect(model().attribute("teachers", hasItem(
+                        allOf(
+                                hasProperty("id", is(6L)),
+                                hasProperty("login", is("teach5"))
+                        )
+                )));
+    }
+
     @Test
     @WithMockUser(roles = "PROFESSOR")
     public void testAddStudent_ProfessorAccess() throws Exception {
@@ -92,6 +108,48 @@ class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    public void testAddTeacher_AdminAccess() throws Exception {
+        String firstname = "TestStd";
+        String lastname = "TestStd";
+        String login = "teststd1";
+        String password = "pass";
+
+        mockMvc.perform(post("/user/addTeacher")
+                        .param("firstname", firstname)
+                        .param("lastname", lastname)
+                        .param("login", login)
+                        .param("password", password))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/teacher-management"))
+                .andExpect(flash().attributeExists("successMessage"))
+                .andExpect(flash().attribute("successMessage", "Teacher added successfully!"));
+
+        // Verify that Student was added to the database
+        assertTrue(userService.existsByLogin(login));
+
+        // Cleaning after test
+        userService.deleteUserByLogin(login);
+        assertFalse(userService.existsByLogin(login));
+    }
+
+    @Test
+    @WithMockUser(roles = "PROFESSOR")
+    public void testAddTeacher_ProfessorAccess() throws Exception {
+        String firstname = "TestStd";
+        String lastname = "TestStd";
+        String login = "teststd1";
+        String password = "pass";
+
+        mockMvc.perform(post("/user/addTeacher")
+                        .param("firstname", firstname)
+                        .param("lastname", lastname)
+                        .param("login", login)
+                        .param("password", password))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     public void testAddExistingStudent() throws Exception {
         String firstname = "TestStd";
         String lastname = "TestStd";
@@ -107,6 +165,25 @@ class UserControllerIntegrationTest {
                         .param("groupId", String.valueOf(groupId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Account with this login already exists"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testAddExistingTeacher() throws Exception {
+        String firstname = "TestTeach";
+        String lastname = "TestTeach";
+        String login = "teach1";
+        String password = "pass";
+
+        mockMvc.perform(post("/user/addTeacher")
+                        .param("firstname", firstname)
+                        .param("lastname", lastname)
+                        .param("login", login)
+                        .param("password", password))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/teacher-management"))
                 .andExpect(flash().attributeExists("errorMessage"))
                 .andExpect(flash().attribute("errorMessage", "Account with this login already exists"));
     }
@@ -170,6 +247,41 @@ class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    public void testUpdateTeacher() throws Exception {
+        // User data before test
+        UserDto userBeforeTest = userService.getUserById(userId);
+
+        // Prepare data to replace in database
+        String expectedFirstname = "newFirstname";
+        String expectedLastname = "newLastname";
+
+        // Confirm what data to update is different from actual
+        assertNotEquals(expectedFirstname, userBeforeTest.getFirstname());
+        assertNotEquals(expectedLastname, userBeforeTest.getLastname());
+
+        mockMvc.perform(post("/user/updateTeacher")
+                        .param("id", String.valueOf(userId))
+                        .param("firstname", expectedFirstname)
+                        .param("lastname", expectedLastname))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/teacher-management"));
+
+        //Retreiving a user database after modification
+        UserDto actualUser = userService.getUserById(userId);
+
+        // Verify that Student data was updated in the database
+        assertEquals(expectedFirstname, actualUser.getFirstname());
+        assertEquals(expectedLastname, actualUser.getLastname());
+
+        // Revert changes
+        actualUser.setFirstname("alex");
+        actualUser.setLastname("Collier");
+        actualUser.setOwnerGroup(groupService.getGroupById(1));
+        userService.save(actualUser);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     public void testDeleteStudent_AdminAccess() throws Exception {
         // Create a test Student to be deleted
         User testUser = new User();
@@ -188,9 +300,35 @@ class UserControllerIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
                 .andExpect(flash().attributeExists("successMessage"))
-                .andExpect(flash().attribute("successMessage", "Student deleted successfully!"));
+                .andExpect(flash().attribute("successMessage", "Account deleted successfully!"));
 
         // Verify that Student was deleted from the database
+        assertFalse(userService.existsByLogin(testUser.getLogin()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testDeleteTeacher_AdminAccess() throws Exception {
+        // Create a test Teacher to be deleted
+        User testUser = new User();
+        testUser.setFirstname("TestStd");
+        testUser.setLastname("TestStd");
+        testUser.setLogin("teststd2");
+        testUser.setPassword("test");
+        testUser.setOwnerGroup(groupService.getGroupById(2L));
+        userService.save(testUser);
+
+        // Verify that Teacher was saved to database
+        assertTrue(userService.existsByLogin(testUser.getLogin()));
+
+        mockMvc.perform(post("/user/deleteTeacher")
+                        .param("userId", String.valueOf(testUser.getId())))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/teacher-management"))
+                .andExpect(flash().attributeExists("successMessage"))
+                .andExpect(flash().attribute("successMessage", "Account deleted successfully!"));
+
+        // Verify that Teacher was deleted from the database
         assertFalse(userService.existsByLogin(testUser.getLogin()));
     }
 
@@ -207,7 +345,7 @@ class UserControllerIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
                 .andExpect(flash().attributeExists("errorMessage"))
-                .andExpect(flash().attribute("errorMessage", "Student not found or could not be deleted"));
+                .andExpect(flash().attribute("errorMessage", "Account not found or could not be deleted"));
     }
 
     @Test
@@ -217,6 +355,16 @@ class UserControllerIntegrationTest {
 
         mockMvc.perform(post("/user/deleteStudent")
                         .param("userId", String.valueOf(studentIdToDelete)))
+                .andExpect(status().isForbidden()); // Expect a 403 Forbidden response
+    }
+
+    @Test
+    @WithMockUser(roles = "PROFESSOR")
+    public void testDeleteTeacher_ProfessorAccess() throws Exception {
+        Long teacherIdToDelete = 2L;
+
+        mockMvc.perform(post("/user/deleteTeacher")
+                        .param("userId", String.valueOf(teacherIdToDelete)))
                 .andExpect(status().isForbidden()); // Expect a 403 Forbidden response
     }
 
@@ -237,6 +385,41 @@ class UserControllerIntegrationTest {
                         .param("password", expectedPassword))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
+                .andExpect(flash().attributeExists("successMessage"))
+                .andExpect(flash().attribute("successMessage", "Credential modification was successful!"));
+
+        //Retreiving a user database after modification
+        UserDto actualUser = userService.getUserById(userId);
+        String actualLogin = actualUser.getLogin();
+        String actualPassword = actualUser.getPassword();
+
+        // Verify that Credentials was modificated
+        assertEquals(expectedLogin, actualLogin);
+        assertTrue(passwordEncoder.matches(expectedPassword, actualPassword));
+
+        // Revert changes
+        actualUser.setLogin("test1");
+        actualUser.setPassword(passwordEncoder.encode("pass"));
+        userService.save(actualUser);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testUpdateTeacherCredentials_AdminAccess() throws Exception {
+        // Prepare the updated data
+        String expectedLogin = "newLogin";
+        String expectedPassword = "newPass";
+
+        // Confirm what data to update is different from actual
+        assertNotEquals(expectedLogin, userService.getUserById(userId).getLogin());
+        assertFalse(passwordEncoder.matches(expectedPassword, userService.getUserById(userId).getPassword()));
+
+        mockMvc.perform(post("/user/updateTeacherCredentials")
+                        .param("id", String.valueOf(userId))
+                        .param("login", expectedLogin)
+                        .param("password", expectedPassword))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/teacher-management"))
                 .andExpect(flash().attributeExists("successMessage"))
                 .andExpect(flash().attribute("successMessage", "Credential modification was successful!"));
 

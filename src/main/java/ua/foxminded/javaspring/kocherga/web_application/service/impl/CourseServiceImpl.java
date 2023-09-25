@@ -99,6 +99,11 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.existsByCourseName(courseName);
     }
 
+    @Override
+    public boolean existByCourseId(Long courseId) {
+        return courseRepository.existsById(courseId);
+    }
+
     @Transactional
     @Override
     public RedirectAttributesDto deleteAndGetRedirAttr(Long courseId) {

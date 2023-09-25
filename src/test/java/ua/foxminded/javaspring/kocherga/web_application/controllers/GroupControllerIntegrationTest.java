@@ -75,6 +75,23 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testUpdateGroup_Error() throws Exception {
+        Long existingGroupId = 3L;
+
+        // Prepare the updated data
+        String expectedGroupName = "professor";
+
+        mockMvc.perform(post("/group/update")
+                        .param("id", String.valueOf(existingGroupId))
+                        .param("name", expectedGroupName))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Group with the same name already exists."));
+    }
+
+    @Test
     @WithMockUser(roles = "PROFESSOR")
     public void testAddGroup_ProfessorAccess() throws Exception {
         String newGroupName = "New Course";
