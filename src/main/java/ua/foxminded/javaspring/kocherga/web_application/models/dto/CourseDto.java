@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.lang.NonNull;
 
 public class CourseDto {
 

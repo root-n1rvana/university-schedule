@@ -43,9 +43,4 @@ public interface UserService {
     RedirectAttributesDto deleteUserAndGetRedirAttr(Long id);
 
     void deleteUserByLogin(String login);
-
-
-
-
-
 }
