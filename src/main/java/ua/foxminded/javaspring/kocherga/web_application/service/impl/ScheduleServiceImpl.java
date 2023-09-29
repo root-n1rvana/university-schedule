@@ -7,9 +7,7 @@ import ua.foxminded.javaspring.kocherga.web_application.service.ScheduleService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -26,24 +24,33 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<Schedule> getScheduleInDateRange(String yearMonth) throws ParseException {
-        if(yearMonth == null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-            yearMonth = sdf.format(new Date());
+    public List<Schedule> getScheduleInDateRange(String yearMonth) {
+
+        if (yearMonth == null) {
+            return new ArrayList<>();
+        } else {
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM");
+            Date parsedDate = null;
+
+            try {
+                parsedDate = inputFormat.parse(yearMonth);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return Collections.emptyList();
+            }
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.setTime(parsedDate);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            Date startDate = calendar.getTime();
+
+            calendar.add(Calendar.MONTH, 1);
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            Date endDate = calendar.getTime();
+
+            return scheduleRepository.findAllByScheduleDateBetween(startDate, endDate);
         }
-
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM");
-        Date parsedDate = inputFormat.parse(yearMonth);
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTime(parsedDate);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        Date startDate = calendar.getTime();
-
-        calendar.add(Calendar.MONTH, 1);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        Date endDate = calendar.getTime();
-
-        return scheduleRepository. findAllByScheduleDateBetween(startDate, endDate);
     }
 }

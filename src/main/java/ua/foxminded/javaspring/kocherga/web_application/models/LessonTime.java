@@ -11,7 +11,7 @@ public class LessonTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     @Column(name = "lesson_time", unique = true, nullable = false)
     private String lessonTime;
@@ -23,12 +23,16 @@ public class LessonTime {
     }
 
     public LessonTime(long id, String lessonTime) {
-        Id = id;
+        this.id = id;
         this.lessonTime = lessonTime;
     }
 
     public long getId() {
-        return Id;
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getLessonTime() {
@@ -63,7 +67,7 @@ public class LessonTime {
     @Override
     public String toString() {
         return "LessonTime{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", lessonTime=" + lessonTime +
                 '}';
     }

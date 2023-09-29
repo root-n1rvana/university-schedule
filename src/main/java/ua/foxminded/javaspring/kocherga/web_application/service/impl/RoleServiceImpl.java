@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import org.springframework.stereotype.Service;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.RoomDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
 

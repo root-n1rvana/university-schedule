@@ -8,4 +8,6 @@ import ua.foxminded.javaspring.kocherga.web_application.models.LessonTime;
 public interface LessonTimeRepository extends JpaRepository<LessonTime, Long> {
 
     LessonTime findById(long lessonTimeId);
+
+    LessonTime getByLessonTime(String lessonTime);
 }

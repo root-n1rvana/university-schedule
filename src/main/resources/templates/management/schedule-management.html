@@ -92,11 +92,8 @@
     </div>
 </div>
 <br>
-
-
-
-
-<form th:action="@{fFive}" method="post" autocomplete="off">
+<div>
+<form th:action="@{management}" method="get" autocomplete="off">
     <div>
         <label for="datepicker" style="display: inline-block; width: 100px;">Select Month</label>
         <input type="text" class="form-control" style="display: inline-block; width: 90px;" name="yearMonth"
@@ -104,46 +101,67 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
-
-
-
-
+</div>
 <br>
+
 <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"
-     data-bs-target="#AddNewCourseModal">
+     data-bs-target="#AddNewLessonModal">
     <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
 </div>
 
-<!--<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewCourseModal">-->
-<!--    <div class="modal-dialog modal-dialog-centered">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h1 class="modal-title fs-5">Add new Course to Database</h1>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <form th:action="@{addCourse}" method="post">-->
-<!--                    <div class="mb-3">-->
-<!--                        <label for="newCourseName" class="col-form-label">Name:</label>-->
-<!--                        <input type="text" class="form-control" id="newCourseName" name="courseName" required/>-->
-<!--                        &lt;!&ndash;                        maxlength="20"&ndash;&gt;-->
-<!--                    </div>-->
-<!--                    <div class="mb-3">-->
-<!--                        <label for="newCourseDescription" class="col-form-label">Description:</label>-->
-<!--                        <input type="text" class="form-control" id="newCourseDescription" name="courseDescription"-->
-<!--                               required/>-->
-<!--                        &lt;!&ndash;                        maxlength="100"&ndash;&gt;-->
-<!--                    </div>-->
-<!--                    <br>-->
-<!--                    <div class="modal-footer">-->
-<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--                        <button type="submit" class="btn btn-primary">Add Course</button>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewLessonModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Add new Lesson to Database</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{addLesson}" method="post" autocomplete="off">
+                    <div class="mb-3" >
+                        <label for="datepickerNew" class="col-form-label">Select Date</label>
+                        <input type="text" class="form-control" name="newScheduleDate"
+                               id="datepickerNew" data-date-format="yyyy-mm-dd"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectGroup" class="col-form-label">Choose Group</label>
+                        <select class="form-select" id="selectGroup" name="ownerGroup.id">
+                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}"
+                                    th:selected="${group.id == 9}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectCourse" class="col-form-label">Choose Course</label>
+                        <select class="form-select" id="selectCourse" name="ownerCourse.id">
+                            <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectRoom" class="col-form-label">Choose Room</label>
+                        <select class="form-select" id="selectRoom" name="ownerRoom.id">
+                            <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.roomLabel}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectLessonTime" class="col-form-label">Choose Lesson Time</label>
+                        <select class="form-select" id="selectLessonTime" name="ownerLessonTime.id">
+                            <option th:each="lessonT : ${lessonsTime}" th:value="${lessonT.id}" th:text="${lessonT.lessonTime}"></option>
+                        </select>
+                    </div>
+
+                    <br>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Lesson</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <br>
 <div th:each="schedule : ${scheduleInDateRange}">
     <button style="margin-bottom: 1px" th:text="${#dates.format(schedule.scheduleDate, 'dd MMMM yyyy')}"
@@ -154,9 +172,9 @@
         <table style="border-collapse: separate">
             <thead>
             <tr>
+                <th>Group</th>
                 <th>Course</th>
                 <th>Room</th>
-                <th>Group</th>
                 <th>Lesson Time</th>
             </tr>
             </thead>
@@ -268,12 +286,21 @@
 <script src="https://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 <script>
-    var dp = $("#datepicker").datepicker({
+    const dp = $("#datepicker").datepicker({
         autoclose: true,
         format: "yyyy-mm",
         startView: "months",
         minViewMode: "months"
     });
 </script>
+
+<script>
+    const dpn = $("#datepickerNew").datepicker({
+        autoclose: true,
+        format: "yyyy-mm-dd"
+    });
+</script>
+
+
 </body>
 </html>
