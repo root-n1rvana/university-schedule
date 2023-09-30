@@ -50,7 +50,10 @@ public class ScheduleController {
 
     @GetMapping("/management")
     public String showScheduleManagementPage(String yearMonth, Model model) {
+        long start = System.currentTimeMillis();
         List<GroupDto> groups = groupService.getAllGroupsForStudents();
+        long finish = System.currentTimeMillis();
+        System.out.println("groupService.getAllGroupsForStudents(): " + (finish - start));
         List<CourseDto> courses = courseService.getAllCourses();
         List<RoomDto> rooms = roomService.getAllRoomsDto();
         List<LessonTimeDto> lessonsTime = lessonTimeService.getAllLessonsTimeDto();
@@ -62,6 +65,9 @@ public class ScheduleController {
         model.addAttribute("scheduleInDateRange", scheduleInDateRange);
         return SCHEDULE_MANAGEMENT_PAGE;
     }
+
+//    @PostMapping("/123")
+//    public String test123()
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addLesson")

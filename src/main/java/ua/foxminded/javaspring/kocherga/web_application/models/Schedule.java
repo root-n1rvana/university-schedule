@@ -15,8 +15,8 @@ public class Schedule {
     private long id;
 
     @Column(name = "date", unique = true, nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date scheduleDate;
+//    @Temporal(TemporalType.DATE)
+    private Date scheduleDate; //TODO try LocalDate
 
     @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.EAGER)
     private Set<Lesson> lessonsList;

@@ -12,6 +12,7 @@ import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,6 +68,7 @@ public class CourseServiceImpl implements CourseService {
     public RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult) {
         RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
         if (redirectAttributesDto.getValue() == null) { //TODO check if this validation method is acceptable
+            //TODO try Optional orElse
             if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
                 redirectAttributesDto.setName("errorMessage");
                 redirectAttributesDto.setValue("Course with the same name already exists.");
@@ -83,13 +85,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private RedirectAttributesDto checkErrorsAndHandle(BindingResult bindingResult) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (bindingResult.hasErrors()) {
-            RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
             redirectAttributesDto.setName("errorMessage");
             redirectAttributesDto.setValue("The number of allowed characters has been exceeded");
-            return redirectAttributesDto;
         }
-        return new RedirectAttributesDto();
+        return redirectAttributesDto;
     }
 
     @Transactional

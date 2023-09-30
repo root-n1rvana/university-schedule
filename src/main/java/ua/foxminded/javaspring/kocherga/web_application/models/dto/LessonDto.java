@@ -10,7 +10,7 @@ public class LessonDto {
 
     private Room ownerRoom;
 
-    private Group ownerGroup;
+    private Group ownerGroup; //TODO Dto to DTO only
 
     private Schedule ownerSchedule;
 

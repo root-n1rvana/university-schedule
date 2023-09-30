@@ -8,6 +8,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
+import ua.foxminded.javaspring.kocherga.web_application.service.ScheduleService;
+import ua.foxminded.javaspring.kocherga.web_application.service.impl.ScheduleServiceImpl;
+
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -16,6 +21,9 @@ class ScheduleControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    ScheduleServiceImpl scheduleService;
+
     @WithMockUser("spring")
     @Test
     public void testLoginPage() throws Exception {
@@ -23,5 +31,4 @@ class ScheduleControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("schedule"));
     }
-
 }
