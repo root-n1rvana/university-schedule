@@ -19,11 +19,11 @@ public class Course {
     @Column(name = "description", length = 100)
     private String courseDescription;
 
-    @OneToMany(mappedBy = "ownerCourse", fetch = FetchType.EAGER)
-    private Set<Lesson> lessons;
+//    @OneToMany(mappedBy = "ownerCourse", fetch = FetchType.EAGER)
+//    private Set<Lesson> lessons;
 
-    @ManyToMany(mappedBy = "userCourses", fetch = FetchType.EAGER)
-    private Set<User> userCourse;
+//    @ManyToMany(mappedBy = "userCourses", fetch = FetchType.EAGER)
+//    private Set<User> userCourse;
 
     public Course() {
     }
@@ -57,21 +57,21 @@ public class Course {
         this.courseDescription = courseDescription;
     }
 
-    public Set<Lesson> getLessons() {
-        return lessons;
-    }
+//    public Set<Lesson> getLessons() {
+//        return lessons;
+//    }
+//
+//    public void setLessons(Set<Lesson> lessonsList) {
+//        this.lessons = lessonsList;
+//    }
 
-    public void setLessons(Set<Lesson> lessonsList) {
-        this.lessons = lessonsList;
-    }
-
-    public Set<User> getUserCourse() {
-        return userCourse;
-    }
-
-    public void setUserCourse(Set<User> userCourseList) {
-        this.userCourse = userCourseList;
-    }
+//    public Set<User> getUserCourse() {
+//        return userCourse;
+//    }
+//
+//    public void setUserCourse(Set<User> userCourseList) {
+//        this.userCourse = userCourseList;
+//    }
 
     @Override
     public boolean equals(Object o) {

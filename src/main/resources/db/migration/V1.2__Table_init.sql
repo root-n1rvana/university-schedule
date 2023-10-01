@@ -9,7 +9,8 @@ CREATE TABLE roles
 CREATE TABLE groups
 (
     id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(10) UNIQUE
+    name VARCHAR(10) UNIQUE,
+    role role_name NOT NULL
 );
 
 CREATE TABLE users

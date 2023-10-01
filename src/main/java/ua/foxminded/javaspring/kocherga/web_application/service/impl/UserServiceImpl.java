@@ -110,19 +110,33 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllStudentUsers() {
         List<Role> roles = new ArrayList<>();
         roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
-        List<User> students = userRepository.findAllByRolesIn(roles)
-                .stream()
-                .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
-                .sorted(Comparator.comparing(User::getId))
-                .collect(Collectors.toList());
-        return userMapper.userListToUserDtoList(students);
+        return test(roles);
+//        List<User> students = userRepository.findAllByRolesIn(roles)
+//                .stream()
+//                .filter(user -> user.getRoles().stream()
+//                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
+//                .sorted(Comparator.comparing(User::getId))
+//                .collect(Collectors.toList());
+//        return userMapper.userListToUserDtoList(students);
     }
 
     @Override
     public List<UserDto> getAllTeacherUsers() {
         List<Role> roles = new ArrayList<>();
         roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
+        return test(roles);
+//        List<User> students = userRepository.findAllByRolesIn(roles)
+//                .stream()
+//                .filter(user -> user.getRoles().stream()
+//                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
+//                .sorted(Comparator.comparing(User::getId))
+//                .collect(Collectors.toList());
+//        return userMapper.userListToUserDtoList(students);
+    }
+
+    private List<UserDto> test(List<Role> roles) {
+//        List<Role> roles = new ArrayList<>();
+//        roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
         List<User> students = userRepository.findAllByRolesIn(roles)
                 .stream()
                 .filter(user -> user.getRoles().stream()

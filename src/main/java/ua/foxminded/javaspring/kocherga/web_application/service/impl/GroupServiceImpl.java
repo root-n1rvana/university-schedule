@@ -48,17 +48,17 @@ public class GroupServiceImpl implements GroupService {
                 .collect(Collectors.toList());
     }
 
-    private boolean adminAndProfessorGroupFilter(GroupDto group) {
-        return !Objects.equals(group.getId(), DefaultGroup.ADMIN.getId()) &&
-                !Objects.equals(group.getId(), DefaultGroup.PROFESSOR.getId());
-    }
-
     public List<GroupDto> getAllGroupsForStudents() {
         return getAllGroups()
                 .stream()
                 .filter(this::adminAndProfessorGroupFilter)
                 .sorted(Comparator.comparing(GroupDto::getId))
                 .collect(Collectors.toList());
+    }
+
+    private boolean adminAndProfessorGroupFilter(GroupDto group) {
+        return !Objects.equals(group.getId(), DefaultGroup.ADMIN.getId()) &&
+                !Objects.equals(group.getId(), DefaultGroup.PROFESSOR.getId());
     }
 
     @Override

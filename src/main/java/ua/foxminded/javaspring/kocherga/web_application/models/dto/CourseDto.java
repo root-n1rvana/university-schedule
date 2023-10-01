@@ -2,17 +2,16 @@ package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.lang.NonNull;
 
 public class CourseDto {
 
     private Long id;
 
     @NotNull
-    @Size(min = 2, max = 20)
+    @Size(min = 2, max = 20, message = "Test course name message")
     private String courseName;
 
-    @Size(min = 2, max = 100)
+    @Size(min = 2, max = 100, message = "Test course description message")
     private String courseDescription;
 
     public CourseDto() {
