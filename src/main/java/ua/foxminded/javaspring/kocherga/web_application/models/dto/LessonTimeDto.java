@@ -6,15 +6,15 @@ public class LessonTimeDto {
 
     private long id;
     private String lessonTime;
-    private Set<LessonDto> lessonsList;
+//    private Set<LessonDto> lessonsList;
 
     public LessonTimeDto() {
     }
 
-    public LessonTimeDto(long id, String lessonTime, Set<LessonDto> lessonsList) {
+    public LessonTimeDto(long id, String lessonTime/*, Set<LessonDto> lessonsList*/) {
         this.id = id;
         this.lessonTime = lessonTime;
-        this.lessonsList = lessonsList;
+//        this.lessonsList = lessonsList;
     }
 
     public long getId() {
@@ -33,11 +33,11 @@ public class LessonTimeDto {
         this.lessonTime = lessonTime;
     }
 
-    public Set<LessonDto> getLessonsList() {
-        return lessonsList;
-    }
-
-    public void setLessonsList(Set<LessonDto> lessonsList) {
-        this.lessonsList = lessonsList;
-    }
+//    public Set<LessonDto> getLessonsList() {
+//        return lessonsList;
+//    }
+//
+//    public void setLessonsList(Set<LessonDto> lessonsList) {
+//        this.lessonsList = lessonsList;
+//    }
 }

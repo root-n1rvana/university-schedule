@@ -177,7 +177,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="lesson : ${schedule.lessonsList}">
+            <tr th:each="lesson : ${schedule.lessons}">
                 <td th:text="${lesson.ownerGroup.name}"></td>
                 <td th:text="${lesson.ownerCourse.courseName}"></td>
                 <td th:text="${lesson.ownerRoom.roomLabel}"></td>

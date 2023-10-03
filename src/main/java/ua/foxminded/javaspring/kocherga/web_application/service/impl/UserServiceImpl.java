@@ -61,8 +61,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(userMapper::userToUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -169,13 +171,23 @@ public class UserServiceImpl implements UserService {
             redirectAttributesDto.setName(ERROR_MSG);
             redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
         } else {
-            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            Group group = groupService.getGroupById(DefaultGroup.PROFESSOR.getId());
-            userDto.setOwnerGroup(groupMapper.groupToGroupDto(group));
-            Set<Role> roles = new HashSet<>();
-            roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
-            userDto.setRoles(roleMapper.roleSetToRoleDtoSet(roles));
-            save(userDto);
+//            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+//            Group group = groupService.getGroupById(DefaultGroup.PROFESSOR.getId());
+//            userDto.setOwnerGroup(groupMapper.groupToGroupDto(group));
+//            Set<Role> roles = new HashSet<>();
+//            roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
+//            userDto.setRoles(roleMapper.roleSetToRoleDtoSet(roles));
+
+            User newTeacher = new User();
+            newTeacher.setFirstname(userDto.getFirstname());
+            newTeacher.setLastname(userDto.getLastname());
+            newTeacher.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            newTeacher.setLogin(userDto.getLogin());
+            newTeacher.setOwnerGroup(groupService.getGroupById(DefaultGroup.PROFESSOR.getId()));
+            newTeacher.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR)));
+
+            save(newTeacher);
+
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Teacher added successfully!");
         }

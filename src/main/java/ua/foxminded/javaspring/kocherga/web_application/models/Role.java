@@ -25,8 +25,8 @@ public class Role implements Serializable {
     @Column(name = "name", nullable = false, unique = true, columnDefinition = "role_name")
     private RoleName roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<User> users;
 
     public Role() {
     }
@@ -52,13 +52,13 @@ public class Role implements Serializable {
         this.roleName = roleName;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+//    public Set<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
 
     @Override
     public boolean equals(Object o) {

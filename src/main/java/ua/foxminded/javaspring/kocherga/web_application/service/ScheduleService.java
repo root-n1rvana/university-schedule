@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    List<Schedule> getAllSchedules();
+    List<ScheduleDto> getAllSchedules();
 
     List<ScheduleDto> getScheduleInDateRange(String yearMonth) throws ParseException;
 }

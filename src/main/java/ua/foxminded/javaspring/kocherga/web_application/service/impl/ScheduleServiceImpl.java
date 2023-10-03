@@ -24,8 +24,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<Schedule> getAllSchedules() {
-        return scheduleRepository.findAll();
+    public List<ScheduleDto> getAllSchedules() {
+        return scheduleRepository.findAll().stream()
+                .map(scheduleMapper::scheduleToScheduleDto)
+                .toList();
     }
 
     @Override

@@ -10,7 +10,7 @@ public class LessonDto {
 
     private GroupDto ownerGroup;
 
-    private ScheduleDto ownerSchedule;
+//    private ScheduleDto ownerSchedule;
 
     private String newScheduleDate;
 
@@ -19,13 +19,13 @@ public class LessonDto {
     public LessonDto() {
     }
 
-    public LessonDto(long id, CourseDto ownerCourse, RoomDto ownerRoom, GroupDto ownerGroup, ScheduleDto ownerSchedule,
+    public LessonDto(long id, CourseDto ownerCourse, RoomDto ownerRoom, GroupDto ownerGroup, /*ScheduleDto ownerSchedule,*/
                      String newScheduleDate, LessonTimeDto ownerLessonTime) {
         this.id = id;
         this.ownerCourse = ownerCourse;
         this.ownerRoom = ownerRoom;
         this.ownerGroup = ownerGroup;
-        this.ownerSchedule = ownerSchedule;
+//        this.ownerSchedule = ownerSchedule;
         this.newScheduleDate = newScheduleDate;
         this.ownerLessonTime = ownerLessonTime;
     }
@@ -62,13 +62,13 @@ public class LessonDto {
         this.ownerGroup = ownerGroup;
     }
 
-    public ScheduleDto getOwnerSchedule() {
-        return ownerSchedule;
-    }
-
-    public void setOwnerSchedule(ScheduleDto ownerSchedule) {
-        this.ownerSchedule = ownerSchedule;
-    }
+//    public ScheduleDto getOwnerSchedule() {
+//        return ownerSchedule;
+//    }
+//
+//    public void setOwnerSchedule(ScheduleDto ownerSchedule) {
+//        this.ownerSchedule = ownerSchedule;
+//    }
 
     public String getNewScheduleDate() {
         return newScheduleDate;
@@ -93,7 +93,7 @@ public class LessonDto {
                 ", ownerCourse=" + ownerCourse +
                 ", ownerRoom=" + ownerRoom +
                 ", ownerGroup=" + ownerGroup +
-                ", ownerSchedule=" + ownerSchedule +
+//                ", ownerSchedule=" + ownerSchedule +
                 ", newScheduleDate='" + newScheduleDate + '\'' +
                 ", ownerLessonTime=" + ownerLessonTime +
                 '}';

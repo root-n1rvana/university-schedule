@@ -21,8 +21,10 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public List<RoomDto> getAllRooms() {
+        return roomRepository.findAll().stream()
+                .map(roomMapper::roomToRoomDto)
+                .toList();
     }
 
     public List<RoomDto> getAllRoomsDto() {

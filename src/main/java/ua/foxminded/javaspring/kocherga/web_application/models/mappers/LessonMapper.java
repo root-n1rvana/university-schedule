@@ -12,9 +12,9 @@ public interface LessonMapper {
 
     LessonDto lessonToLessonDto(Lesson lesson);
     Lesson lessonDtoToLesson(LessonDto lessonDto);
-    List<LessonDto> lessonListToLessonDtoList(List<Lesson> lessons);
-    List<Lesson> lessonDtoListToLessonList(List<LessonDto> lessons);
-    Set<LessonDto> lessonSetToLessonDtoSet(Set<Lesson> lessons);
-    Set<Lesson> lessonDtoSetToLessonSet(Set<LessonDto> lessons);
+//    List<LessonDto> lessonListToLessonDtoList(List<Lesson> lessons);
+//    List<Lesson> lessonDtoListToLessonList(List<LessonDto> lessons);
+//    Set<LessonDto> lessonSetToLessonDtoSet(Set<Lesson> lessons);
+//    Set<Lesson> lessonDtoSetToLessonSet(Set<LessonDto> lessons);
 
 }
