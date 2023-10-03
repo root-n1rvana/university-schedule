@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
 
@@ -33,6 +34,8 @@ class UserControllerIntegrationTest {
     private GroupServiceImpl groupService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private GroupMapper groupMapper;
 
     //Id's for test purpose
     long groupId = 1L;
@@ -241,7 +244,7 @@ class UserControllerIntegrationTest {
         // Revert changes
         actualUser.setFirstname("alex");
         actualUser.setLastname("Collier");
-        actualUser.setOwnerGroup(groupService.getGroupById(1));
+        actualUser.setOwnerGroup(groupMapper.groupToGroupDto(groupService.getGroupById(1)));
         userService.save(actualUser);
     }
 
@@ -276,7 +279,7 @@ class UserControllerIntegrationTest {
         // Revert changes
         actualUser.setFirstname("alex");
         actualUser.setLastname("Collier");
-        actualUser.setOwnerGroup(groupService.getGroupById(1));
+        actualUser.setOwnerGroup(groupMapper.groupToGroupDto(groupService.getGroupById(1)));
         userService.save(actualUser);
     }
 

@@ -80,48 +80,48 @@
     <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
 </div>
 
-<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewStudentModal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">Add new Student to Database</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form th:action="@{addStudent}" method="post">
-                    <div class="mb-3">
-                        <label for="newFirstname" class="col-form-label">First Name:</label>
-                        <input type="text" class="form-control" id="newFirstname" name="firstname" maxlength="50" required/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newLastname" class="col-form-label">Last Name:</label>
-                        <input type="text" class="form-control" id="newLastname" name="lastname" maxlength="50" required/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newLogin" class="col-form-label">Login:</label>
-                        <input type="text" class="form-control" id="newLogin" name="login" maxlength="20" required/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newPassword" class="col-form-label">Password:</label>
-                        <input type="password" class="form-control" id="newPassword" name="password" required/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newGroupName" class="col-form-label">Choose Group</label>
-                        <select class="form-select" id="newGroupName" name="ownerGroup.id">
-                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}"
-                                    th:selected="${group.id == 9}"></option>
-                        </select>
-                    </div>
-                    <br>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add Student</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewStudentModal">-->
+<!--    <div class="modal-dialog modal-dialog-centered">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h1 class="modal-title fs-5">Add new Student to Database</h1>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <form th:action="@{addStudent}" method="post">-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="newFirstname" class="col-form-label">First Name:</label>-->
+<!--                        <input type="text" class="form-control" id="newFirstname" name="firstname" maxlength="50" required/>-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="newLastname" class="col-form-label">Last Name:</label>-->
+<!--                        <input type="text" class="form-control" id="newLastname" name="lastname" maxlength="50" required/>-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="newLogin" class="col-form-label">Login:</label>-->
+<!--                        <input type="text" class="form-control" id="newLogin" name="login" maxlength="20" required/>-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="newPassword" class="col-form-label">Password:</label>-->
+<!--                        <input type="password" class="form-control" id="newPassword" name="password" required/>-->
+<!--                    </div>-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="newGroupName" class="col-form-label">Choose Group</label>-->
+<!--                        <select class="form-select" id="newGroupName" name="ownerGroup.id">-->
+<!--                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}"-->
+<!--                                    th:selected="${group.id == 9}"></option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <br>-->
+<!--                    <div class="modal-footer">-->
+<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--                        <button type="submit" class="btn btn-primary">Add Student</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <br>
 <div class="content">
     <table style="border-collapse: separate">

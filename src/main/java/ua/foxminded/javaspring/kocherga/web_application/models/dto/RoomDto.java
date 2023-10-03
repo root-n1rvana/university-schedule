@@ -1,7 +1,5 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
-import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
-
 import java.util.Set;
 
 public class RoomDto {
@@ -9,12 +7,12 @@ public class RoomDto {
     private Long id;
     private String roomLabel;
     private String roomDescription;
-    private Set<Lesson> lessonsList;
+    private Set<LessonDto> lessonsList;
 
     public RoomDto() {
     }
 
-    public RoomDto(Long id, String roomLabel, String roomDescription, Set<Lesson> lessonsList) {
+    public RoomDto(Long id, String roomLabel, String roomDescription, Set<LessonDto> lessonsList) {
         this.id = id;
         this.roomLabel = roomLabel;
         this.roomDescription = roomDescription;
@@ -45,11 +43,11 @@ public class RoomDto {
         this.roomDescription = roomDescription;
     }
 
-    public Set<Lesson> getLessonsList() {
+    public Set<LessonDto> getLessonsList() {
         return lessonsList;
     }
 
-    public void setLessonsList(Set<Lesson> lessonsList) {
+    public void setLessonsList(Set<LessonDto> lessonsList) {
         this.lessonsList = lessonsList;
     }
 }

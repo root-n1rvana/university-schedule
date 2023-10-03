@@ -19,8 +19,8 @@ public class Room {
     @Column(name = "description", length = 100)
     private String roomDescription;
 
-    @OneToMany(mappedBy = "ownerRoom")
-    private Set<Lesson> lessonsList;
+//    @OneToMany(mappedBy = "ownerRoom")
+//    private Set<Lesson> lessonsList;
 
     public Room() {
     }
@@ -54,13 +54,13 @@ public class Room {
         this.roomDescription = roomDescription;
     }
 
-    public Set<Lesson> getLessonsList() {
-        return lessonsList;
-    }
-
-    public void setLessonsList(Set<Lesson> lessonsList) {
-        this.lessonsList = lessonsList;
-    }
+//    public Set<Lesson> getLessonsList() {
+//        return lessonsList;
+//    }
+//
+//    public void setLessonsList(Set<Lesson> lessonsList) {
+//        this.lessonsList = lessonsList;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -75,12 +75,12 @@ public class Room {
         return Objects.hash(roomLabel);
     }
 
-    @Override
-    public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", roomLabel='" + roomLabel + '\'' +
-                ", roomDescription='" + roomDescription + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Room{" +
+//                "id=" + id +
+//                ", roomLabel='" + roomLabel + '\'' +
+//                ", roomDescription='" + roomDescription + '\'' +
+//                '}';
+//    }
 }

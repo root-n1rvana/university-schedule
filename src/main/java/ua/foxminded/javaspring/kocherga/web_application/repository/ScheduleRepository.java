@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -12,11 +12,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     Schedule getScheduleById(long scheduleId);
 
-    Schedule getByScheduleDate(Date scheduleDate);
+    Schedule getByScheduleDate(LocalDate scheduleDate);
 
-    Schedule findByScheduleDate(Date scheduleDate);
+    Schedule findByScheduleDate(LocalDate scheduleDate);
 
-    List<Schedule> findAllByScheduleDateBetween(Date startDate, Date endDate);
+    List<Schedule> findAllByScheduleDateBetween(LocalDate startDate, LocalDate endDate);
 
-    boolean existsByScheduleDate(Date scheduleDate);
+    boolean existsByScheduleDate(LocalDate scheduleDate);
 }

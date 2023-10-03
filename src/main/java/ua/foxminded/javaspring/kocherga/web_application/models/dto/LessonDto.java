@@ -1,29 +1,26 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
-import ua.foxminded.javaspring.kocherga.web_application.models.*;
-
 public class LessonDto {
 
     private long id;
 
-    private Course ownerCourse;
+    private CourseDto ownerCourse;
 
-    private Room ownerRoom;
+    private RoomDto ownerRoom;
 
-    private Group ownerGroup; //TODO Dto to DTO only
+    private GroupDto ownerGroup;
 
-    private Schedule ownerSchedule;
+    private ScheduleDto ownerSchedule;
 
     private String newScheduleDate;
 
-    private LessonTime ownerLessonTime;
+    private LessonTimeDto ownerLessonTime;
 
     public LessonDto() {
     }
 
-    public LessonDto(long id, Course ownerCourse, Room ownerRoom, Group ownerGroup,
-                     Schedule ownerSchedule, String newScheduleDate,
-                     LessonTime ownerLessonTime) {
+    public LessonDto(long id, CourseDto ownerCourse, RoomDto ownerRoom, GroupDto ownerGroup, ScheduleDto ownerSchedule,
+                     String newScheduleDate, LessonTimeDto ownerLessonTime) {
         this.id = id;
         this.ownerCourse = ownerCourse;
         this.ownerRoom = ownerRoom;
@@ -41,35 +38,35 @@ public class LessonDto {
         this.id = id;
     }
 
-    public Course getOwnerCourse() {
+    public CourseDto getOwnerCourse() {
         return ownerCourse;
     }
 
-    public void setOwnerCourse(Course ownerCourse) {
+    public void setOwnerCourse(CourseDto ownerCourse) {
         this.ownerCourse = ownerCourse;
     }
 
-    public Room getOwnerRoom() {
+    public RoomDto getOwnerRoom() {
         return ownerRoom;
     }
 
-    public void setOwnerRoom(Room ownerRoom) {
+    public void setOwnerRoom(RoomDto ownerRoom) {
         this.ownerRoom = ownerRoom;
     }
 
-    public Group getOwnerGroup() {
+    public GroupDto getOwnerGroup() {
         return ownerGroup;
     }
 
-    public void setOwnerGroup(Group ownerGroup) {
+    public void setOwnerGroup(GroupDto ownerGroup) {
         this.ownerGroup = ownerGroup;
     }
 
-    public Schedule getOwnerSchedule() {
+    public ScheduleDto getOwnerSchedule() {
         return ownerSchedule;
     }
 
-    public void setOwnerSchedule(Schedule ownerSchedule) {
+    public void setOwnerSchedule(ScheduleDto ownerSchedule) {
         this.ownerSchedule = ownerSchedule;
     }
 
@@ -81,11 +78,11 @@ public class LessonDto {
         this.newScheduleDate = newScheduleDate;
     }
 
-    public LessonTime getOwnerLessonTime() {
+    public LessonTimeDto getOwnerLessonTime() {
         return ownerLessonTime;
     }
 
-    public void setOwnerLessonTime(LessonTime ownerLessonTime) {
+    public void setOwnerLessonTime(LessonTimeDto ownerLessonTime) {
         this.ownerLessonTime = ownerLessonTime;
     }
 

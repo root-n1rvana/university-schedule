@@ -7,11 +7,12 @@ import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
+import ua.foxminded.javaspring.kocherga.web_application.models.mappers.RoleMapper;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,17 +30,24 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final GroupServiceImpl groupService;
     private final UserMapper userMapper;
+    private final GroupMapper groupMapper;
+    private final RoleMapper roleMapper;
+
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository,
                            GroupServiceImpl groupService,
-                           UserMapper userMapper) {
+                           UserMapper userMapper,
+                           GroupMapper groupMapper,
+                           RoleMapper roleMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.groupService = groupService;
         this.userMapper = userMapper;
+        this.groupMapper = groupMapper;
+        this.roleMapper = roleMapper;
     }
 
     @Override
@@ -142,10 +150,10 @@ public class UserServiceImpl implements UserService {
         } else {
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             Group group = groupService.getGroupById(userDto.getOwnerGroup().getId());
-            userDto.setOwnerGroup(group);
+            userDto.setOwnerGroup(groupMapper.groupToGroupDto(group));
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
-            userDto.setRoles(roles);
+            userDto.setRoles(roleMapper.roleSetToRoleDtoSet(roles));
             save(userDto);
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Student added successfully!");
@@ -163,10 +171,10 @@ public class UserServiceImpl implements UserService {
         } else {
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             Group group = groupService.getGroupById(DefaultGroup.PROFESSOR.getId());
-            userDto.setOwnerGroup(group);
+            userDto.setOwnerGroup(groupMapper.groupToGroupDto(group));
             Set<Role> roles = new HashSet<>();
             roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
-            userDto.setRoles(roles);
+            userDto.setRoles(roleMapper.roleSetToRoleDtoSet(roles));
             save(userDto);
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Teacher added successfully!");

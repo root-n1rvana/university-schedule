@@ -8,11 +8,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
 import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
+import ua.foxminded.javaspring.kocherga.web_application.repository.ScheduleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.service.ScheduleService;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.ScheduleServiceImpl;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -23,6 +27,8 @@ class ScheduleControllerIntegrationTest {
 
     @Autowired
     ScheduleServiceImpl scheduleService;
+    @Autowired
+    ScheduleRepository scheduleRepository;
 
     @WithMockUser("spring")
     @Test

@@ -5,17 +5,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.*;
-import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
-import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
-import ua.foxminded.javaspring.kocherga.web_application.service.LessonTimeService;
-import ua.foxminded.javaspring.kocherga.web_application.service.RoomService;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.*;
 
-import java.text.ParseException;
 import java.util.List;
 
 @Controller
@@ -50,10 +47,7 @@ public class ScheduleController {
 
     @GetMapping("/management")
     public String showScheduleManagementPage(String yearMonth, Model model) {
-        long start = System.currentTimeMillis();
         List<GroupDto> groups = groupService.getAllGroupsForStudents();
-        long finish = System.currentTimeMillis();
-        System.out.println("groupService.getAllGroupsForStudents(): " + (finish - start));
         List<CourseDto> courses = courseService.getAllCourses();
         List<RoomDto> rooms = roomService.getAllRoomsDto();
         List<LessonTimeDto> lessonsTime = lessonTimeService.getAllLessonsTimeDto();
@@ -61,13 +55,10 @@ public class ScheduleController {
         model.addAttribute("courses", courses);
         model.addAttribute("rooms", rooms);
         model.addAttribute("lessonsTime", lessonsTime);
-        List<Schedule> scheduleInDateRange = scheduleService.getScheduleInDateRange(yearMonth);
+        List<ScheduleDto> scheduleInDateRange = scheduleService.getScheduleInDateRange(yearMonth);
         model.addAttribute("scheduleInDateRange", scheduleInDateRange);
         return SCHEDULE_MANAGEMENT_PAGE;
     }
-
-//    @PostMapping("/123")
-//    public String test123()
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addLesson")

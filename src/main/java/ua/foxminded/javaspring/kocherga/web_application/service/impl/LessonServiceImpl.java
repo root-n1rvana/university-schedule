@@ -7,12 +7,12 @@ import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.LessonDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.LessonMapper;
+import ua.foxminded.javaspring.kocherga.web_application.models.mappers.LessonTimeMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.*;
 import ua.foxminded.javaspring.kocherga.web_application.service.LessonService;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -25,6 +25,7 @@ public class LessonServiceImpl implements LessonService {
     private final LessonTimeRepository lessonTimeRepository;
     private final ScheduleRepository scheduleRepository;
     private final LessonMapper lessonMapper;
+    private final LessonTimeMapper lessonTimeMapper;
 
     public LessonServiceImpl(LessonRepository lessonRepository,
                              CourseRepository courseRepository,
@@ -32,7 +33,8 @@ public class LessonServiceImpl implements LessonService {
                              GroupRepository groupRepository,
                              LessonTimeRepository lessonTimeRepository,
                              ScheduleRepository scheduleRepository,
-                             LessonMapper lessonMapper) {
+                             LessonMapper lessonMapper,
+                             LessonTimeMapper lessonTimeMapper) {
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
         this.roomRepository = roomRepository;
@@ -40,6 +42,7 @@ public class LessonServiceImpl implements LessonService {
         this.lessonTimeRepository = lessonTimeRepository;
         this.scheduleRepository = scheduleRepository;
         this.lessonMapper = lessonMapper;
+        this.lessonTimeMapper = lessonTimeMapper;
 
     }
 
@@ -58,16 +61,9 @@ public class LessonServiceImpl implements LessonService {
         lessonRepository.save(lessonMapper.lessonDtoToLesson(lessonDto));
     }
 
-    @Transactional
     private Schedule addScheduleIfNotExist(String scheduleDate) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-
-        try {
-            date = dateFormat.parse(scheduleDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(scheduleDate, dateFormatter);
 
         if (scheduleRepository.existsByScheduleDate(date)) {
             return scheduleRepository.getByScheduleDate(date);

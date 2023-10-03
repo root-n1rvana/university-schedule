@@ -1,8 +1,8 @@
 package ua.foxminded.javaspring.kocherga.web_application.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.Objects;
 
 @Entity
 @Table(name = "lessons")
@@ -90,28 +90,5 @@ public class Lesson {
 
     public void setOwnerLessonTime(LessonTime ownerLessonTime) {
         this.ownerLessonTime = ownerLessonTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Lesson lesson = (Lesson) o;
-        return ownerSchedule.equals(lesson.ownerSchedule) && ownerLessonTime.equals(lesson.ownerLessonTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ownerSchedule, ownerLessonTime);
-    }
-
-    @Override
-    public String toString() {
-        return "Lesson{" +
-                "lessonId=" + id +
-                ", ownerRoom=" + ownerRoom +
-                ", ownerSchedule=" + ownerSchedule +
-                ", ownerLessonTime=" + ownerLessonTime +
-                '}';
     }
 }

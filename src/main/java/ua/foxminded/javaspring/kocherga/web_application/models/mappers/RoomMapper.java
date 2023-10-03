@@ -5,6 +5,7 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Room;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RoomDto;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface RoomMapper {
@@ -13,5 +14,11 @@ public interface RoomMapper {
 
     Room roomDtoToRoom(RoomDto roomDto);
 
-    List<RoomDto> roomlistToRoomDtoList(List<Room> rooms);
+    List<RoomDto> roomListToRoomDtoList(List<Room> rooms);
+
+    List<Room> roomDtoListToRoomList(List<RoomDto> rooms);
+
+    Set<RoomDto> roomSetToRoomDtoSet(Set<Room> rooms);
+
+    Set<Room> roomDtoSetToRoomSet(Set<RoomDto> rooms);
 }

@@ -1,29 +1,27 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
-import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
-
 import java.util.Set;
 
 public class LessonTimeDto {
 
-    private String id;
+    private long id;
     private String lessonTime;
-    private Set<Lesson> lessonsList;
+    private Set<LessonDto> lessonsList;
 
     public LessonTimeDto() {
     }
 
-    public LessonTimeDto(String id, String lessonTime, Set<Lesson> lessonsList) {
+    public LessonTimeDto(long id, String lessonTime, Set<LessonDto> lessonsList) {
         this.id = id;
         this.lessonTime = lessonTime;
         this.lessonsList = lessonsList;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -35,11 +33,11 @@ public class LessonTimeDto {
         this.lessonTime = lessonTime;
     }
 
-    public Set<Lesson> getLessonsList() {
+    public Set<LessonDto> getLessonsList() {
         return lessonsList;
     }
 
-    public void setLessonsList(Set<Lesson> lessonsList) {
+    public void setLessonsList(Set<LessonDto> lessonsList) {
         this.lessonsList = lessonsList;
     }
 }

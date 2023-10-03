@@ -132,14 +132,14 @@ public class User {
         return Objects.hash(id, firstname, lastname);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + firstname + '\'' +
-                ", userLastname='" + lastname + '\'' +
-                ", ownerGroup=" + ownerGroup +
-                ", userCourses=" + userCourses +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", userName='" + firstname + '\'' +
+//                ", userLastname='" + lastname + '\'' +
+//                ", ownerGroup=" + ownerGroup +
+//                ", userCourses=" + userCourses +
+//                '}';
+//    }
 }
