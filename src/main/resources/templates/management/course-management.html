@@ -70,14 +70,13 @@
     <div th:if="${errorMessage}" class="alert alert-danger">
         <span th:text="${errorMessage}"></span>
     </div>
+
     <div th:if="${successMessage}" class="alert alert-info">
         <span th:text="${successMessage}"></span>
     </div>
-    <div th:if="${deletionError}" class="alert alert-danger">
-        <span th:text="${deletionError}"></span>
-    </div>
-    <div th:if="${deletionSucceeded}" class="alert alert-info">
-        <span th:text="${deletionSucceeded}"></span>
+
+    <div th:if="${warnMessage}" class="alert alert-danger">
+        <span th:text="${warnMessage}"></span>
     </div>
 </div>
 
@@ -152,8 +151,7 @@
                                 <div class="mb-3">
                                     <label for="courseDescription" class="col-form-label">Description:</label>
                                     <input type="text" class="form-control" id="courseDescription"
-                                           name="courseDescription" th:value="${course.courseDescription}" maxlength="100"
-                                           required/>
+                                           name="courseDescription" th:value="${course.courseDescription}" maxlength="100"/>
                                 </div>
                                 <br>
                                 <div class="modal-footer">

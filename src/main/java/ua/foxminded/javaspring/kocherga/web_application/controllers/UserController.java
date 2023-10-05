@@ -78,7 +78,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/updateTeacher")
     public String updateTeacher(@ModelAttribute UserDto userDto, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = userService.updateTeacherAndGetRedirAttr(userDto);
+        RedirectAttributesDto redirAttrDto = userService.updateUserAndGetRedirAttr(userDto);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_TEACHER_MANAGEMENT_PAGE;
     }

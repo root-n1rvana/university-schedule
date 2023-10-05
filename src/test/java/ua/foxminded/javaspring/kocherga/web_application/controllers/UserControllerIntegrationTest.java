@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
+import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
 
@@ -29,13 +30,15 @@ class UserControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private GroupMapper groupMapper;
+    @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private GroupServiceImpl groupService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private GroupMapper groupMapper;
 
     //Id's for test purpose
     long groupId = 1L;
@@ -105,7 +108,7 @@ class UserControllerIntegrationTest {
         assertTrue(userService.existsByLogin(login));
 
         // Cleaning after test
-        userService.deleteUserByLogin(login);
+        userRepository.deleteByLogin(login);
         assertFalse(userService.existsByLogin(login));
     }
 
@@ -131,7 +134,7 @@ class UserControllerIntegrationTest {
         assertTrue(userService.existsByLogin(login));
 
         // Cleaning after test
-        userService.deleteUserByLogin(login);
+        userRepository.deleteByLogin(login);
         assertFalse(userService.existsByLogin(login));
     }
 

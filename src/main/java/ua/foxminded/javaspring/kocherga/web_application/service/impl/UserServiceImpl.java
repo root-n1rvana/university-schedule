@@ -8,7 +8,6 @@ import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
-import ua.foxminded.javaspring.kocherga.web_application.models.mappers.RoleMapper;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
@@ -31,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private final GroupServiceImpl groupService;
     private final UserMapper userMapper;
     private final GroupMapper groupMapper;
-    private final RoleMapper roleMapper;
 
 
     public UserServiceImpl(UserRepository userRepository,
@@ -39,15 +37,13 @@ public class UserServiceImpl implements UserService {
                            RoleRepository roleRepository,
                            GroupServiceImpl groupService,
                            UserMapper userMapper,
-                           GroupMapper groupMapper,
-                           RoleMapper roleMapper) {
+                           GroupMapper groupMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.groupService = groupService;
         this.userMapper = userMapper;
         this.groupMapper = groupMapper;
-        this.roleMapper = roleMapper;
     }
 
     @Override
@@ -119,70 +115,56 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllStudentUsers() {
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
-        List<User> students = userRepository.findAllByRolesIn(roles)
-                .stream()
-                .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
-                .sorted(Comparator.comparing(User::getId))
-                .collect(Collectors.toList());
+        List<User> students = getUsersByRoleExceptAdmin(RoleName.ROLE_STUDENT);
         return userMapper.userListToUserDtoList(students);
     }
 
     @Override
     public List<UserDto> getAllTeacherUsers() {
+        List<User> teachers = getUsersByRoleExceptAdmin(RoleName.ROLE_PROFESSOR);
+        return userMapper.userListToUserDtoList(teachers);
+    }
+
+    private List<User> getUsersByRoleExceptAdmin(RoleName roleName) {
         List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
-        List<User> students = userRepository.findAllByRolesIn(roles)
+        roles.add(roleRepository.getRoleByRoleName(roleName));
+        return userRepository.findAllByRolesIn(roles)
                 .stream()
                 .filter(user -> user.getRoles().stream()
                         .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
                 .sorted(Comparator.comparing(User::getId))
                 .collect(Collectors.toList());
-        return userMapper.userListToUserDtoList(students);
     }
 
     @Transactional
     @Override
     public RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (userRepository.existsByLogin(userDto.getLogin())) {
-            redirectAttributesDto.setName(ERROR_MSG);
-            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
-        } else {
-            User newStudent = new User();
-            newStudent.setFirstname(userDto.getFirstname());
-            newStudent.setLastname(userDto.getLastname());
-            newStudent.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            newStudent.setLogin(userDto.getLogin());
-            newStudent.setOwnerGroup(groupService.getGroupById(DefaultGroup.STUDENT.getId()));
-            newStudent.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
-            save(newStudent);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("Student added successfully!");
-        }
-        return redirectAttributesDto;
+        return saveUserAndGetRedirAttr(userDto, DefaultGroup.UNSELECTED, RoleName.ROLE_STUDENT);
     }
 
     @Transactional
     @Override
     public RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto) {
+        return saveUserAndGetRedirAttr(userDto, DefaultGroup.PROFESSOR, RoleName.ROLE_PROFESSOR);
+    }
+
+    @Transactional
+    private RedirectAttributesDto saveUserAndGetRedirAttr(UserDto userDto, DefaultGroup defaultGroup, RoleName roleName) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (userRepository.existsByLogin(userDto.getLogin())) {
             redirectAttributesDto.setName(ERROR_MSG);
             redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
         } else {
-            User newTeacher = new User();
-            newTeacher.setFirstname(userDto.getFirstname());
-            newTeacher.setLastname(userDto.getLastname());
-            newTeacher.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            newTeacher.setLogin(userDto.getLogin());
-            newTeacher.setOwnerGroup(groupService.getGroupById(DefaultGroup.PROFESSOR.getId()));
-            newTeacher.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR)));
-            save(newTeacher);
+            User newUser = new User();
+            newUser.setFirstname(userDto.getFirstname());
+            newUser.setLastname(userDto.getLastname());
+            newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            newUser.setLogin(userDto.getLogin());
+            newUser.setOwnerGroup(groupService.getGroupById(defaultGroup.getId()));
+            newUser.setRoles(Set.of(roleRepository.getRoleByRoleName(roleName)));
+            save(newUser);
             redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("Teacher added successfully!");
+            redirectAttributesDto.setValue("User added successfully!");
         }
         return redirectAttributesDto;
     }
@@ -190,28 +172,24 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        User userToEdit = userRepository.getUserById(userDto.getId());
-        userToEdit.setFirstname(userDto.getFirstname());
-        userToEdit.setLastname(userDto.getLastname());
         Group group = groupService.getGroupById(userDto.getOwnerGroup().getId());
-        userToEdit.setOwnerGroup(group);
-        save(userToEdit);
-        redirectAttributesDto.setName(SUCCESS_MSG);
-        redirectAttributesDto.setValue("Student info was modificated successfully!");
-        return redirectAttributesDto;
+        userDto.setOwnerGroup(groupMapper.groupToGroupDto(group));
+        return updateUserAndGetRedirAttr(userDto);
     }
 
     @Transactional
     @Override
-    public RedirectAttributesDto updateTeacherAndGetRedirAttr(UserDto userDto) {
+    public RedirectAttributesDto updateUserAndGetRedirAttr(UserDto userDto) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         User userToEdit = userRepository.getUserById(userDto.getId());
         userToEdit.setFirstname(userDto.getFirstname());
         userToEdit.setLastname(userDto.getLastname());
+        if (userDto.getOwnerGroup() != null) {
+            userToEdit.setOwnerGroup(groupMapper.groupDtoToGroup(userDto.getOwnerGroup()));
+        }
         save(userToEdit);
         redirectAttributesDto.setName(SUCCESS_MSG);
-        redirectAttributesDto.setValue("Teacher info was modificated successfully!");
+        redirectAttributesDto.setValue("User info was modified successfully!");
         return redirectAttributesDto;
     }
 
@@ -246,11 +224,5 @@ public class UserServiceImpl implements UserService {
             redirectAttributesDto.setValue("Account not found or could not be deleted");
         }
         return redirectAttributesDto;
-    }
-
-    @Transactional
-    @Override
-    public void deleteUserByLogin(String login) {
-        userRepository.deleteByLogin(login);
     }
 }

@@ -14,7 +14,7 @@ public class RedirectAttributesMessageHandler {
         redirectAttributes.addFlashAttribute("successMessage", message);
     }
 
-    void setWarningMessage(RedirectAttributes redirectAttributes, String message) {
-        redirectAttributes.addFlashAttribute("warningMessage", message);
+    void setWarnMessage(RedirectAttributes redirectAttributes, String message) {
+        redirectAttributes.addFlashAttribute("warnMessage", message);
     }
 }

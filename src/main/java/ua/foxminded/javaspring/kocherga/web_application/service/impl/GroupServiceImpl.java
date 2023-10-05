@@ -36,17 +36,17 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.groupToGroupDto(getGroupById(groupId));
     }
 
-    @Override
-    public List<GroupDto> getAllGroups() {
-        return groupMapper.groupListToGroupDtoList(groupRepository.findAll());
-    }
-
     public List<GroupDto> getAllGroupsForManagement() {
         return getAllGroups()
                 .stream()
                 .filter(group -> !Objects.equals(group.getId(), DefaultGroup.UNSELECTED.getId()))
                 .sorted(Comparator.comparing(GroupDto::getId))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupDto> getAllGroups() {
+        return groupMapper.groupListToGroupDtoList(groupRepository.findAll());
     }
 
     public List<GroupDto> getAllStudentsGroups() {

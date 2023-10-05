@@ -1,5 +1,8 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
+import jakarta.transaction.Transactional;
+import ua.foxminded.javaspring.kocherga.web_application.models.DefaultGroup;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
@@ -30,17 +33,17 @@ public interface UserService {
 
     void saveNewRegisteredUser(UserDto userDto);
 
+
     RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto);
 
     RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto);
 
-    RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto);
+    @Transactional
+    RedirectAttributesDto updateUserAndGetRedirAttr(UserDto userDto);
 
-    RedirectAttributesDto updateTeacherAndGetRedirAttr(UserDto userDto);
+    RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto);
 
     RedirectAttributesDto userCredentialsUpdate(UserDto userDto);
 
     RedirectAttributesDto deleteUserAndGetRedirAttr(Long id);
-
-    void deleteUserByLogin(String login);
 }

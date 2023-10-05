@@ -1,8 +1,11 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
@@ -12,21 +15,22 @@ import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private static final int MAX_COURSE_NAME_LENGTH = 30;
-    private static final int MAX_COURSE_DESCRIPTION_LENGTH = 100;
-
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
+    private final RedirectAttributesMessageHandler attrMsgHandler;
 
-    public CourseServiceImpl(CourseRepository courseRepository, CourseMapper courseMapper) {
+
+    public CourseServiceImpl(CourseRepository courseRepository,
+                             CourseMapper courseMapper,
+                             RedirectAttributesMessageHandler attrMsgHandler) {
         this.courseRepository = courseRepository;
         this.courseMapper = courseMapper;
+        this.attrMsgHandler = attrMsgHandler;
     }
 
     @Override
@@ -95,23 +99,31 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional
     @Override
-    public RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult) {
-        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
-        if (redirectAttributesDto.getValue() == null) {
-            Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
-            boolean notSameCourseName = !courseToUpdate.getCourseName().equals(courseDto.getCourseName());
-            if (courseRepository.existsByCourseName(courseDto.getCourseName()) && notSameCourseName) {
-                redirectAttributesDto.setName("errorMessage");
-                redirectAttributesDto.setValue("Course with the same name already exists.");
-            } else {
-                courseToUpdate.setCourseName(courseDto.getCourseName());
-                courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
-                save(courseToUpdate);
-                redirectAttributesDto.setName("successMessage");
-                redirectAttributesDto.setValue("Course updated successfully!");
-            }
+    public void updateAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        validateBindingResultErrors(bindingResult);
+        validateExistingCourseName(courseDto);
+
+        Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
+        courseToUpdate.setCourseName(courseDto.getCourseName());
+        courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
+        save(courseToUpdate);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "Course updated successfully!");
+    }
+
+    private void validateBindingResultErrors(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errMessage = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(", "));
+            throw new ValidationException(errMessage);
         }
-        return redirectAttributesDto;
+    }
+
+    private void validateExistingCourseName(CourseDto courseDto) {
+        boolean notSameCourseName = !courseRepository.getCourseById(courseDto.getId()).getCourseName().equals(courseDto.getCourseName());
+        if (existsByCourseName(courseDto.getCourseName()) && notSameCourseName) {
+            throw new ValidationException("Course with the same name already exists.");
+        }
     }
 
     @Override
@@ -130,10 +142,10 @@ public class CourseServiceImpl implements CourseService {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (courseRepository.existsById(courseId)) {
             courseRepository.deleteById(courseId);
-            redirectAttributesDto.setName("deletionSucceeded");
+            redirectAttributesDto.setName("successMessage");
             redirectAttributesDto.setValue("Course deleted successfully!");
         } else {
-            redirectAttributesDto.setName("deletionError");
+            redirectAttributesDto.setName("errorMessage");
             redirectAttributesDto.setValue("Course not found or could not be deleted");
         }
         return redirectAttributesDto;

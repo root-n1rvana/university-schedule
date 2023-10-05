@@ -13,7 +13,7 @@ public class CourseDto {
     @Size(min = 2, max = 20, message = "Course Name should have at least 2 and max 20 characters")
     private String courseName;
 
-    @Size(min = 2, max = 100, message = "Course Description should have at least 2 and max 100 characters or be empty")
+    @Size(min = 2, max = 100, message = "Course Description should have at least 2 and max 100 characters")
     private String courseDescription;
 
     public CourseDto() {
