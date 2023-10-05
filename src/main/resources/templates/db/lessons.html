@@ -73,7 +73,6 @@
       <th>Course</th>
       <th>Room</th>
       <th>Group</th>
-      <th>Date</th>
       <th>Time</th>
     </tr>
     </thead>
@@ -83,7 +82,6 @@
       <td th:text="${lesson.ownerCourse.courseName}"></td>
       <td th:text="${lesson.ownerRoom.roomLabel}"></td>
       <td th:text="${lesson.ownerGroup.name}"></td>
-      <td th:text="${lesson.ownerSchedule.scheduleDate}"></td>
       <td th:text="${lesson.ownerLessonTime.lessonTime}"></td>
     </tr>
     </tbody>

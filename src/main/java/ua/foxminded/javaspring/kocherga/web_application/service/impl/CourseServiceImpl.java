@@ -12,7 +12,7 @@ import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +67,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult) {
         RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
-        if (redirectAttributesDto.getValue() == null) { //TODO check if this validation method is acceptable
+        if (redirectAttributesDto.getValue() == null) {
             //TODO try Optional orElse
             if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
                 redirectAttributesDto.setName("errorMessage");
@@ -98,11 +98,12 @@ public class CourseServiceImpl implements CourseService {
     public RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult) {
         RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
         if (redirectAttributesDto.getValue() == null) {
-            if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
+            Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
+            boolean notSameCourseName = !courseToUpdate.getCourseName().equals(courseDto.getCourseName());
+            if (courseRepository.existsByCourseName(courseDto.getCourseName()) && notSameCourseName) {
                 redirectAttributesDto.setName("errorMessage");
                 redirectAttributesDto.setValue("Course with the same name already exists.");
             } else {
-                Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
                 courseToUpdate.setCourseName(courseDto.getCourseName());
                 courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
                 save(courseToUpdate);

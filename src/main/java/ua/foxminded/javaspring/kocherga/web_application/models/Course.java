@@ -3,7 +3,6 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 import jakarta.persistence.*;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -18,12 +17,6 @@ public class Course {
 
     @Column(name = "description", length = 100)
     private String courseDescription;
-
-//    @OneToMany(mappedBy = "ownerCourse", fetch = FetchType.EAGER)
-//    private Set<Lesson> lessons;
-//
-//    @ManyToMany(mappedBy = "userCourses", fetch = FetchType.EAGER)
-//    private Set<User> userCourse;
 
     public Course() {
     }
@@ -57,22 +50,6 @@ public class Course {
         this.courseDescription = courseDescription;
     }
 
-//    public Set<Lesson> getLessons() {
-//        return lessons;
-//    }
-//
-//    public void setLessons(Set<Lesson> lessonsList) {
-//        this.lessons = lessonsList;
-//    }
-//
-//    public Set<User> getUserCourse() {
-//        return userCourse;
-//    }
-//
-//    public void setUserCourse(Set<User> userCourseList) {
-//        this.userCourse = userCourseList;
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,13 +62,4 @@ public class Course {
     public int hashCode() {
         return Objects.hash(id, courseName, courseDescription);
     }
-
-//    @Override
-//    public String toString() {
-//        return "Course{" +
-//                "id=" + id +
-//                ", courseName='" + courseName + '\'' +
-//                ", courseDescription='" + courseDescription + '\'' +
-//                '}';
-//    }
 }

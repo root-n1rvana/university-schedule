@@ -151,13 +151,14 @@ public class UserServiceImpl implements UserService {
             redirectAttributesDto.setName(ERROR_MSG);
             redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
         } else {
-            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            Group group = groupService.getGroupById(userDto.getOwnerGroup().getId());
-            userDto.setOwnerGroup(groupMapper.groupToGroupDto(group));
-            Set<Role> roles = new HashSet<>();
-            roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
-            userDto.setRoles(roleMapper.roleSetToRoleDtoSet(roles));
-            save(userDto);
+            User newStudent = new User();
+            newStudent.setFirstname(userDto.getFirstname());
+            newStudent.setLastname(userDto.getLastname());
+            newStudent.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            newStudent.setLogin(userDto.getLogin());
+            newStudent.setOwnerGroup(groupService.getGroupById(DefaultGroup.STUDENT.getId()));
+            newStudent.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
+            save(newStudent);
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("Student added successfully!");
         }
