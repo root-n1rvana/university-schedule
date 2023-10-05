@@ -10,6 +10,7 @@ import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapp
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -48,22 +49,13 @@ public class GroupServiceImpl implements GroupService {
                 .collect(Collectors.toList());
     }
 
-    private boolean adminAndProfessorGroupFilter(GroupDto group) {
-        return !Objects.equals(group.getId(), DefaultGroup.ADMIN.getId()) &&
-                !Objects.equals(group.getId(), DefaultGroup.PROFESSOR.getId());
-    }
-
-    public List<GroupDto> getAllGroupsForStudents() {
-        return getAllGroups()
+    public List<GroupDto> getAllStudentsGroups() {
+        List<String> excludedGroupNames = Arrays.asList("admin", "professor");
+        return groupRepository.findByNameNotIn(excludedGroupNames)
                 .stream()
-                .filter(this::adminAndProfessorGroupFilter)
-                .sorted(Comparator.comparing(GroupDto::getId))
+                .map(groupMapper::groupToGroupDto)
+                .sorted(Comparator.comparingLong(GroupDto::getId))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean existByGroupName(String groupName) {
-        return groupRepository.existsByName(groupName);
     }
 
     @Override

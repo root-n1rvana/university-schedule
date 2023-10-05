@@ -18,7 +18,7 @@ public class Schedule {
     private LocalDate scheduleDate;
 
     @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.EAGER)
-    private Set<Lesson> lessonsList;
+    private Set<Lesson> lessons;
 
     public Schedule() {
     }
@@ -44,12 +44,12 @@ public class Schedule {
         this.scheduleDate = scheduleDate;
     }
 
-    public Set<Lesson> getLessonsList() {
-        return lessonsList;
+    public Set<Lesson> getLessons() {
+        return lessons;
     }
 
-    public void setLessonsList(Set<Lesson> lessonsList) {
-        this.lessonsList = lessonsList;
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
     }
 
     @Override

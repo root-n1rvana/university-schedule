@@ -93,14 +93,14 @@
 </div>
 <br>
 <div>
-<form th:action="@{management}" method="get" autocomplete="off">
-    <div>
-        <label for="datepicker" style="display: inline-block; width: 100px;">Select Month</label>
-        <input type="text" class="form-control" style="display: inline-block; width: 90px;" name="yearMonth"
-               id="datepicker" data-date-format="yyyy-mm">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
+    <form th:action="@{management}" method="get" autocomplete="off">
+        <div>
+            <label for="datepicker" style="display: inline-block; width: 100px;">Select Month</label>
+            <input type="text" class="form-control" style="display: inline-block; width: 90px;" name="yearMonth"
+                   id="datepicker" data-date-format="yyyy-mm">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
 </div>
 <br>
 
@@ -118,7 +118,7 @@
             </div>
             <div class="modal-body">
                 <form th:action="@{addLesson}" method="post" autocomplete="off">
-                    <div class="mb-3" >
+                    <div class="mb-3">
                         <label for="datepickerNew" class="col-form-label">Select Date</label>
                         <input type="text" class="form-control" name="newScheduleDate"
                                id="datepickerNew" data-date-format="yyyy-mm-dd"/>
@@ -133,19 +133,22 @@
                     <div class="mb-3">
                         <label for="selectCourse" class="col-form-label">Choose Course</label>
                         <select class="form-select" id="selectCourse" name="ownerCourse.id">
-                            <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
+                            <option th:each="course : ${courses}" th:value="${course.id}"
+                                    th:text="${course.courseName}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="selectRoom" class="col-form-label">Choose Room</label>
                         <select class="form-select" id="selectRoom" name="ownerRoom.id">
-                            <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.roomLabel}"></option>
+                            <option th:each="room : ${rooms}" th:value="${room.id}"
+                                    th:text="${room.roomLabel}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="selectLessonTime" class="col-form-label">Choose Lesson Time</label>
                         <select class="form-select" id="selectLessonTime" name="ownerLessonTime.id">
-                            <option th:each="lessonT : ${lessonsTime}" th:value="${lessonT.id}" th:text="${lessonT.lessonTime}"></option>
+                            <option th:each="lessonT : ${lessonsTime}" th:value="${lessonT.id}"
+                                    th:text="${lessonT.lessonTime}"></option>
                         </select>
                     </div>
                     <br>
@@ -177,7 +180,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="lesson : ${schedule.lessonsList}">
+            <tr th:each="lesson : ${schedule.lessons}">
                 <td th:text="${lesson.ownerGroup.name}"></td>
                 <td th:text="${lesson.ownerCourse.courseName}"></td>
                 <td th:text="${lesson.ownerRoom.roomLabel}"></td>

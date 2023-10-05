@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface LessonService {
 
-    List<Lesson> getAllLessons();
+    List<LessonDto> getAllLessons();
 
     boolean existsByCourseNameRoomLabelGroupNameLessonTime(String courseName, String roomLabel, String groupName, String lessonTime);
 

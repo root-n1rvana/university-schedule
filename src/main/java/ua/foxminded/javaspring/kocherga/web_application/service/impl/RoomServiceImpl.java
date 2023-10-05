@@ -1,7 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import org.springframework.stereotype.Service;
-import ua.foxminded.javaspring.kocherga.web_application.models.Room;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RoomDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.RoomMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoomRepository;
@@ -21,8 +20,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public List<RoomDto> getAllRooms() {
+        return roomRepository.findAll().stream()
+                .map(roomMapper::roomToRoomDto)
+                .toList();
+
     }
 
     public List<RoomDto> getAllRoomsDto() {

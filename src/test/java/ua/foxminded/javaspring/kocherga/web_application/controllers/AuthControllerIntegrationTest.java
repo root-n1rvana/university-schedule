@@ -44,8 +44,7 @@ public class AuthControllerIntegrationTest {
                         .param("firstname", "testuser123")
                         .param("lastname", "testuser123")
                         .param("login", "testuser123")
-                        .param("password", "testpassword")
-                )
+                        .param("password", "testpassword"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("login"));
         User user = userRepository.findByLogin("testuser123");

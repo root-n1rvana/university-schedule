@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 
+import java.util.List;
+
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
@@ -16,4 +18,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     void deleteByName(String groupName);
 
     Group getGroupByName(String groupName);
+
+    List<Group> findByNameNotIn(List<String> names);
 }

@@ -1,7 +1,6 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import org.springframework.stereotype.Service;
-import ua.foxminded.javaspring.kocherga.web_application.models.LessonTime;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.LessonTimeDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.LessonTimeMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.LessonTimeRepository;
@@ -21,8 +20,10 @@ public class LessonTimeServiceImpl implements LessonTimeService {
     }
 
     @Override
-    public List<LessonTime> getAllLessonsTime() {
-        return lessonTimeRepository.findAll();
+    public List<LessonTimeDto> getAllLessonsTime() {
+        return lessonTimeRepository.findAll().stream()
+                .map(lessonTimeMapper::lessonTimeToLessonTimeDto)
+                .toList();
     }
 
     public List<LessonTimeDto> getAllLessonsTimeDto() {

@@ -2,23 +2,18 @@ package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 
-import java.util.Set;
-
 public class RoleDto {
 
     private long id;
 
     private RoleName roleName;
 
-    private Set<UserDto> users;
-
     public RoleDto() {
     }
 
-    public RoleDto(long id, RoleName roleName, Set<UserDto> users) {
+    public RoleDto(long id, RoleName roleName) {
         this.id = id;
         this.roleName = roleName;
-        this.users = users;
     }
 
     public long getId() {
@@ -35,13 +30,5 @@ public class RoleDto {
 
     public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
-    }
-
-    public Set<UserDto> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<UserDto> users) {
-        this.users = users;
     }
 }

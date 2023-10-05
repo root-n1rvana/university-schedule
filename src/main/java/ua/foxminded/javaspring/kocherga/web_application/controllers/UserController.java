@@ -5,14 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -31,11 +27,9 @@ public class UserController {
         this.groupService = groupService;
     }
 
-    //Temporal method, will be changed in next tasks
-    @GetMapping("/{groupId}")
+    @GetMapping("group/{groupId}")
     public String getUsersByGroupId(@PathVariable int groupId, Model model) {
-        List<User> users = userService.getUsersByGroupId(groupId);
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.getUsersByGroupId(groupId));
         return "db/users";
     }
 
@@ -45,18 +39,15 @@ public class UserController {
     }
 
     @GetMapping("/student-management")
-    public String showStudentUsersPage(Model model) {
-        List<UserDto> users = userService.getAllStudentUsers();
-        List<GroupDto> groups = groupService.getAllGroupsForStudents();
-        model.addAttribute("users", users);
-        model.addAttribute("groups", groups);
+    public String showStudentPage(Model model) {
+        model.addAttribute("users", userService.getAllStudentUsers());
+        model.addAttribute("groups", groupService.getAllStudentsGroups());
         return STUDENT_MANAGEMENT_PAGE;
     }
 
     @GetMapping("/teacher-management")
-    public String showProfManagementPage(Model model) {
-        List<UserDto> teachers = userService.getAllTeacherUsers();
-        model.addAttribute("teachers", teachers);
+    public String showTeacherManagementPage(Model model) {
+        model.addAttribute("teachers", userService.getAllTeacherUsers());
         return TEACHER_MANAGEMENT_PAGE;
     }
 

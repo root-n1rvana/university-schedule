@@ -15,7 +15,6 @@ import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServic
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -104,11 +103,11 @@ class GroupControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Group added successfully!"));
 
         // Verify that the group was added to the database
-        assertTrue(groupService.existByGroupName(newGroupName));
+        assertTrue(groupRepository.existsByName(newGroupName));
 
         // Cleaning after test
         groupRepository.deleteByName(newGroupName);
-        assertFalse(groupService.existByGroupName(newGroupName));
+        assertFalse(groupRepository.existsByName(newGroupName));
     }
 
     @Test
@@ -117,7 +116,7 @@ class GroupControllerIntegrationTest {
         String newGroupName = "admin";
 
         // Verify that the group already exists
-        assertTrue(groupService.existByGroupName(newGroupName));
+        assertTrue(groupRepository.existsByName(newGroupName));
 
         mockMvc.perform(post("/group/addGroup")
                         .param("newGroupName", newGroupName))
@@ -146,7 +145,7 @@ class GroupControllerIntegrationTest {
         groupRepository.save(testGroup);
 
         // Verify that the group was saved to database
-        assertTrue(groupService.existByGroupName(testGroup.getName()));
+        assertTrue(groupRepository.existsByName(testGroup.getName()));
 
         mockMvc.perform(post("/group/delete")
                         .param("groupId", String.valueOf(testGroup.getId())))
@@ -156,7 +155,7 @@ class GroupControllerIntegrationTest {
                 .andExpect(flash().attribute("deletionSucceeded", "Group deleted successfully!"));
 
         // Verify that the group was deleted from the database
-        assertFalse(groupService.existByGroupName(testGroup.getName()));
+        assertFalse(groupRepository.existsByName(testGroup.getName()));
     }
 
     @Test

@@ -12,10 +12,7 @@ public interface GroupService {
 
     Group getGroupById(long groupId);
 
-
     List<GroupDto> getAllGroups();
-
-    boolean existByGroupName(String groupName);
 
     boolean existByGroupId(Long groupId);
 

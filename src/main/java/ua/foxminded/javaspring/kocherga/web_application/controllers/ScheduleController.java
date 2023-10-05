@@ -47,7 +47,7 @@ public class ScheduleController {
 
     @GetMapping("/management")
     public String showScheduleManagementPage(String yearMonth, Model model) {
-        List<GroupDto> groups = groupService.getAllGroupsForStudents();
+        List<GroupDto> groups = groupService.getAllStudentsGroups();
         List<CourseDto> courses = courseService.getAllCourses();
         List<RoomDto> rooms = roomService.getAllRoomsDto();
         List<LessonTimeDto> lessonsTime = lessonTimeService.getAllLessonsTimeDto();

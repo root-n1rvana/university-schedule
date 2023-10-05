@@ -12,7 +12,7 @@ public interface UserService {
 
     User findUserByLoginName(String loginName);
 
-    List<User> getAllUsers();
+    List<UserDto> getAllUsers();
 
     List<UserDto> getAllStudentUsers();
 

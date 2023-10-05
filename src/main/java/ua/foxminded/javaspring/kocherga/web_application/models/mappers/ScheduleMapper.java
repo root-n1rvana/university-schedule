@@ -14,7 +14,7 @@ public interface ScheduleMapper {
     ScheduleDto scheduleToScheduleDto(Schedule schedule);
     Schedule scheduleDtoToSchedule(ScheduleDto scheduleDto);
     List<ScheduleDto> scheduleListToScheduleDtoList(List<Schedule> schedules);
-    List<Schedule> scheduleDtoListToScheduleList(List<ScheduleDto> schedules);
-    Set<ScheduleDto> scheduleSetToScheduleDtoSet(Set<Schedule> schedules);
-    Set<Schedule> scheduleDtoSetToScheduleList(Set<ScheduleDto> schedules);
+//    List<Schedule> scheduleDtoListToScheduleList(List<ScheduleDto> schedules);
+//    Set<ScheduleDto> scheduleSetToScheduleDtoSet(Set<Schedule> schedules);
+//    Set<Schedule> scheduleDtoSetToScheduleList(Set<ScheduleDto> schedules);
 }

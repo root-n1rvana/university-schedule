@@ -7,7 +7,6 @@ import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.LessonDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.LessonMapper;
-import ua.foxminded.javaspring.kocherga.web_application.models.mappers.LessonTimeMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.*;
 import ua.foxminded.javaspring.kocherga.web_application.service.LessonService;
 
@@ -25,7 +24,6 @@ public class LessonServiceImpl implements LessonService {
     private final LessonTimeRepository lessonTimeRepository;
     private final ScheduleRepository scheduleRepository;
     private final LessonMapper lessonMapper;
-    private final LessonTimeMapper lessonTimeMapper;
 
     public LessonServiceImpl(LessonRepository lessonRepository,
                              CourseRepository courseRepository,
@@ -33,8 +31,7 @@ public class LessonServiceImpl implements LessonService {
                              GroupRepository groupRepository,
                              LessonTimeRepository lessonTimeRepository,
                              ScheduleRepository scheduleRepository,
-                             LessonMapper lessonMapper,
-                             LessonTimeMapper lessonTimeMapper) {
+                             LessonMapper lessonMapper) {
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
         this.roomRepository = roomRepository;
@@ -42,13 +39,14 @@ public class LessonServiceImpl implements LessonService {
         this.lessonTimeRepository = lessonTimeRepository;
         this.scheduleRepository = scheduleRepository;
         this.lessonMapper = lessonMapper;
-        this.lessonTimeMapper = lessonTimeMapper;
 
     }
 
     @Override
-    public List<Lesson> getAllLessons() {
-        return lessonRepository.findAll();
+    public List<LessonDto> getAllLessons() {
+        return lessonRepository.findAll().stream()
+                .map(lessonMapper::lessonToLessonDto)
+                .toList();
     }
 
     @Override
@@ -74,33 +72,33 @@ public class LessonServiceImpl implements LessonService {
         }
     }
 
-    @Transactional
-    @Override
-    public RedirectAttributesDto saveAndGetRedirAttr(LessonDto lessonDto, BindingResult bindingResult) {
-        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
-        if (redirectAttributesDto.getValue() == null) {
-            Lesson newLesson = new Lesson();
-            Course course = courseRepository.getCourseById(lessonDto.getOwnerCourse().getId());
-            newLesson.setOwnerCourse(course);
-
-            Room room = roomRepository.getRoomById(lessonDto.getOwnerRoom().getId());
-            newLesson.setOwnerRoom(room);
-
-            Group group = groupRepository.getGroupById(lessonDto.getOwnerGroup().getId());
-            newLesson.setOwnerGroup(group);
-
-            LessonTime lessonTime = lessonTimeRepository.findById(lessonDto.getOwnerLessonTime().getId());
-            newLesson.setOwnerLessonTime(lessonTime);
-
-            Schedule schedule = addScheduleIfNotExist(lessonDto.getNewScheduleDate());
-            newLesson.setOwnerSchedule(schedule);
-
-            lessonRepository.save(newLesson);
-            redirectAttributesDto.setName("successMessage");
-            redirectAttributesDto.setValue("Lesson added successfully!");
-        }
-        return redirectAttributesDto;
-    }
+//    @Transactional
+//    @Override
+//    public RedirectAttributesDto saveAndGetRedirAttr(LessonDto lessonDto, BindingResult bindingResult) {
+//        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
+//        if (redirectAttributesDto.getValue() == null) {
+//            Lesson newLesson = new Lesson();
+//            Course course = courseRepository.getCourseById(lessonDto.getOwnerCourse().getId());
+//            newLesson.setOwnerCourse(course);
+//
+//            Room room = roomRepository.getRoomById(lessonDto.getOwnerRoom().getId());
+//            newLesson.setOwnerRoom(room);
+//
+//            Group group = groupRepository.getGroupById(lessonDto.getOwnerGroup().getId());
+//            newLesson.setOwnerGroup(group);
+//
+//            LessonTime lessonTime = lessonTimeRepository.findById(lessonDto.getOwnerLessonTime().getId());
+//            newLesson.setOwnerLessonTime(lessonTime);
+//
+//            Schedule schedule = addScheduleIfNotExist(lessonDto.getNewScheduleDate());
+//            newLesson.setOwnerSchedule(schedule);
+//
+//            lessonRepository.save(newLesson);
+//            redirectAttributesDto.setName("successMessage");
+//            redirectAttributesDto.setValue("Lesson added successfully!");
+//        }
+//        return redirectAttributesDto;
+//    }
 
     private RedirectAttributesDto checkErrorsAndHandle(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -112,4 +110,33 @@ public class LessonServiceImpl implements LessonService {
         return new RedirectAttributesDto();
     }
 
+    private Lesson createLessonFromDto(LessonDto lessonDto) {
+        Lesson newLesson = new Lesson();
+        newLesson.setOwnerCourse(courseRepository.getCourseById(lessonDto.getOwnerCourse().getId()));
+        newLesson.setOwnerRoom(roomRepository.getRoomById(lessonDto.getOwnerRoom().getId()));
+        newLesson.setOwnerGroup(groupRepository.getGroupById(lessonDto.getOwnerGroup().getId()));
+        newLesson.setOwnerLessonTime(lessonTimeRepository.findById(lessonDto.getOwnerLessonTime().getId()));
+        newLesson.setOwnerSchedule(addScheduleIfNotExist(lessonDto.getNewScheduleDate()));
+        return newLesson;
+    }
+
+    @Transactional
+    @Override
+    public RedirectAttributesDto saveAndGetRedirAttr(LessonDto lessonDto, BindingResult bindingResult) {
+        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
+        if (redirectAttributesDto.getValue() == null) {
+            try {
+                Lesson newLesson = createLessonFromDto(lessonDto);
+                lessonRepository.save(newLesson);
+                redirectAttributesDto.setName("successMessage");
+                redirectAttributesDto.setValue("Lesson added successfully!");
+            } catch (Exception e) {
+                // Handle any exceptions here
+                // Log the error and set an appropriate error message in redirectAttributesDto
+                redirectAttributesDto.setName("successMessage");
+                redirectAttributesDto.setValue("Some imput data is incorrect");
+            }
+        }
+        return redirectAttributesDto;
+    }
 }

@@ -24,8 +24,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<Schedule> getAllSchedules() {
-        return scheduleRepository.findAll();
+    public List<ScheduleDto> getAllSchedules() {
+        return scheduleRepository.findAll().stream()
+                .map(scheduleMapper::scheduleToScheduleDto)
+                .toList();
+
     }
 
     @Override
@@ -40,24 +43,4 @@ public class ScheduleServiceImpl implements ScheduleService {
             return scheduleMapper.scheduleListToScheduleDtoList(schedules);
         }
     }
-
-//    @Override
-//    public List<ScheduleDto> getScheduleInDateRange(String yearMonth) {
-//        if (yearMonth == null) {
-//            return new ArrayList<>();
-//        } else {
-//            YearMonth ym = YearMonth.parse(yearMonth);
-//            LocalDate startDate = ym.atDay(1);
-//            LocalDate endDate = ym.atEndOfMonth();
-//            List<ScheduleDto> schedules = scheduleMapper.scheduleListToScheduleDtoList(scheduleRepository.findAllByScheduleDateBetween(startDate, endDate));
-//
-//            for (ScheduleDto schedule : schedules) {
-//                List<LessonDto> lessons = new ArrayList<>(schedule.getLessonsList());
-//                lessons.sort(Comparator.comparing(lesson -> lesson.getOwnerGroup().getId()));
-//                lessons.sort(Comparator.comparing(lesson -> lesson.getOwnerLessonTime().getId()));
-//                schedule.setLessonDtoList(lessons);
-//            }
-//            return schedules;
-//        }
-//    }
 }
