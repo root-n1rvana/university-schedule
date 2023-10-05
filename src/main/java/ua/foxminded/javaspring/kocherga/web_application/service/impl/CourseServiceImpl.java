@@ -23,14 +23,17 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
     private final RedirectAttributesMessageHandler attrMsgHandler;
+    private final BindingResultErrorsHandler bindingResultErrHandler;
 
 
     public CourseServiceImpl(CourseRepository courseRepository,
                              CourseMapper courseMapper,
-                             RedirectAttributesMessageHandler attrMsgHandler) {
+                             RedirectAttributesMessageHandler attrMsgHandler,
+                             BindingResultErrorsHandler bindingResultErrHandler) {
         this.courseRepository = courseRepository;
         this.courseMapper = courseMapper;
         this.attrMsgHandler = attrMsgHandler;
+        this.bindingResultErrHandler = bindingResultErrHandler;
     }
 
     @Override
@@ -100,7 +103,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public void updateAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        validateBindingResultErrors(bindingResult);
+        bindingResultErrHandler.validateBindingResultErrors(bindingResult);
         validateExistingCourseName(courseDto);
 
         Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
@@ -108,15 +111,6 @@ public class CourseServiceImpl implements CourseService {
         courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
         save(courseToUpdate);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "Course updated successfully!");
-    }
-
-    private void validateBindingResultErrors(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errMessage = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-            throw new ValidationException(errMessage);
-        }
     }
 
     private void validateExistingCourseName(CourseDto courseDto) {
