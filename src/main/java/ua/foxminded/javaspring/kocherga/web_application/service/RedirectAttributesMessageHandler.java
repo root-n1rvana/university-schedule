@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.kocherga.web_application.service.impl;
+package ua.foxminded.javaspring.kocherga.web_application.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -6,15 +6,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Component
 public class RedirectAttributesMessageHandler {
 
-    void setErrorMessage(RedirectAttributes redirectAttributes, String message) {
+    public void setErrorMessage(RedirectAttributes redirectAttributes, String message) {
         redirectAttributes.addFlashAttribute("errorMessage", message);
     }
 
-    void setSuccessMessage(RedirectAttributes redirectAttributes, String message) {
+    public void setSuccessMessage(RedirectAttributes redirectAttributes, String message) {
         redirectAttributes.addFlashAttribute("successMessage", message);
     }
 
-    void setWarnMessage(RedirectAttributes redirectAttributes, String message) {
+    public void setWarnMessage(RedirectAttributes redirectAttributes, String message) {
         redirectAttributes.addFlashAttribute("warnMessage", message);
     }
 }

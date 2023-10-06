@@ -95,14 +95,14 @@
                 <form th:action="@{addCourse}" method="post">
                     <div class="mb-3">
                         <label for="newCourseName" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="newCourseName" name="courseName" required/>
-<!--                        maxlength="20"-->
+                        <input type="text" class="form-control" id="newCourseName" name="courseName" maxlength="20" required/>
+
                     </div>
                     <div class="mb-3">
                         <label for="newCourseDescription" class="col-form-label">Description:</label>
                         <input type="text" class="form-control" id="newCourseDescription" name="courseDescription"
-                               required/>
-<!--                        maxlength="100"-->
+                               maxlength="100" required/>
+
                     </div>
                     <br>
                     <div class="modal-footer">

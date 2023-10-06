@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.kocherga.web_application.service.impl;
+package ua.foxminded.javaspring.kocherga.web_application.service;
 
 import jakarta.validation.ValidationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

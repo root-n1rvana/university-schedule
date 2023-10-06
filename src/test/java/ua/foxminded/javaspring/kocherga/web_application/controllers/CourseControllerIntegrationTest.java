@@ -54,7 +54,7 @@ class CourseControllerIntegrationTest {
         Course testCourse = new Course();
         testCourse.setCourseName("Test Course");
         testCourse.setCourseDescription("Description");
-        courseService.save(testCourse);
+        courseRepository.save(testCourse);
         CourseDto savedCourse = courseService.findByCourseName("Test Course");
 
         // Prepare data to replace in database
@@ -150,7 +150,7 @@ class CourseControllerIntegrationTest {
         Course testCourse = new Course();
         testCourse.setCourseName("CourseToDelete");
         testCourse.setCourseDescription("CourseDescriptionToDelete");
-        courseService.save(testCourse);
+        courseRepository.save(testCourse);
 
         // Verify that the course was saved to database
         assertTrue(courseService.existsByCourseName(testCourse.getCourseName()));

@@ -16,4 +16,10 @@ public interface LessonService {
 
     @Transactional
     RedirectAttributesDto saveAndGetRedirAttr(LessonDto lessonDto, BindingResult bindingResult);
+
+    @Transactional
+    RedirectAttributesDto updateLessonAndGetRedirAttr(LessonDto lessonDto);
+
+    @Transactional
+    RedirectAttributesDto deleteLessonAndGetRedirAttr(Long id);
 }

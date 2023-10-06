@@ -1,10 +1,12 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import ua.foxminded.javaspring.kocherga.web_application.models.*;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
@@ -61,7 +63,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(userMapper::userToUserDto)
                 .collect(Collectors.toList());
-
     }
 
     @Override
@@ -109,7 +110,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT);
         user.setRoles(new HashSet<>(Collections.singletonList(role)));
-        user.setOwnerGroup(groupService.getGroupById(9L)); //id 9L - default 'No Group'
+        user.setOwnerGroup(groupService.getGroupById(DefaultGroup.UNSELECTED.getId()));
         userRepository.save(user);
     }
 
@@ -136,38 +137,96 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+//    @Transactional
+//    @Override
+//    public RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto) {
+//        return saveUserAndGetRedirAttr(userDto, DefaultGroup.UNSELECTED, RoleName.ROLE_STUDENT);
+//    }
+//
+//    @Transactional
+//    @Override
+//    public RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto) {
+//        return saveUserAndGetRedirAttr(userDto, DefaultGroup.PROFESSOR, RoleName.ROLE_PROFESSOR);
+//    }
+//
+//    @Transactional
+//    private RedirectAttributesDto saveUserAndGetRedirAttr(UserDto userDto, DefaultGroup defaultGroup, RoleName roleName) {
+//        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+//        if (userRepository.existsByLogin(userDto.getLogin())) {
+//            redirectAttributesDto.setName(ERROR_MSG);
+//            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
+//        } else {
+//            User newUser = new User();
+//            newUser.setFirstname(userDto.getFirstname());
+//            newUser.setLastname(userDto.getLastname());
+//            newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+//            newUser.setLogin(userDto.getLogin());
+//            newUser.setOwnerGroup(groupService.getGroupById(defaultGroup.getId()));
+//            newUser.setRoles(Set.of(roleRepository.getRoleByRoleName(roleName)));
+//            save(newUser);
+//            redirectAttributesDto.setName(SUCCESS_MSG);
+//            redirectAttributesDto.setValue("User added successfully!");
+//        }
+//        return redirectAttributesDto;
+//    }
+
+
+
     @Transactional
     @Override
     public RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto) {
-        return saveUserAndGetRedirAttr(userDto, DefaultGroup.UNSELECTED, RoleName.ROLE_STUDENT);
-    }
-
-    @Transactional
-    @Override
-    public RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto) {
-        return saveUserAndGetRedirAttr(userDto, DefaultGroup.PROFESSOR, RoleName.ROLE_PROFESSOR);
-    }
-
-    @Transactional
-    private RedirectAttributesDto saveUserAndGetRedirAttr(UserDto userDto, DefaultGroup defaultGroup, RoleName roleName) {
         RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
         if (userRepository.existsByLogin(userDto.getLogin())) {
             redirectAttributesDto.setName(ERROR_MSG);
             redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
         } else {
-            User newUser = new User();
-            newUser.setFirstname(userDto.getFirstname());
-            newUser.setLastname(userDto.getLastname());
-            newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            newUser.setLogin(userDto.getLogin());
-            newUser.setOwnerGroup(groupService.getGroupById(defaultGroup.getId()));
-            newUser.setRoles(Set.of(roleRepository.getRoleByRoleName(roleName)));
-            save(newUser);
+            User newStudent = new User();
+            newStudent.setFirstname(userDto.getFirstname());
+            newStudent.setLastname(userDto.getLastname());
+            newStudent.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            newStudent.setLogin(userDto.getLogin());
+            newStudent.setOwnerGroup(groupService.getGroupById(DefaultGroup.STUDENT.getId()));
+            newStudent.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
+            save(newStudent);
             redirectAttributesDto.setName(SUCCESS_MSG);
             redirectAttributesDto.setValue("User added successfully!");
         }
         return redirectAttributesDto;
     }
+
+    @Transactional
+    @Override
+    public RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto) {
+        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+//        if (userRepository.existsByLogin(userDto.getLogin())) {
+//            redirectAttributesDto.setName(ERROR_MSG);
+//            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
+//        } else {
+        validateExistingLoginName(userDto);
+
+            User newTeacher = new User();
+            newTeacher.setFirstname(userDto.getFirstname());
+            newTeacher.setLastname(userDto.getLastname());
+            newTeacher.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            newTeacher.setLogin(userDto.getLogin());
+            newTeacher.setOwnerGroup(groupService.getGroupById(DefaultGroup.PROFESSOR.getId()));
+            newTeacher.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR)));
+            save(newTeacher);
+            redirectAttributesDto.setName(SUCCESS_MSG);
+            redirectAttributesDto.setValue("User added successfully!");
+//        }
+        return redirectAttributesDto;
+    }
+
+    private void validateExistingLoginName(UserDto userDto) {
+        if (userRepository.existsByLogin(userDto.getLogin())) {
+            throw new ValidationException(USER_LOGIN_EXISTS_ERROR);
+        }
+    }
+
+
+
+
 
     @Transactional
     @Override

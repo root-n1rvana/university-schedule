@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -11,7 +10,9 @@ import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.CourseMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
+import ua.foxminded.javaspring.kocherga.web_application.service.BindingResultErrorsHandler;
 import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
+import ua.foxminded.javaspring.kocherga.web_application.service.RedirectAttributesMessageHandler;
 
 import java.util.Comparator;
 import java.util.List;
@@ -59,45 +60,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional
     @Override
-    public void save(Course course) {
-        courseRepository.save(course);
-    }
-
-    @Transactional
-    @Override
-    public void save(CourseDto courseDto) {
-        Course course = courseMapper.courseDtoToCourse(courseDto);
-        courseRepository.save(course);
-    }
-
-    @Transactional
-    @Override
-    public RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult) {
-        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
-        if (redirectAttributesDto.getValue() == null) {
-            //TODO try Optional orElse
-            if (courseRepository.existsByCourseName(courseDto.getCourseName())) {
-                redirectAttributesDto.setName("errorMessage");
-                redirectAttributesDto.setValue("Course with the same name already exists.");
-            } else {
-                Course newCourse = new Course();
-                newCourse.setCourseName(courseDto.getCourseName());
-                newCourse.setCourseDescription(courseDto.getCourseDescription());
-                save(newCourse);
-                redirectAttributesDto.setName("successMessage");
-                redirectAttributesDto.setValue("Course added successfully!");
-            }
-        }
-        return redirectAttributesDto;
-    }
-
-    private RedirectAttributesDto checkErrorsAndHandle(BindingResult bindingResult) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (bindingResult.hasErrors()) {
-            redirectAttributesDto.setName("errorMessage");
-            redirectAttributesDto.setValue("The number of allowed characters has been exceeded");
-        }
-        return redirectAttributesDto;
+    public void saveAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateBindingResultErrors(bindingResult);
+        validateExistingCourseName(courseDto);
+        Course newCourse = new Course();
+        newCourse.setCourseName(courseDto.getCourseName());
+        newCourse.setCourseDescription(courseDto.getCourseDescription());
+        courseRepository.save(newCourse);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "Course saved successfully!");
     }
 
     @Transactional
@@ -105,16 +75,18 @@ public class CourseServiceImpl implements CourseService {
     public void updateAndGetRedirAttr(CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         bindingResultErrHandler.validateBindingResultErrors(bindingResult);
         validateExistingCourseName(courseDto);
-
         Course courseToUpdate = courseRepository.getCourseById(courseDto.getId());
         courseToUpdate.setCourseName(courseDto.getCourseName());
         courseToUpdate.setCourseDescription(courseDto.getCourseDescription());
-        save(courseToUpdate);
+        courseRepository.save(courseToUpdate);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "Course updated successfully!");
     }
 
     private void validateExistingCourseName(CourseDto courseDto) {
-        boolean notSameCourseName = !courseRepository.getCourseById(courseDto.getId()).getCourseName().equals(courseDto.getCourseName());
+        boolean notSameCourseName = true;
+        if (!(courseDto.getId() == null)) {
+            notSameCourseName = !courseRepository.getCourseById(courseDto.getId()).getCourseName().equals(courseDto.getCourseName());
+        }
         if (existsByCourseName(courseDto.getCourseName()) && notSameCourseName) {
             throw new ValidationException("Course with the same name already exists.");
         }

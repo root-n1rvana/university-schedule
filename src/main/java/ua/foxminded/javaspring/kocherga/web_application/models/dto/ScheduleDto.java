@@ -1,6 +1,7 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public class ScheduleDto {
@@ -11,13 +12,16 @@ public class ScheduleDto {
 
     private Set<LessonDto> lessons;
 
+    private List<LessonDto> lessonsList;
+
     public ScheduleDto() {
     }
 
-    public ScheduleDto(long id, LocalDate scheduleDate, Set<LessonDto> lessons) {
+    public ScheduleDto(long id, LocalDate scheduleDate, Set<LessonDto> lessons, List<LessonDto> lessonsList) {
         this.id = id;
         this.scheduleDate = scheduleDate;
         this.lessons = lessons;
+        this.lessonsList = lessonsList;
     }
 
     public long getId() {
@@ -42,5 +46,13 @@ public class ScheduleDto {
 
     public void setLessons(Set<LessonDto> lessons) {
         this.lessons = lessons;
+    }
+
+    public List<LessonDto> getLessonsList() {
+        return lessonsList;
+    }
+
+    public void setLessonsList(List<LessonDto> lessonsList) {
+        this.lessonsList = lessonsList;
     }
 }

@@ -35,8 +35,7 @@ public class CourseController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addCourse")
     public String addCourse(@ModelAttribute @Valid CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = courseService.saveAndGetRedirAttr(courseDto, bindingResult);
-        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        courseService.saveAndGetRedirAttr(courseDto, bindingResult, redirectAttributes);
         return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
 
@@ -44,10 +43,8 @@ public class CourseController {
     @PostMapping("/update")
     public String updateCourse(@Valid CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         courseService.updateAndGetRedirAttr(courseDto, bindingResult, redirectAttributes);
-
         return REDIRECT_TO_COURSE_MANAGEMENT_PAGE;
     }
-
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")

@@ -5,10 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.*;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.*;
@@ -64,6 +61,22 @@ public class ScheduleController {
     @PostMapping("/addLesson")
     public String addLesson(@ModelAttribute @Valid LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         RedirectAttributesDto redirAttrDto = lessonService.saveAndGetRedirAttr(lessonDto, bindingResult);
+        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        return REDIRECT_TO_SCHEDULE_MANAGEMENT_PAGE;
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
+    @PostMapping("/update")
+    public String updateLesson(LessonDto lessonDto, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = lessonService.updateLessonAndGetRedirAttr(lessonDto);
+        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        return REDIRECT_TO_SCHEDULE_MANAGEMENT_PAGE;
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
+    @PostMapping("/delete")
+    public String deleteLesson(@RequestParam long lessonId, RedirectAttributes redirectAttributes) {
+        RedirectAttributesDto redirAttrDto = lessonService.deleteLessonAndGetRedirAttr(lessonId);
         redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
         return REDIRECT_TO_SCHEDULE_MANAGEMENT_PAGE;
     }
