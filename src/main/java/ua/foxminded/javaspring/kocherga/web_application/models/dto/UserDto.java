@@ -1,36 +1,43 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.Collection;
 import java.util.Set;
 
 public class UserDto {
 
     private Long id;
     @NotEmpty
-    @Size(max = 50)
+    @Size(min = 2, max = 50, message = "Firstname should have at least 2 and max 50 characters")
     private String firstname;
 
     @NotEmpty
-    @Size(max = 50)
+    @Size(min = 2, max = 50, message = "Lastname should have at least 2 and max 50 characters")
     private String lastname;
 
     @NotEmpty
-    @Size(max = 20)
+    @NotNull
+    @Size(min = 2, max = 20, message = "Login should have at least 2 and max 20 characters")
     private String login;
 
+    @NotNull
     @NotEmpty(message = "Password should not be empty")
     private String password;
     private GroupDto ownerGroup;
     private Set<RoleDto> roles;
     private Set<CourseDto> userCourses;
+    private Collection<Long> roleIds;
+
+    private String uiPage;
 
     public UserDto() {
     }
 
     public UserDto(Long id, String firstname, String lastname, String login, String password, GroupDto ownerGroup,
-                   Set<RoleDto> roles, Set<CourseDto> userCourses) {
+                   Set<RoleDto> roles, Set<CourseDto> userCourses, Collection<Long> roleIds, String uiPage) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -39,6 +46,8 @@ public class UserDto {
         this.ownerGroup = ownerGroup;
         this.roles = roles;
         this.userCourses = userCourses;
+        this.roleIds = roleIds;
+        this.uiPage = uiPage;
     }
 
     public Long getId() {
@@ -105,17 +114,19 @@ public class UserDto {
         this.userCourses = userCourses;
     }
 
-    @Override
-    public String toString() {
-        return "UserDto{" +
-                "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", ownerGroup=" + ownerGroup +
-                ", roles=" + roles +
-                ", userCourses=" + userCourses +
-                '}';
+    public Collection<Long> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(Collection<Long> roleIds) {
+        this.roleIds = roleIds;
+    }
+
+    public String getUiPage() {
+        return uiPage;
+    }
+
+    public void setUiPage(String uiPage) {
+        this.uiPage = uiPage;
     }
 }

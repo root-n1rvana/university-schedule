@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
-    <!-- Custom CSS styles -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,38 +61,58 @@
             background-color: #cff4fc;
             border-color: #b6effb
         }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
     </style>
 </head>
-
 <body>
 <div class="container">
     <div class="card-header">
         <h2 class="text-center">Registration</h2>
     </div>
-    <div th:if="${param.success}">
-        <div class="alert alert-info">
-            You have successfully registered!
-        </div>
+    <div th:if="${param.success}" class="alert alert-info">
+        You have successfully registered!
     </div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <br>
     <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
         <div class="form-group">
             <label for="firstname">First Name</label>
-            <input class="form-control" id="firstname" name="firstname" placeholder="Enter first name" th:field="*{firstname}" type="text" />
+            <input class="form-control" id="firstname" name="firstname" placeholder="Enter first name"
+                   th:field="*{firstname}" type="text"/>
             <p th:errors="*{firstname}" class="alert alert-info" th:if="${#fields.hasErrors('firstname')}"></p>
         </div>
         <div class="form-group">
             <label for="lastname">Last Name</label>
-            <input class="form-control" id="lastname" name="lastname" placeholder="Enter last name" th:field="*{lastname}" type="text" />
+            <input class="form-control" id="lastname" name="lastname" placeholder="Enter last name"
+                   th:field="*{lastname}" type="text"/>
             <p th:errors="*{lastname}" class="alert alert-info" th:if="${#fields.hasErrors('lastname')}"></p>
         </div>
         <div class="form-group">
             <label class="form-label">Login</label>
-            <input class="form-control" id="login" name="login" placeholder="Enter Login name" th:field="*{login}" type="login" />
+            <input class="form-control" id="login" name="login" placeholder="Enter Login name" th:field="*{login}"
+                   type="login"/>
             <p th:errors="*{login}" class="alert alert-info" th:if="${#fields.hasErrors('login')}"></p>
         </div>
         <div class="form-group">
             <label class="form-label">Password</label>
-            <input class="form-control" id="password" name="password" placeholder="Enter password" th:field="*{password}" type="password" />
+            <input class="form-control" id="password" name="password" placeholder="Enter password"
+                   th:field="*{password}" type="password"/>
             <p th:errors="*{password}" class="alert alert-info" th:if="${#fields.hasErrors('password')}"></p>
         </div>
         <div class="form-group">
@@ -103,5 +122,4 @@
     </form>
 </div>
 </body>
-
 </html>

@@ -37,10 +37,14 @@ public class ScheduleController {
         this.lessonService = lessonService;
     }
 
-    @GetMapping
-    public String index() {
+    @GetMapping("/")
+    public String showSchedulePage(String yearMonth, Long groupId, Model model) {
+        List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(groupId, yearMonth);
+        model.addAttribute("scheduleInDateRangeForGroup", scheduleInDateRangeForGroup);
         return "schedule";
     }
+
+    //ToDo schedulePage for Teacher
 
     @GetMapping("/management")
     public String showScheduleManagementPage(String yearMonth, Model model) {
@@ -60,24 +64,21 @@ public class ScheduleController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/addLesson")
     public String addLesson(@ModelAttribute @Valid LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = lessonService.saveAndGetRedirAttr(lessonDto, bindingResult);
-        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        lessonService.saveNewLesson(lessonDto, bindingResult, redirectAttributes);
         return REDIRECT_TO_SCHEDULE_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/update")
-    public String updateLesson(LessonDto lessonDto, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = lessonService.updateLessonAndGetRedirAttr(lessonDto);
-        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+    public String updateLesson(LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        lessonService.updateLesson(lessonDto, bindingResult, redirectAttributes);
         return REDIRECT_TO_SCHEDULE_MANAGEMENT_PAGE;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PostMapping("/delete")
     public String deleteLesson(@RequestParam long lessonId, RedirectAttributes redirectAttributes) {
-        RedirectAttributesDto redirAttrDto = lessonService.deleteLessonAndGetRedirAttr(lessonId);
-        redirectAttributes.addFlashAttribute(redirAttrDto.getName(), redirAttrDto.getValue());
+        lessonService.deleteLesson(lessonId, redirectAttributes);
         return REDIRECT_TO_SCHEDULE_MANAGEMENT_PAGE;
     }
 }

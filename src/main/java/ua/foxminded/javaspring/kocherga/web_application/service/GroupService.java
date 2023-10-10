@@ -1,23 +1,24 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import ua.foxminded.javaspring.kocherga.web_application.models.Group;
+import jakarta.transaction.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 
 import java.util.List;
 
 public interface GroupService {
 
-    void save(GroupDto groupDto);
-
-    Group getGroupById(long groupId);
-
     List<GroupDto> getAllGroups();
 
-    boolean existByGroupId(Long groupId);
+    List<GroupDto> getAllGroupsForManagement();
 
-    RedirectAttributesDto saveAndGetRedirAttr(String newGroupName);
+    @Transactional
+    void saveNewGroup(GroupDto groupDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    RedirectAttributesDto updateAndGetRedirAttr(GroupDto groupDto);
-    RedirectAttributesDto deleteAndGetRedirAttr(Long groupId);
+    @Transactional
+    void updateGroup(GroupDto groupDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
+
+    @Transactional
+    void deleteGroup(Long groupId, RedirectAttributes redirectAttributes);
 }

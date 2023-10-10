@@ -1,5 +1,8 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class LessonDto {
 
     private long id;
@@ -10,6 +13,8 @@ public class LessonDto {
 
     private GroupDto ownerGroup;
 
+    @NotNull
+    @NotBlank(message = "Date can't be empty")
     private String newScheduleDate;
 
     private LessonTimeDto ownerLessonTime;
@@ -17,8 +22,7 @@ public class LessonDto {
     public LessonDto() {
     }
 
-    public LessonDto(long id, CourseDto ownerCourse, RoomDto ownerRoom, GroupDto ownerGroup,
-                     String newScheduleDate, LessonTimeDto ownerLessonTime) {
+    public LessonDto(long id, CourseDto ownerCourse, RoomDto ownerRoom, GroupDto ownerGroup, String newScheduleDate, LessonTimeDto ownerLessonTime) {
         this.id = id;
         this.ownerCourse = ownerCourse;
         this.ownerRoom = ownerRoom;

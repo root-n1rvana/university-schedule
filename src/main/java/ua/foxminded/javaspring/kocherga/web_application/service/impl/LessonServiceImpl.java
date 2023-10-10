@@ -3,12 +3,16 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import ua.foxminded.javaspring.kocherga.web_application.models.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
+import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.LessonDto;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.LessonMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.*;
+import ua.foxminded.javaspring.kocherga.web_application.service.BindingResultErrorsHandler;
 import ua.foxminded.javaspring.kocherga.web_application.service.LessonService;
+import ua.foxminded.javaspring.kocherga.web_application.service.RedirectAttributesMessageHandler;
+import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.LessonValidationException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,9 +21,6 @@ import java.util.List;
 @Service
 public class LessonServiceImpl implements LessonService {
 
-    private static final String ERROR_MSG = "errorMessage";
-    private static final String SUCCESS_MSG = "successMessage";
-
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
     private final RoomRepository roomRepository;
@@ -27,6 +28,8 @@ public class LessonServiceImpl implements LessonService {
     private final LessonTimeRepository lessonTimeRepository;
     private final ScheduleRepository scheduleRepository;
     private final LessonMapper lessonMapper;
+    private final RedirectAttributesMessageHandler attrMsgHandler;
+    private final BindingResultErrorsHandler bindingResultErrHandler;
 
     public LessonServiceImpl(LessonRepository lessonRepository,
                              CourseRepository courseRepository,
@@ -34,7 +37,9 @@ public class LessonServiceImpl implements LessonService {
                              GroupRepository groupRepository,
                              LessonTimeRepository lessonTimeRepository,
                              ScheduleRepository scheduleRepository,
-                             LessonMapper lessonMapper) {
+                             LessonMapper lessonMapper,
+                             RedirectAttributesMessageHandler attrMsgHandler,
+                             BindingResultErrorsHandler bindingResultErrHandler) {
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
         this.roomRepository = roomRepository;
@@ -42,7 +47,8 @@ public class LessonServiceImpl implements LessonService {
         this.lessonTimeRepository = lessonTimeRepository;
         this.scheduleRepository = scheduleRepository;
         this.lessonMapper = lessonMapper;
-
+        this.attrMsgHandler = attrMsgHandler;
+        this.bindingResultErrHandler = bindingResultErrHandler;
     }
 
     @Override
@@ -52,81 +58,36 @@ public class LessonServiceImpl implements LessonService {
                 .toList();
     }
 
-    @Override
-    public boolean existsByCourseNameRoomLabelGroupNameLessonTime(String courseName, String roomLabel, String groupName, String lessonTime) {
-        return lessonRepository.existsByOwnerCourseContainsAndOwnerRoomContainsAndOwnerGroupContainsAndOwnerLessonTimeContains(courseName, roomLabel, groupName, lessonTime);
-    }
-
-    @Transactional
-    public void save(LessonDto lessonDto) {
-        lessonRepository.save(lessonMapper.lessonDtoToLesson(lessonDto));
-    }
-
-//    @Transactional
-//    @Override
-//    public RedirectAttributesDto saveAndGetRedirAttr(LessonDto lessonDto, BindingResult bindingResult) {
-//        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
-//        if (redirectAttributesDto.getValue() == null) {
-//            Lesson newLesson = new Lesson();
-//            Course course = courseRepository.getCourseById(lessonDto.getOwnerCourse().getId());
-//            newLesson.setOwnerCourse(course);
-//
-//            Room room = roomRepository.getRoomById(lessonDto.getOwnerRoom().getId());
-//            newLesson.setOwnerRoom(room);
-//
-//            Group group = groupRepository.getGroupById(lessonDto.getOwnerGroup().getId());
-//            newLesson.setOwnerGroup(group);
-//
-//            LessonTime lessonTime = lessonTimeRepository.findById(lessonDto.getOwnerLessonTime().getId());
-//            newLesson.setOwnerLessonTime(lessonTime);
-//
-//            Schedule schedule = addScheduleIfNotExist(lessonDto.getNewScheduleDate());
-//            newLesson.setOwnerSchedule(schedule);
-//
-//            lessonRepository.save(newLesson);
-//            redirectAttributesDto.setName("successMessage");
-//            redirectAttributesDto.setValue("Lesson added successfully!");
-//        }
-//        return redirectAttributesDto;
-//    }
-
     @Transactional
     @Override
-    public RedirectAttributesDto saveAndGetRedirAttr(LessonDto lessonDto, BindingResult bindingResult) {
-        RedirectAttributesDto redirectAttributesDto = checkErrorsAndHandle(bindingResult);
-        if (redirectAttributesDto.getValue() == null) {
-            Lesson newLesson = new Lesson();
-            updateLessonFromDto(lessonDto, newLesson);
-            lessonRepository.save(newLesson);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("Lesson added successfully!");
-        }
-        return redirectAttributesDto;
+    public void saveNewLesson(LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateLessonBindingResultErrors(bindingResult);
+        checkLessonExist(lessonDto);
+        Lesson newLesson = new Lesson();
+        fillLessonByLessonDto(lessonDto, newLesson);
+        lessonRepository.save(newLesson);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "Lesson added successfully!");
     }
 
-    private RedirectAttributesDto checkErrorsAndHandle(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-            redirectAttributesDto.setName(ERROR_MSG);
-            redirectAttributesDto.setValue("Incorrect data format or the number of characters is out of range");
-            return redirectAttributesDto;
+    private void checkLessonExist(LessonDto lessonDto) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(lessonDto.getNewScheduleDate(), dateFormatter);
+        if (lessonRepository.existsByOwnerGroupIdAndOwnerLessonTimeIdAndOwnerScheduleScheduleDate(lessonDto.getOwnerGroup().getId(), lessonDto.getOwnerLessonTime().getId(), date)) {
+            throw new LessonValidationException("Lesson for this group with same Date and Time already exists");
         }
-        return new RedirectAttributesDto();
     }
 
-    private Lesson updateLessonFromDto(LessonDto lessonDto, Lesson lesson) {
+    private void fillLessonByLessonDto(LessonDto lessonDto, Lesson lesson) {
         lesson.setOwnerCourse(courseRepository.getCourseById(lessonDto.getOwnerCourse().getId()));
         lesson.setOwnerRoom(roomRepository.getRoomById(lessonDto.getOwnerRoom().getId()));
         lesson.setOwnerGroup(groupRepository.getGroupById(lessonDto.getOwnerGroup().getId()));
         lesson.setOwnerLessonTime(lessonTimeRepository.findById(lessonDto.getOwnerLessonTime().getId()));
         lesson.setOwnerSchedule(addScheduleIfNotExist(lessonDto.getNewScheduleDate()));
-        return lesson;
     }
 
     private Schedule addScheduleIfNotExist(String scheduleDate) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(scheduleDate, dateFormatter);
-
         if (scheduleRepository.existsByScheduleDate(date)) {
             return scheduleRepository.getByScheduleDate(date);
         } else {
@@ -138,28 +99,23 @@ public class LessonServiceImpl implements LessonService {
 
     @Transactional
     @Override
-    public RedirectAttributesDto updateLessonAndGetRedirAttr(LessonDto lessonDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+    public void updateLesson(LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateLessonBindingResultErrors(bindingResult);
+        checkLessonExist(lessonDto);
         Lesson lessonToEdit = lessonRepository.getLessonById(lessonDto.getId());
-        updateLessonFromDto(lessonDto, lessonToEdit);
+        fillLessonByLessonDto(lessonDto, lessonToEdit);
         lessonRepository.save(lessonToEdit);
-        redirectAttributesDto.setName(SUCCESS_MSG);
-        redirectAttributesDto.setValue("Lesson updated successfully!");
-        return redirectAttributesDto;
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "Lesson updated successfully!");
     }
 
     @Transactional
     @Override
-    public RedirectAttributesDto deleteLessonAndGetRedirAttr(Long id) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+    public void deleteLesson(Long id, RedirectAttributes redirectAttributes) {
         if (lessonRepository.existsById(id)) {
             lessonRepository.deleteById(id);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("Lesson deleted successfully!");
+            attrMsgHandler.setSuccessMessage(redirectAttributes, "Lesson deleted successfully!");
         } else {
-            redirectAttributesDto.setName(ERROR_MSG);
-            redirectAttributesDto.setValue("Lesson not found or could not be deleted");
+            attrMsgHandler.setErrorMessage(redirectAttributes, "Lesson not found or could not be deleted");
         }
-        return redirectAttributesDto;
     }
 }

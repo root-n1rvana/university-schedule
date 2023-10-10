@@ -20,5 +20,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Transactional
     void deleteByCourseName(String courseName);
 
+    @Transactional
     void deleteById(@NonNull Long courseId);
 }

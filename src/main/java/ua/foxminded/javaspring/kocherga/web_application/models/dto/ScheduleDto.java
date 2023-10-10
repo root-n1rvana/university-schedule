@@ -1,5 +1,7 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +10,7 @@ public class ScheduleDto {
 
     private long id;
 
+    @DateTimeFormat
     private LocalDate scheduleDate;
 
     private Set<LessonDto> lessons;

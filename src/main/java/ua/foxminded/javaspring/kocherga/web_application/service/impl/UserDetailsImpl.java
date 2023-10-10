@@ -3,12 +3,13 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class UserDetailsImpl  implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
@@ -51,5 +52,9 @@ public class UserDetailsImpl  implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Group getOwnerGroup() {
+        return user.getOwnerGroup();
     }
 }

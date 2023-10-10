@@ -6,20 +6,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
+import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
+import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,11 +30,11 @@ class UserControllerIntegrationTest {
     @Autowired
     private GroupMapper groupMapper;
     @Autowired
-    private UserServiceImpl userService;
+    private UserMapper userMapper;
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private GroupServiceImpl groupService;
+    private GroupRepository groupRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -47,7 +45,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @Test
     public void testManagementPage() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/management"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/user-management"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("management/user-management"));
     }
@@ -94,6 +92,7 @@ class UserControllerIntegrationTest {
         Long groupId = 3L;
 
         mockMvc.perform(post("/user/addStudent")
+                        .param("UiPage", "student")
                         .param("firstname", firstname)
                         .param("lastname", lastname)
                         .param("login", login)
@@ -102,14 +101,14 @@ class UserControllerIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/student-management"))
                 .andExpect(flash().attributeExists("successMessage"))
-                .andExpect(flash().attribute("successMessage", "Student added successfully!"));
+                .andExpect(flash().attribute("successMessage", "User added successfully!"));
 
         // Verify that Student was added to the database
-        assertTrue(userService.existsByLogin(login));
+        assertTrue(userRepository.existsByLogin(login));
 
         // Cleaning after test
         userRepository.deleteByLogin(login);
-        assertFalse(userService.existsByLogin(login));
+        assertFalse(userRepository.existsByLogin(login));
     }
 
     @Test
@@ -119,8 +118,12 @@ class UserControllerIntegrationTest {
         String lastname = "TestStd";
         String login = "teststd1";
         String password = "pass";
+        String roleIds = "3";
 
         mockMvc.perform(post("/user/addTeacher")
+                        .param("UiPage", "teacher")
+                        .param("roleIds", roleIds)
+                        .param("ownerGroup.id", String.valueOf(groupId))
                         .param("firstname", firstname)
                         .param("lastname", lastname)
                         .param("login", login)
@@ -128,14 +131,14 @@ class UserControllerIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/teacher-management"))
                 .andExpect(flash().attributeExists("successMessage"))
-                .andExpect(flash().attribute("successMessage", "Teacher added successfully!"));
+                .andExpect(flash().attribute("successMessage", "User added successfully!"));
 
         // Verify that Student was added to the database
-        assertTrue(userService.existsByLogin(login));
+        assertTrue(userRepository.existsByLogin(login));
 
         // Cleaning after test
         userRepository.deleteByLogin(login);
-        assertFalse(userService.existsByLogin(login));
+        assertFalse(userRepository.existsByLogin(login));
     }
 
     @Test
@@ -164,6 +167,7 @@ class UserControllerIntegrationTest {
         Long groupId = 3L;
 
         mockMvc.perform(post("/user/addStudent")
+                        .param("UiPage", "student")
                         .param("firstname", firstname)
                         .param("lastname", lastname)
                         .param("login", login)
@@ -182,8 +186,12 @@ class UserControllerIntegrationTest {
         String lastname = "TestTeach";
         String login = "teach1";
         String password = "pass";
+        String roleIds = "3";
 
         mockMvc.perform(post("/user/addTeacher")
+                        .param("UiPage", "teacher")
+                        .param("roleIds", roleIds)
+                        .param("ownerGroup.id", String.valueOf(groupId))
                         .param("firstname", firstname)
                         .param("lastname", lastname)
                         .param("login", login)
@@ -216,9 +224,10 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "PROFESSOR")
     public void testUpdateStudent() throws Exception {
         // User data before test
-        UserDto userBeforeTest = userService.getUserById(userId);
+        UserDto userBeforeTest = userMapper.userToUserDto(userRepository.getUserById(userId));
 
         // Prepare data to replace in database
+        String roleIds = "2";
         String expectedFirstname = "newFirstname";
         String expectedLastname = "newLastname";
         Long expectedGroupId = 4L;
@@ -229,7 +238,9 @@ class UserControllerIntegrationTest {
         assertNotEquals(expectedGroupId, userBeforeTest.getOwnerGroup().getName());
 
         mockMvc.perform(post("/user/updateStudent")
+                        .param("UiPage", "student")
                         .param("id", String.valueOf(userId))
+                        .param("roleIds", roleIds)
                         .param("firstname", expectedFirstname)
                         .param("lastname", expectedLastname)
                         .param("ownerGroup.id", String.valueOf(expectedGroupId)))
@@ -237,7 +248,7 @@ class UserControllerIntegrationTest {
                 .andExpect(redirectedUrl("/user/student-management"));
 
         //Retreiving a user database after modification
-        UserDto actualUser = userService.getUserById(userId);
+        UserDto actualUser = userMapper.userToUserDto(userRepository.getUserById(userId));
 
         // Verify that Student data was updated in the database
         assertEquals(expectedFirstname, actualUser.getFirstname());
@@ -247,17 +258,18 @@ class UserControllerIntegrationTest {
         // Revert changes
         actualUser.setFirstname("alex");
         actualUser.setLastname("Collier");
-        actualUser.setOwnerGroup(groupMapper.groupToGroupDto(groupService.getGroupById(1)));
-        userService.save(actualUser);
+        actualUser.setOwnerGroup(groupMapper.groupToGroupDto(groupRepository.getGroupById(1)));
+        userRepository.save(userMapper.userDtoToUser(actualUser));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testUpdateTeacher() throws Exception {
         // User data before test
-        UserDto userBeforeTest = userService.getUserById(userId);
+        UserDto userBeforeTest = userMapper.userToUserDto(userRepository.getUserById(userId));
 
         // Prepare data to replace in database
+        String roleIds = "2";
         String expectedFirstname = "newFirstname";
         String expectedLastname = "newLastname";
 
@@ -266,14 +278,16 @@ class UserControllerIntegrationTest {
         assertNotEquals(expectedLastname, userBeforeTest.getLastname());
 
         mockMvc.perform(post("/user/updateTeacher")
+                        .param("UiPage", "teacher")
                         .param("id", String.valueOf(userId))
+                        .param("roleIds", roleIds)
                         .param("firstname", expectedFirstname)
                         .param("lastname", expectedLastname))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/teacher-management"));
 
         //Retreiving a user database after modification
-        UserDto actualUser = userService.getUserById(userId);
+        UserDto actualUser = userMapper.userToUserDto(userRepository.getUserById(userId));
 
         // Verify that Student data was updated in the database
         assertEquals(expectedFirstname, actualUser.getFirstname());
@@ -282,8 +296,8 @@ class UserControllerIntegrationTest {
         // Revert changes
         actualUser.setFirstname("alex");
         actualUser.setLastname("Collier");
-        actualUser.setOwnerGroup(groupMapper.groupToGroupDto(groupService.getGroupById(1)));
-        userService.save(actualUser);
+        actualUser.setOwnerGroup(groupMapper.groupToGroupDto(groupRepository.getGroupById(1)));
+        userRepository.save(userMapper.userDtoToUser(actualUser));
     }
 
     @Test
@@ -295,11 +309,11 @@ class UserControllerIntegrationTest {
         testUser.setLastname("TestStd");
         testUser.setLogin("teststd2");
         testUser.setPassword("test");
-        testUser.setOwnerGroup(groupService.getGroupById(9L));
-        userService.save(testUser);
+        testUser.setOwnerGroup(groupRepository.getGroupById(9L));
+        userRepository.save(testUser);
 
         // Verify that Student was saved to database
-        assertTrue(userService.existsByLogin(testUser.getLogin()));
+        assertTrue(userRepository.existsByLogin(testUser.getLogin()));
 
         mockMvc.perform(post("/user/deleteStudent")
                         .param("userId", String.valueOf(testUser.getId())))
@@ -309,7 +323,7 @@ class UserControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Account deleted successfully!"));
 
         // Verify that Student was deleted from the database
-        assertFalse(userService.existsByLogin(testUser.getLogin()));
+        assertFalse(userRepository.existsByLogin(testUser.getLogin()));
     }
 
     @Test
@@ -321,11 +335,11 @@ class UserControllerIntegrationTest {
         testUser.setLastname("TestStd");
         testUser.setLogin("teststd2");
         testUser.setPassword("test");
-        testUser.setOwnerGroup(groupService.getGroupById(2L));
-        userService.save(testUser);
+        testUser.setOwnerGroup(groupRepository.getGroupById(2L));
+        userRepository.save(testUser);
 
         // Verify that Teacher was saved to database
-        assertTrue(userService.existsByLogin(testUser.getLogin()));
+        assertTrue(userRepository.existsByLogin(testUser.getLogin()));
 
         mockMvc.perform(post("/user/deleteTeacher")
                         .param("userId", String.valueOf(testUser.getId())))
@@ -335,7 +349,7 @@ class UserControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Account deleted successfully!"));
 
         // Verify that Teacher was deleted from the database
-        assertFalse(userService.existsByLogin(testUser.getLogin()));
+        assertFalse(userRepository.existsByLogin(testUser.getLogin()));
     }
 
     @Test
@@ -344,7 +358,7 @@ class UserControllerIntegrationTest {
         long nonExistingUserId = 77L;
 
         // Verify that Student does not exist in database
-        assertFalse(userService.existsById(nonExistingUserId));
+        assertFalse(userRepository.existsById(nonExistingUserId));
 
         mockMvc.perform(post("/user/deleteStudent")
                         .param("userId", String.valueOf(nonExistingUserId)))
@@ -378,15 +392,18 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     public void testUpdateStudentCredentials_AdminAccess() throws Exception {
         // Prepare the updated data
+        String roleIds = "2";
         String expectedLogin = "newLogin";
         String expectedPassword = "newPass";
 
         // Confirm what data to update is different from actual
-        assertNotEquals(expectedLogin, userService.getUserById(userId).getLogin());
-        assertFalse(passwordEncoder.matches(expectedPassword, userService.getUserById(userId).getPassword()));
+        assertNotEquals(expectedLogin, userMapper.userToUserDto(userRepository.getUserById(userId)).getLogin());
+        assertFalse(passwordEncoder.matches(expectedPassword, userMapper.userToUserDto(userRepository.getUserById(userId)).getPassword()));
 
         mockMvc.perform(post("/user/updateStudentCredentials")
+                        .param("UiPage", "student")
                         .param("id", String.valueOf(userId))
+                        .param("roleIds", roleIds)
                         .param("login", expectedLogin)
                         .param("password", expectedPassword))
                 .andExpect(status().is3xxRedirection())
@@ -395,7 +412,7 @@ class UserControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Credential modification was successful!"));
 
         //Retreiving a user database after modification
-        UserDto actualUser = userService.getUserById(userId);
+        UserDto actualUser = userMapper.userToUserDto(userRepository.getUserById(userId));
         String actualLogin = actualUser.getLogin();
         String actualPassword = actualUser.getPassword();
 
@@ -406,22 +423,25 @@ class UserControllerIntegrationTest {
         // Revert changes
         actualUser.setLogin("test1");
         actualUser.setPassword(passwordEncoder.encode("pass"));
-        userService.save(actualUser);
+        userRepository.save(userMapper.userDtoToUser(actualUser));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testUpdateTeacherCredentials_AdminAccess() throws Exception {
         // Prepare the updated data
+        String roleIds = "2";
         String expectedLogin = "newLogin";
         String expectedPassword = "newPass";
 
         // Confirm what data to update is different from actual
-        assertNotEquals(expectedLogin, userService.getUserById(userId).getLogin());
-        assertFalse(passwordEncoder.matches(expectedPassword, userService.getUserById(userId).getPassword()));
+        assertNotEquals(expectedLogin, userMapper.userToUserDto(userRepository.getUserById(userId)).getLogin());
+        assertFalse(passwordEncoder.matches(expectedPassword, userMapper.userToUserDto(userRepository.getUserById(userId)).getPassword()));
 
         mockMvc.perform(post("/user/updateTeacherCredentials")
+                        .param("UiPage", "teacher")
                         .param("id", String.valueOf(userId))
+                        .param("roleIds", roleIds)
                         .param("login", expectedLogin)
                         .param("password", expectedPassword))
                 .andExpect(status().is3xxRedirection())
@@ -430,7 +450,7 @@ class UserControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Credential modification was successful!"));
 
         //Retreiving a user database after modification
-        UserDto actualUser = userService.getUserById(userId);
+        UserDto actualUser = userMapper.userToUserDto(userRepository.getUserById(userId));
         String actualLogin = actualUser.getLogin();
         String actualPassword = actualUser.getPassword();
 
@@ -441,17 +461,18 @@ class UserControllerIntegrationTest {
         // Revert changes
         actualUser.setLogin("test1");
         actualUser.setPassword(passwordEncoder.encode("pass"));
-        userService.save(actualUser);
+        userRepository.save(userMapper.userDtoToUser(actualUser));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testUpdateStudentCredentialsError() throws Exception {
         // Using existing data
-        String existingLogin = userService.getUserById(1).getLogin();
+        String existingLogin = userMapper.userToUserDto(userRepository.getUserById(1)).getLogin();
         String somePassword = "somePassword";
 
         mockMvc.perform(post("/user/updateStudentCredentials")
+                        .param("UiPage", "student")
                         .param("id", String.valueOf(userId))
                         .param("login", existingLogin)
                         .param("password", somePassword))
@@ -473,32 +494,5 @@ class UserControllerIntegrationTest {
                         .param("login", expectedLogin)
                         .param("password", expectedPassword))
                 .andExpect(status().isForbidden()); // Expect a 403 Forbidden response
-    }
-
-    @WithUserDetails(value = "teach1")
-    @Test
-    void getUsersByGroupId_Controller_ShouldReturnListOfUsers() throws Exception {
-        mockMvc.perform(get("/user/{groupId}", groupId))
-                .andExpect(status().isOk())
-                .andExpect(view().name("db/users"))
-                .andExpect(model().attributeExists("users"))
-                .andExpect(model().attribute("users", hasSize(3)))
-                .andExpect(model().attribute("users", hasItem(
-                        allOf(
-                                hasProperty("firstname", is("admin"))
-                        )
-                )))
-                .andExpect(model().attribute("users", hasItem(
-                        allOf(
-                                hasProperty("firstname", is("alex")),
-                                hasProperty("lastname", is("Collier"))
-                        )
-                )))
-                .andExpect(model().attribute("users", hasItem(
-                        allOf(
-                                hasProperty("firstname", is("John")),
-                                hasProperty("lastname", is("Collier"))
-                        )
-                )));
     }
 }

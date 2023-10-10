@@ -8,6 +8,4 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Room;
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Room getRoomById(long roomId);
-
-    Room getRoomByRoomLabel(String roomLabel);
 }

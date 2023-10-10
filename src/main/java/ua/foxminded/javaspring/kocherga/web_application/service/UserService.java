@@ -1,19 +1,13 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
 import jakarta.transaction.Transactional;
-import ua.foxminded.javaspring.kocherga.web_application.models.DefaultGroup;
-import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 
 import java.util.List;
 
 public interface UserService {
-
-    UserDto getUserById(long id);
-
-    User findUserByLoginName(String loginName);
 
     List<UserDto> getAllUsers();
 
@@ -21,29 +15,18 @@ public interface UserService {
 
     List<UserDto> getAllTeacherUsers();
 
-    List<User> getUsersByGroupId(long groupId);
-
-    boolean existsByLogin(String login);
-
-    boolean existsById(Long id);
-
-    void save(User user);
-
-    void save(UserDto user);
-
-    void saveNewRegisteredUser(UserDto userDto);
-
-
-    RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto);
-
-    RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto);
+    @Transactional
+    void saveNewRegisteredUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     @Transactional
-    RedirectAttributesDto updateUserAndGetRedirAttr(UserDto userDto);
+    void saveNewUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto);
+    @Transactional
+    void updateUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    RedirectAttributesDto userCredentialsUpdate(UserDto userDto);
+    @Transactional
+    void userCredentialsUpdate(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    RedirectAttributesDto deleteUserAndGetRedirAttr(Long id);
+    @Transactional
+    void deleteUser(Long id, RedirectAttributes redirectAttributes);
 }

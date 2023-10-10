@@ -3,7 +3,6 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 import jakarta.persistence.*;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "rooms")
@@ -18,9 +17,6 @@ public class Room {
 
     @Column(name = "description", length = 100)
     private String roomDescription;
-
-//    @OneToMany(mappedBy = "ownerRoom")
-//    private Set<Lesson> lessonsList;
 
     public Room() {
     }
@@ -54,14 +50,6 @@ public class Room {
         this.roomDescription = roomDescription;
     }
 
-//    public Set<Lesson> getLessonsList() {
-//        return lessonsList;
-//    }
-//
-//    public void setLessonsList(Set<Lesson> lessonsList) {
-//        this.lessonsList = lessonsList;
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,13 +62,4 @@ public class Room {
     public int hashCode() {
         return Objects.hash(roomLabel);
     }
-
-//    @Override
-//    public String toString() {
-//        return "Room{" +
-//                "id=" + id +
-//                ", roomLabel='" + roomLabel + '\'' +
-//                ", roomDescription='" + roomDescription + '\'' +
-//                '}';
-//    }
 }

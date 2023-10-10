@@ -2,13 +2,17 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.DefaultGroup;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
+import ua.foxminded.javaspring.kocherga.web_application.service.BindingResultErrorsHandler;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
+import ua.foxminded.javaspring.kocherga.web_application.service.RedirectAttributesMessageHandler;
+import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.GroupValidationException;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -19,23 +23,22 @@ import java.util.stream.Collectors;
 @Service
 public class GroupServiceImpl implements GroupService {
 
-    private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
+    private final GroupRepository groupRepository;
+    private final RedirectAttributesMessageHandler attrMsgHandler;
+    private final BindingResultErrorsHandler bindingResultErrHandler;
 
-    public GroupServiceImpl(GroupRepository groupRepository, GroupMapper groupMapper) {
-        this.groupRepository = groupRepository;
+    public GroupServiceImpl(GroupMapper groupMapper,
+                            GroupRepository groupRepository,
+                            RedirectAttributesMessageHandler attrMsgHandler,
+                            BindingResultErrorsHandler bindingResultErrHandler) {
         this.groupMapper = groupMapper;
+        this.groupRepository = groupRepository;
+        this.attrMsgHandler = attrMsgHandler;
+        this.bindingResultErrHandler = bindingResultErrHandler;
     }
 
     @Override
-    public Group getGroupById(long groupId) {
-        return groupRepository.getGroupById(groupId);
-    }
-
-    public GroupDto getGroupDtoById(long groupId) {
-        return groupMapper.groupToGroupDto(getGroupById(groupId));
-    }
-
     public List<GroupDto> getAllGroupsForManagement() {
         return getAllGroups()
                 .stream()
@@ -58,64 +61,45 @@ public class GroupServiceImpl implements GroupService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public boolean existByGroupId(Long groupId) {
-        return groupRepository.existsById(groupId);
-    }
-
     @Transactional
-    @Override
-    public void save(GroupDto groupDto) {
-        Group group = groupMapper.groupDtoToGroup(groupDto);
+    public void saveNewGroup(GroupDto groupDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateGroupBindingResultErrors(bindingResult);
+        checkGroupNameExist(groupDto);
+        Group group = new Group();
+        group.setName(groupDto.getName());
         groupRepository.save(group);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "Group added successfully!");
     }
 
-    @Transactional
-    @Override
-    public RedirectAttributesDto saveAndGetRedirAttr(String newGroupName) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (groupRepository.existsByName(newGroupName)) {
-            redirectAttributesDto.setName("errorMessage");
-            redirectAttributesDto.setValue("Group with the same name already exists.");
-        } else {
-            Group group = new Group();
-            group.setName(newGroupName);
-            groupRepository.save(group);
-            redirectAttributesDto.setName("successMessage");
-            redirectAttributesDto.setValue("Group added successfully!");
+    private void checkGroupNameExist(GroupDto groupDto) {
+        boolean notSameGroupName = true;
+        if (!(groupDto.getId() == null)) {
+            notSameGroupName = !groupRepository.getGroupById(groupDto.getId()).getName().equals(groupDto.getName());
         }
-        return redirectAttributesDto;
-    }
-
-    @Transactional
-    @Override
-    public RedirectAttributesDto updateAndGetRedirAttr(GroupDto groupDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (groupRepository.existsByName(groupDto.getName())) {
-            redirectAttributesDto.setName("errorMessage");
-            redirectAttributesDto.setValue("Group with the same name already exists.");
-        } else {
-            Group groupToUpdate = getGroupById(groupDto.getId());
-            groupToUpdate.setName(groupDto.getName());
-            groupRepository.save(groupToUpdate);
-            redirectAttributesDto.setName("successMessage");
-            redirectAttributesDto.setValue("Group updated successfully!");
+        if (groupRepository.existsByName(groupDto.getName()) && notSameGroupName) {
+            throw new GroupValidationException("Group with the same name already exists.");
         }
-        return redirectAttributesDto;
     }
 
     @Transactional
     @Override
-    public RedirectAttributesDto deleteAndGetRedirAttr(Long groupId) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+    public void updateGroup(GroupDto groupDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateGroupBindingResultErrors(bindingResult);
+        checkGroupNameExist(groupDto);
+        Group groupToUpdate = groupRepository.getGroupById(groupDto.getId());
+        groupToUpdate.setName(groupDto.getName());
+        groupRepository.save(groupToUpdate);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "Group updated successfully!");
+    }
+
+    @Transactional
+    @Override
+    public void deleteGroup(Long groupId, RedirectAttributes redirectAttributes) {
         if (groupRepository.existsById(groupId)) {
             groupRepository.deleteById(groupId);
-            redirectAttributesDto.setName("deletionSucceeded");
-            redirectAttributesDto.setValue("Group deleted successfully!");
+            attrMsgHandler.setSuccessMessage(redirectAttributes, "Group deleted successfully!");
         } else {
-            redirectAttributesDto.setName("deletionError");
-            redirectAttributesDto.setValue("Course not found or could not be deleted");
+            attrMsgHandler.setErrorMessage(redirectAttributes, "Course not found or could not be deleted");
         }
-        return redirectAttributesDto;
     }
 }

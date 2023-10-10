@@ -2,9 +2,8 @@ package ua.foxminded.javaspring.kocherga.web_application.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.validation.BindingResult;
-import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.LessonDto;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 
 import java.util.List;
 
@@ -12,14 +11,12 @@ public interface LessonService {
 
     List<LessonDto> getAllLessons();
 
-    boolean existsByCourseNameRoomLabelGroupNameLessonTime(String courseName, String roomLabel, String groupName, String lessonTime);
+    @Transactional
+    void saveNewLesson(LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     @Transactional
-    RedirectAttributesDto saveAndGetRedirAttr(LessonDto lessonDto, BindingResult bindingResult);
+    void updateLesson(LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     @Transactional
-    RedirectAttributesDto updateLessonAndGetRedirAttr(LessonDto lessonDto);
-
-    @Transactional
-    RedirectAttributesDto deleteLessonAndGetRedirAttr(Long id);
+    void deleteLesson(Long id, RedirectAttributes redirectAttributes);
 }

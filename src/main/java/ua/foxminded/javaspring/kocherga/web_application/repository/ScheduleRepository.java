@@ -10,11 +10,7 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
-    Schedule getScheduleById(long scheduleId);
-
     Schedule getByScheduleDate(LocalDate scheduleDate);
-
-    Schedule findByScheduleDate(LocalDate scheduleDate);
 
     List<Schedule> findAllByScheduleDateBetween(LocalDate startDate, LocalDate endDate);
 

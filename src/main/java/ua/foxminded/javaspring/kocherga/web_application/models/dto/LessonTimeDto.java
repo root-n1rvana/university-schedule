@@ -1,8 +1,14 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class LessonTimeDto {
 
     private long id;
+
+    @NotNull
+    @NotBlank(message = "Lesson Time can't be empty")
     private String lessonTime;
 
     public LessonTimeDto() {

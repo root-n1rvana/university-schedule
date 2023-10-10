@@ -1,19 +1,26 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import ua.foxminded.javaspring.kocherga.web_application.models.*;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foxminded.javaspring.kocherga.web_application.models.DefaultGroup;
+import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
+import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
-import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
+import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
+import ua.foxminded.javaspring.kocherga.web_application.service.BindingResultErrorsHandler;
+import ua.foxminded.javaspring.kocherga.web_application.service.RedirectAttributesMessageHandler;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
+import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.RegistrationValidationException;
+import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.StudentValidationException;
+import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.TeacherValidationException;
+import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.UserValidationException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,96 +29,83 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private static final String USER_LOGIN_EXISTS_ERROR = "Account with this login already exists";
-    private static final String ERROR_MSG = "errorMessage";
-    private static final String SUCCESS_MSG = "successMessage";
-
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final GroupServiceImpl groupService;
+    private final RoleServiceImpl roleService;
+    private final GroupRepository groupRepository;
     private final UserMapper userMapper;
-    private final GroupMapper groupMapper;
-
+    private final RedirectAttributesMessageHandler attrMsgHandler;
+    private final BindingResultErrorsHandler bindingResultErrHandler;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository,
-                           GroupServiceImpl groupService,
+                           RoleServiceImpl roleService,
+                           GroupRepository groupRepository,
                            UserMapper userMapper,
-                           GroupMapper groupMapper) {
+                           RedirectAttributesMessageHandler attrMsgHandler,
+                           BindingResultErrorsHandler bindingResultErrHandler) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
-        this.groupService = groupService;
+        this.roleService = roleService;
+        this.groupRepository = groupRepository;
         this.userMapper = userMapper;
-        this.groupMapper = groupMapper;
+        this.attrMsgHandler = attrMsgHandler;
+        this.bindingResultErrHandler = bindingResultErrHandler;
     }
 
+    @Transactional
     @Override
-    public UserDto getUserById(long id) {
-        return userMapper.userToUserDto(userRepository.getUserById(id));
+    public void saveNewRegisteredUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.RegistrationBindingResultErrors(bindingResult);
+        checkIfUserExists(userDto);
+        User user = new User();
+        fillUserByUserDto(userDto, user);
+        user.setOwnerGroup(groupRepository.getGroupById(DefaultGroup.UNSELECTED.getId()));
+        userRepository.save(user);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "You have successfully registered!");
     }
 
-    @Override
-    public User findUserByLoginName(String loginName) {
-        return userRepository.findByLogin(loginName);
+    public void checkIfUserExists(UserDto userDto) {
+        if (userRepository.existsByLogin(userDto.getLogin())) {
+            throw new RegistrationValidationException(USER_LOGIN_EXISTS_ERROR);
+        }
+    }
+
+    private void fillUserByUserDto(UserDto userDto, User user) {
+        if (userDto.getFirstname() != null) {
+            user.setFirstname(userDto.getFirstname());
+        }
+        if (userDto.getLastname() != null) {
+            user.setLastname(userDto.getLastname());
+        }
+        if (userDto.getLogin() != null) {
+            user.setLogin(userDto.getLogin());
+        }
+        if (userDto.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
+        if (userDto.getOwnerGroup() != null) {
+            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        }
+        if (userDto.getRoleIds() == null) {
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
+            user.setRoles(roles);
+        } else {
+            user.setRoles(roleService.getRolesByIds(userDto.getRoleIds()));
+        }
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::userToUserDto)
+                .sorted(Comparator.comparing(UserDto::getId))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<User> getUsersByGroupId(long groupId) {
-        return userRepository.findByOwnerGroupId(groupId);
-    }
-
-    @Override
-    public boolean existsByLogin(String login) {
-        return userRepository.existsByLogin(login);
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return userRepository.existsById(id);
-    }
-
-    public void checkIfUserExists(UserDto userDto, BindingResult result) {
-        User existingUser = this.findUserByLoginName(userDto.getLogin());
-
-        if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
-            result.rejectValue("loginName", "account.exists", USER_LOGIN_EXISTS_ERROR);
-        }
-    }
-
-    @Transactional
-    @Override
-    public void save(User user) {
-        userRepository.save(user);
-    }
-
-    @Transactional
-    @Override
-    public void save(UserDto user) {
-        userRepository.save(userMapper.userDtoToUser(user));
-    }
-
-    @Transactional
-    @Override
-    public void saveNewRegisteredUser(UserDto userDto) {
-        User user = new User();
-        user.setFirstname(userDto.getFirstname());
-        user.setLastname(userDto.getLastname());
-        user.setLogin(userDto.getLogin());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        Role role = roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT);
-        user.setRoles(new HashSet<>(Collections.singletonList(role)));
-        user.setOwnerGroup(groupService.getGroupById(DefaultGroup.UNSELECTED.getId()));
-        userRepository.save(user);
     }
 
     @Override
@@ -127,161 +121,79 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<User> getUsersByRoleExceptAdmin(RoleName roleName) {
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.getRoleByRoleName(roleName));
-        return userRepository.findAllByRolesIn(roles)
-                .stream()
+        return userRepository.findByRoleName(roleName).stream()
                 .filter(user -> user.getRoles().stream()
                         .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
                 .sorted(Comparator.comparing(User::getId))
                 .collect(Collectors.toList());
     }
 
-//    @Transactional
-//    @Override
-//    public RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto) {
-//        return saveUserAndGetRedirAttr(userDto, DefaultGroup.UNSELECTED, RoleName.ROLE_STUDENT);
-//    }
-//
-//    @Transactional
-//    @Override
-//    public RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto) {
-//        return saveUserAndGetRedirAttr(userDto, DefaultGroup.PROFESSOR, RoleName.ROLE_PROFESSOR);
-//    }
-//
-//    @Transactional
-//    private RedirectAttributesDto saveUserAndGetRedirAttr(UserDto userDto, DefaultGroup defaultGroup, RoleName roleName) {
-//        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-//        if (userRepository.existsByLogin(userDto.getLogin())) {
-//            redirectAttributesDto.setName(ERROR_MSG);
-//            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
-//        } else {
-//            User newUser = new User();
-//            newUser.setFirstname(userDto.getFirstname());
-//            newUser.setLastname(userDto.getLastname());
-//            newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-//            newUser.setLogin(userDto.getLogin());
-//            newUser.setOwnerGroup(groupService.getGroupById(defaultGroup.getId()));
-//            newUser.setRoles(Set.of(roleRepository.getRoleByRoleName(roleName)));
-//            save(newUser);
-//            redirectAttributesDto.setName(SUCCESS_MSG);
-//            redirectAttributesDto.setValue("User added successfully!");
-//        }
-//        return redirectAttributesDto;
-//    }
-
-
-
     @Transactional
     @Override
-    public RedirectAttributesDto saveStudentAndGetRedirAttr(UserDto userDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-        if (userRepository.existsByLogin(userDto.getLogin())) {
-            redirectAttributesDto.setName(ERROR_MSG);
-            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
-        } else {
-            User newStudent = new User();
-            newStudent.setFirstname(userDto.getFirstname());
-            newStudent.setLastname(userDto.getLastname());
-            newStudent.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            newStudent.setLogin(userDto.getLogin());
-            newStudent.setOwnerGroup(groupService.getGroupById(DefaultGroup.STUDENT.getId()));
-            newStudent.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
-            save(newStudent);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("User added successfully!");
+    public void saveNewUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
+        checkLoginDuplication(userDto);
+        User user = new User();
+        fillUserByUserDto(userDto, user);
+        userRepository.save(user);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "User added successfully!");
+    }
+
+    private void checkLoginDuplication(UserDto userDto) {
+        boolean notSameLoginName = true;
+        if (!(userDto.getId() == null)) {
+            notSameLoginName = !userRepository.getUserById(userDto.getId()).getLogin().equals(userDto.getLogin());
         }
-        return redirectAttributesDto;
-    }
-
-    @Transactional
-    @Override
-    public RedirectAttributesDto saveTeacherAndGetRedirAttr(UserDto userDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
-//        if (userRepository.existsByLogin(userDto.getLogin())) {
-//            redirectAttributesDto.setName(ERROR_MSG);
-//            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
-//        } else {
-        validateExistingLoginName(userDto);
-
-            User newTeacher = new User();
-            newTeacher.setFirstname(userDto.getFirstname());
-            newTeacher.setLastname(userDto.getLastname());
-            newTeacher.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            newTeacher.setLogin(userDto.getLogin());
-            newTeacher.setOwnerGroup(groupService.getGroupById(DefaultGroup.PROFESSOR.getId()));
-            newTeacher.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR)));
-            save(newTeacher);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("User added successfully!");
-//        }
-        return redirectAttributesDto;
-    }
-
-    private void validateExistingLoginName(UserDto userDto) {
-        if (userRepository.existsByLogin(userDto.getLogin())) {
-            throw new ValidationException(USER_LOGIN_EXISTS_ERROR);
+        switch (userDto.getUiPage()) {
+            case "teacher":
+                if (userRepository.existsByLogin(userDto.getLogin()) && notSameLoginName) {
+                    throw new TeacherValidationException(USER_LOGIN_EXISTS_ERROR);
+                }
+                break;
+            case "student":
+                if (userRepository.existsByLogin(userDto.getLogin()) && notSameLoginName) {
+                    throw new StudentValidationException(USER_LOGIN_EXISTS_ERROR);
+                }
+                break;
+            case "user":
+                if (userRepository.existsByLogin(userDto.getLogin()) && notSameLoginName) {
+                    throw new UserValidationException(USER_LOGIN_EXISTS_ERROR);
+                }
+                break;
         }
     }
 
-
-
-
-
     @Transactional
     @Override
-    public RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto) {
-        Group group = groupService.getGroupById(userDto.getOwnerGroup().getId());
-        userDto.setOwnerGroup(groupMapper.groupToGroupDto(group));
-        return updateUserAndGetRedirAttr(userDto);
-    }
-
-    @Transactional
-    @Override
-    public RedirectAttributesDto updateUserAndGetRedirAttr(UserDto userDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+    public void updateUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
+        checkLoginDuplication(userDto);
         User userToEdit = userRepository.getUserById(userDto.getId());
-        userToEdit.setFirstname(userDto.getFirstname());
-        userToEdit.setLastname(userDto.getLastname());
-        if (userDto.getOwnerGroup() != null) {
-            userToEdit.setOwnerGroup(groupMapper.groupDtoToGroup(userDto.getOwnerGroup()));
-        }
-        save(userToEdit);
-        redirectAttributesDto.setName(SUCCESS_MSG);
-        redirectAttributesDto.setValue("User info was modified successfully!");
-        return redirectAttributesDto;
+        fillUserByUserDto(userDto, userToEdit);
+        userRepository.save(userToEdit);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "User updated successfully!");
     }
 
     @Transactional
     @Override
-    public RedirectAttributesDto userCredentialsUpdate(UserDto userDto) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+    public void userCredentialsUpdate(UserDto userDto, BindingResult bindingResult, RedirectAttributes
+            redirectAttributes) {
+        bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
+        checkLoginDuplication(userDto);
         User userToEdit = userRepository.getUserById(userDto.getId());
-        if (userRepository.existsByLogin(userDto.getLogin()) && !userToEdit.getLogin().equals(userDto.getLogin())) {
-            redirectAttributesDto.setName(ERROR_MSG);
-            redirectAttributesDto.setValue(USER_LOGIN_EXISTS_ERROR);
-        } else {
-            userToEdit.setLogin(userDto.getLogin());
-            userToEdit.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            save(userToEdit);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("Credential modification was successful!");
-        }
-        return redirectAttributesDto;
+        fillUserByUserDto(userDto, userToEdit);
+        userRepository.save(userToEdit);
+        attrMsgHandler.setSuccessMessage(redirectAttributes, "Credential modification was successful!");
     }
 
     @Transactional
     @Override
-    public RedirectAttributesDto deleteUserAndGetRedirAttr(Long id) {
-        RedirectAttributesDto redirectAttributesDto = new RedirectAttributesDto();
+    public void deleteUser(Long id, RedirectAttributes redirectAttributes) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
-            redirectAttributesDto.setName(SUCCESS_MSG);
-            redirectAttributesDto.setValue("Account deleted successfully!");
+            attrMsgHandler.setSuccessMessage(redirectAttributes, "Account deleted successfully!");
         } else {
-            redirectAttributesDto.setName(ERROR_MSG);
-            redirectAttributesDto.setValue("Account not found or could not be deleted");
+            attrMsgHandler.setErrorMessage(redirectAttributes, "Account not found or could not be deleted");
         }
-        return redirectAttributesDto;
     }
 }

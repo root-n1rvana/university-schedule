@@ -12,6 +12,8 @@ import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -45,8 +47,8 @@ public class AuthControllerIntegrationTest {
                         .param("lastname", "testuser123")
                         .param("login", "testuser123")
                         .param("password", "testpassword"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("login"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
         User user = userRepository.findByLogin("testuser123");
         user.getRoles().clear();
         userRepository.save(user);
@@ -55,14 +57,13 @@ public class AuthControllerIntegrationTest {
 
     @Test
     public void testRegistrationWithErrors() throws Exception {
+        // Set empty values in userDto to trigger errors
         UserDto userDto = new UserDto();
-        // Set invalid values in userDto to trigger errors
 
         mockMvc.perform(post("/register/save")
                         .flashAttr("user", userDto))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("register"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("user"))
-                .andExpect(MockMvcResultMatchers.model().attributeHasErrors("user"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/register"))
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/register"));
     }
 }

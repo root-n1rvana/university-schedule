@@ -24,7 +24,6 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.findAll().stream()
                 .map(roomMapper::roomToRoomDto)
                 .toList();
-
     }
 
     public List<RoomDto> getAllRoomsDto() {

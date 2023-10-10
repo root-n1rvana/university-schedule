@@ -9,9 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.CourseServiceImpl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,9 +22,6 @@ class CourseControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private CourseServiceImpl courseService;
 
     @Autowired
     private CourseRepository courseRepository;
@@ -55,7 +50,7 @@ class CourseControllerIntegrationTest {
         testCourse.setCourseName("Test Course");
         testCourse.setCourseDescription("Description");
         courseRepository.save(testCourse);
-        CourseDto savedCourse = courseService.findByCourseName("Test Course");
+        Course savedCourse = courseRepository.getCourseByCourseName("Test Course");
 
         // Prepare data to replace in database
         String expectedCourseName = "Updated Course Name";
@@ -69,7 +64,7 @@ class CourseControllerIntegrationTest {
                 .andExpect(redirectedUrl("/course/management"));
 
         // Verify that the course was updated in the database
-        CourseDto actualCourse = courseService.getCourseById(savedCourse.getId());
+        Course actualCourse = courseRepository.getCourseById(savedCourse.getId());
         assertEquals(expectedCourseName, actualCourse.getCourseName());
         assertEquals(expectedCourseDescription, actualCourse.getCourseDescription());
 
@@ -89,14 +84,14 @@ class CourseControllerIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course/management"))
                 .andExpect(flash().attributeExists("successMessage"))
-                .andExpect(flash().attribute("successMessage", "Course added successfully!"));
+                .andExpect(flash().attribute("successMessage", "Course saved successfully!"));
 
         // Verify that the course was added to the database
-        assertTrue(courseService.existsByCourseName(newCourseName));
+        assertTrue(courseRepository.existsByCourseName(newCourseName));
 
         // Cleaning after test
         courseRepository.deleteByCourseName(newCourseName);
-        assertFalse(courseService.existsByCourseName(newCourseName));
+        assertFalse(courseRepository.existsByCourseName(newCourseName));
     }
 
     @Test
@@ -117,7 +112,7 @@ class CourseControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testUpdateCourse_Error() throws Exception {
-        CourseDto existingCourse = courseService.findByCourseName("History");
+        Course existingCourse = courseRepository.getCourseByCourseName("History");
 
         // Prepare data to replace in database
         String expectedCourseName = "Math";
@@ -153,17 +148,17 @@ class CourseControllerIntegrationTest {
         courseRepository.save(testCourse);
 
         // Verify that the course was saved to database
-        assertTrue(courseService.existsByCourseName(testCourse.getCourseName()));
+        assertTrue(courseRepository.existsByCourseName(testCourse.getCourseName()));
 
         mockMvc.perform(post("/course/delete")
                         .param("courseId", String.valueOf(testCourse.getId())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course/management"))
-                .andExpect(flash().attributeExists("deletionSucceeded"))
-                .andExpect(flash().attribute("deletionSucceeded", "Course deleted successfully!"));
+                .andExpect(flash().attributeExists("successMessage"))
+                .andExpect(flash().attribute("successMessage", "Course deleted successfully!"));
 
         // Verify that the course was deleted from the database
-        assertFalse(courseService.existsByCourseName(testCourse.getCourseName()));
+        assertFalse(courseRepository.existsByCourseName(testCourse.getCourseName()));
     }
 
     @Test
@@ -172,15 +167,14 @@ class CourseControllerIntegrationTest {
         Long nonExistingCourseId = 99L;
 
         // Verify that the course not exist
-        assertFalse(courseService.existByCourseId(nonExistingCourseId));
+        assertFalse(courseRepository.existsById(nonExistingCourseId));
 
         mockMvc.perform(post("/course/delete")
                         .param("courseId", String.valueOf(nonExistingCourseId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/course/management"))
-                .andExpect(flash().attributeExists("deletionError"))
-                .andExpect(flash().attribute("deletionError", "Course not found or could not be deleted"));
-
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Course not found or could not be deleted"));
     }
 
     @Test

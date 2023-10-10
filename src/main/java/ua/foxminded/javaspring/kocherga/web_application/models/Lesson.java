@@ -1,7 +1,5 @@
 package ua.foxminded.javaspring.kocherga.web_application.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
