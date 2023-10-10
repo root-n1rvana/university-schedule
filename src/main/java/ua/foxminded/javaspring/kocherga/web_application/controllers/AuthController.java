@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
 
@@ -26,22 +27,13 @@ public class AuthController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        UserDto user = new UserDto();
-        model.addAttribute("user", user);
+        model.addAttribute("user", new UserDto());
         return "register";
     }
 
     @PostMapping("/register/save")
-    public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-        userService.checkIfUserExists(userDto, result);
-
-        if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
-            return "register";
-        }
-
-        userService.saveNewRegisteredUser(userDto);
-        return "login";
+    public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        userService.saveNewRegisteredUser(userDto, bindingResult, redirectAttributes);
+        return "redirect:/login";
     }
-
 }

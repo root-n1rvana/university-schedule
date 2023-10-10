@@ -3,7 +3,6 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 import jakarta.persistence.*;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "lessons_time")
@@ -11,24 +10,25 @@ public class LessonTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     @Column(name = "lesson_time", unique = true, nullable = false)
     private String lessonTime;
-
-    @OneToMany(mappedBy = "ownerLessonTime", fetch = FetchType.EAGER)
-    private Set<Lesson> lessonsList;
 
     public LessonTime() {
     }
 
     public LessonTime(long id, String lessonTime) {
-        Id = id;
+        this.id = id;
         this.lessonTime = lessonTime;
     }
 
     public long getId() {
-        return Id;
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getLessonTime() {
@@ -37,14 +37,6 @@ public class LessonTime {
 
     public void setLessonTime(String lessonTime) {
         this.lessonTime = lessonTime;
-    }
-
-    public Set<Lesson> getLessonsList() {
-        return lessonsList;
-    }
-
-    public void setLessonsList(Set<Lesson> lessonsList) {
-        this.lessonsList = lessonsList;
     }
 
     @Override
@@ -58,13 +50,5 @@ public class LessonTime {
     @Override
     public int hashCode() {
         return Objects.hash(lessonTime);
-    }
-
-    @Override
-    public String toString() {
-        return "LessonTime{" +
-                "Id=" + Id +
-                ", lessonTime=" + lessonTime +
-                '}';
     }
 }

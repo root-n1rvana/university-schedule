@@ -2,15 +2,13 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "lessons")
 public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id", nullable = false)
@@ -35,8 +33,8 @@ public class Lesson {
     public Lesson() {
     }
 
-    public Lesson(int Id, Course ownerCourse, Room ownerRoom, Group ownerGroup, Schedule ownerSchedule, LessonTime ownerLessonTime) {
-        this.Id = Id;
+    public Lesson(long id, Course ownerCourse, Room ownerRoom, Group ownerGroup, Schedule ownerSchedule, LessonTime ownerLessonTime) {
+        this.id = id;
         this.ownerCourse = ownerCourse;
         this.ownerRoom = ownerRoom;
         this.ownerGroup = ownerGroup;
@@ -45,11 +43,11 @@ public class Lesson {
     }
 
     public long getId() {
-        return Id;
+        return id;
     }
 
-    public void setId(long lessonId) {
-        this.Id = lessonId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Course getOwnerCourse() {
@@ -90,28 +88,5 @@ public class Lesson {
 
     public void setOwnerLessonTime(LessonTime ownerLessonTime) {
         this.ownerLessonTime = ownerLessonTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Lesson lesson = (Lesson) o;
-        return ownerSchedule.equals(lesson.ownerSchedule) && ownerLessonTime.equals(lesson.ownerLessonTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ownerSchedule, ownerLessonTime);
-    }
-
-    @Override
-    public String toString() {
-        return "Lesson{" +
-                "lessonId=" + Id +
-                ", ownerRoom=" + ownerRoom +
-                ", ownerSchedule=" + ownerSchedule +
-                ", ownerLessonTime=" + ownerLessonTime +
-                '}';
     }
 }

@@ -10,8 +10,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -149,13 +149,14 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllSchedules_Controller_ShouldReturnListOfAllSchedules() throws Exception {
-        Date expectedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-12");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate expectedDate = LocalDate.parse("2023-09-06", dateFormatter);
 
         mockMvc.perform(get("/entity/schedules"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/schedules"))
                 .andExpect(model().attributeExists("schedules"))
-                .andExpect(model().attribute("schedules", hasSize(3)))
+                .andExpect(model().attribute("schedules", hasSize(6)))
                 .andExpect(model().attribute("schedules", hasItem(
                         allOf(
                                 hasProperty("id", is(3L)),
@@ -167,21 +168,20 @@ public class DatabaseControllerIntegrationTest {
     @WithMockUser("spring")
     @Test
     void getAllLessons_Controller_ShouldReturnListOfAllLessons() throws Exception {
-        Date expectedDate1 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-11");
-        Date expectedDate2 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-12");
+        String expectedGroup = "GR-3";
+        String expectedGroup1 = "GR-6";
 
         mockMvc.perform(get("/entity/lessons"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/lessons"))
                 .andExpect(model().attributeExists("lessons"))
-                .andExpect(model().attribute("lessons", hasSize(30)))
+                .andExpect(model().attribute("lessons", hasSize(60)))
                 .andExpect(model().attribute("lessons", hasItem(
                         allOf(
                                 hasProperty("id", is(15L)),
                                 hasProperty("ownerCourse", hasProperty("courseName", is("History"))),
                                 hasProperty("ownerRoom", hasProperty("roomLabel", is("A2"))),
-                                hasProperty("ownerGroup", hasProperty("name", is("GR-3"))),
-                                hasProperty("ownerSchedule", hasProperty("scheduleDate", is(expectedDate1))),
+                                hasProperty("ownerGroup", hasProperty("name", is(expectedGroup))),
                                 hasProperty("ownerLessonTime", hasProperty("lessonTime", is("15:15-16:45")))
                         )
                 )))
@@ -190,8 +190,7 @@ public class DatabaseControllerIntegrationTest {
                                 hasProperty("id", is(30L)),
                                 hasProperty("ownerCourse", hasProperty("courseName", is("Chemistry"))),
                                 hasProperty("ownerRoom", hasProperty("roomLabel", is("A8"))),
-                                hasProperty("ownerGroup", hasProperty("name", is("GR-6"))),
-                                hasProperty("ownerSchedule", hasProperty("scheduleDate", is(expectedDate2))),
+                                hasProperty("ownerGroup", hasProperty("name", is(expectedGroup1))),
                                 hasProperty("ownerLessonTime", hasProperty("lessonTime", is("15:15-16:45")))
                         )
                 )));

@@ -35,20 +35,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            box-shadow: inset 0px 0px 0px 1px #000;
+            box-shadow: inset 0 0 0 1px #000;
             mix-blend-mode: multiply;
             animation: dance 2s infinite steps(1);
         }
         body div#error div#box:before {
             clip-path: polygon(0 0, 65% 0, 35% 100%, 0 100%);
-            box-shadow: inset 0px 0px 0px 1px currentColor;
+            box-shadow: inset 0 0 0 1px currentColor;
             color: #f0f;
         }
         body div#error div#box:after {
             clip-path: polygon(65% 0, 100% 0, 100% 100%, 35% 100%);
             animation-duration: 0.5s;
             animation-direction: alternate;
-            box-shadow: inset 0px 0px 0px 1px currentColor;
+            box-shadow: inset 0 0 0 1px currentColor;
             color: #0ff;
         }
         body div#error h3 {

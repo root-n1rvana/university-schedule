@@ -1,12 +1,14 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class GroupDto {
 
     private Long id;
 
-    @Size(max = 10)
+    @NotBlank
+    @Size(min = 2, max = 10, message = "name should have at least 2 and max 20 characters")
     private String name;
 
     public GroupDto() {

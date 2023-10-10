@@ -1,45 +1,32 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
+import jakarta.transaction.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserDto getUserById(long id);
-
-    User findUserByLoginName(String loginName);
-
-    List<User> getAllUsers();
+    List<UserDto> getAllUsers();
 
     List<UserDto> getAllStudentUsers();
 
-    List<User> getUsersByGroupId(long groupId);
+    List<UserDto> getAllTeacherUsers();
 
-    boolean existsByLogin(String login);
+    @Transactional
+    void saveNewRegisteredUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    boolean existsById(Long id);
+    @Transactional
+    void saveNewUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    void save(User user);
+    @Transactional
+    void updateUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    void save(UserDto user);
+    @Transactional
+    void userCredentialsUpdate(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    void saveNewRegisteredUser(UserDto userDto);
-
-    RedirectAttributesDto saveStudentAndgetRedirAttr(UserDto userDto);
-
-    RedirectAttributesDto updateStudentAndGetRedirAttr(UserDto userDto);
-
-    RedirectAttributesDto userCredentialsUpdate(UserDto userDto);
-
-    RedirectAttributesDto deleteStudentAndGetRedirAttr(Long id);
-
-    void deleteUserByLogin(String login);
-
-
-
-
-
+    @Transactional
+    void deleteUser(Long id, RedirectAttributes redirectAttributes);
 }

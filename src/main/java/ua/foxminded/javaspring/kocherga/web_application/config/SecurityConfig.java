@@ -23,12 +23,28 @@ public class SecurityConfig {
                         .requestMatchers("/user/management/**").hasRole("ADMIN")
                         .requestMatchers("/course/addCourse").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/group/addGroup").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/schedule/addLesson").hasAnyRole("ADMIN", "PROFESSOR")
+
+                        .requestMatchers("/user/addUser").hasRole("ADMIN")
                         .requestMatchers("/user/addStudent").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/user/addTeacher").hasRole("ADMIN")
+
+                        .requestMatchers("/user/updateUser").hasRole("ADMIN")
                         .requestMatchers("/user/updateStudent").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/user/updateTeacher").hasRole("ADMIN")
+                        .requestMatchers("/schedule/update").hasAnyRole("ADMIN", "PROFESSOR")
+
                         .requestMatchers("/course/delete").hasRole("ADMIN")
                         .requestMatchers("/group/delete").hasRole("ADMIN")
+                        .requestMatchers("/schedule/delete").hasAnyRole("ADMIN", "PROFESSOR")
+
+                        .requestMatchers("/user/deleteUser").hasRole("ADMIN")
                         .requestMatchers("/user/deleteStudent").hasRole("ADMIN")
-                        .requestMatchers("/user/updateCredentials").hasRole("ADMIN")
+                        .requestMatchers("/user/deleteTeacher").hasRole("ADMIN")
+
+                        .requestMatchers("/user/updateUserCredentials").hasRole("ADMIN")
+                        .requestMatchers("/user/updateStudentCredentials").hasRole("ADMIN")
+                        .requestMatchers("/user/updateTeacherCredentials").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()
                 ).formLogin(

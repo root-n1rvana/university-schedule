@@ -1,15 +1,19 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class CourseDto {
 
     private Long id;
 
-    @Size(max = 20)
+    @NotNull
+    @NotBlank
+    @Size(min = 2, max = 20, message = "Course Name should have at least 2 and max 20 characters")
     private String courseName;
 
-    @Size(max = 100)
+    @Size(min = 2, max = 100, message = "Course Description should have at least 2 and max 100 characters")
     private String courseDescription;
 
     public CourseDto() {

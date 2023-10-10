@@ -1,28 +1,22 @@
 package ua.foxminded.javaspring.kocherga.web_application.service;
 
-import ua.foxminded.javaspring.kocherga.web_application.models.Course;
+import jakarta.transaction.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.RedirectAttributesDto;
 
 import java.util.List;
 
 public interface CourseService {
 
-    void save(Course course);
-
-    void save(CourseDto courseDto);
-
-    CourseDto getCourseById(long courseId);
-
-    CourseDto findByCourseName(String courseName);
-
     List<CourseDto> getAllCourses();
 
-    RedirectAttributesDto saveAndGetRedirAttr(CourseDto courseDto);
+    @Transactional
+    void saveNewCourse(CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    RedirectAttributesDto updateAndGetRedirAttr(CourseDto courseDto);
+    @Transactional
+    void updateCourse(CourseDto courseDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    boolean existsByCourseName(String courseName);
-
-    RedirectAttributesDto deleteAndGetRedirAttr(Long courseId);
+    @Transactional
+    void deleteCourse(Long courseId, RedirectAttributes redirectAttributes);
 }

@@ -10,12 +10,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -27,10 +26,10 @@ class GroupControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GroupServiceImpl groupService;
+    private GroupRepository groupRepository;
 
     @Autowired
-    private GroupRepository groupRepository;
+    GroupMapper groupMapper;
 
     @WithMockUser("spring")
     @Test
@@ -55,7 +54,7 @@ class GroupControllerIntegrationTest {
         Group testGroup = new Group();
         testGroup.setName("Test Group");
         groupRepository.save(testGroup);
-        GroupDto savedGroup = groupService.getGroupDtoById(testGroup.getId());
+        GroupDto savedGroup = groupMapper.groupToGroupDto(groupRepository.getGroupById(testGroup.getId()));
 
         // Prepare the updated data
         String expectedGroupName = "New Name";
@@ -67,7 +66,7 @@ class GroupControllerIntegrationTest {
                 .andExpect(redirectedUrl("/group/management"));
 
         // Verify that the group was updated in the database
-        GroupDto actualGroup = groupService.getGroupDtoById(savedGroup.getId());
+        GroupDto actualGroup = groupMapper.groupToGroupDto(groupRepository.getGroupById(savedGroup.getId()));
         assertEquals(expectedGroupName, actualGroup.getName());
 
         // Cleaning after test
@@ -75,35 +74,52 @@ class GroupControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testUpdateGroup_Error() throws Exception {
+        String existingGroupId = "3";
+
+        // Prepare the updated data
+        String expectedGroupName = "professor";
+
+        mockMvc.perform(post("/group/update")
+                        .param("id", existingGroupId)
+                        .param("name", expectedGroupName))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/group/management"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Group with the same name already exists."));
+    }
+
+    @Test
     @WithMockUser(roles = "PROFESSOR")
     public void testAddGroup_ProfessorAccess() throws Exception {
-        String newGroupName = "New Course";
+        String newGroupName = "NewCourse";
 
         mockMvc.perform(post("/group/addGroup")
-                        .param("newGroupName", newGroupName))
+                        .param("name", newGroupName))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/group/management"))
                 .andExpect(flash().attributeExists("successMessage"))
                 .andExpect(flash().attribute("successMessage", "Group added successfully!"));
 
         // Verify that the group was added to the database
-        assertTrue(groupService.existByGroupName(newGroupName));
+        assertTrue(groupRepository.existsByName(newGroupName));
 
         // Cleaning after test
         groupRepository.deleteByName(newGroupName);
-        assertFalse(groupService.existByGroupName(newGroupName));
+        assertFalse(groupRepository.existsByName(newGroupName));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testAddGroupError() throws Exception {
-        String newGroupName = "admin";
+        String newGroupName = "professor";
 
         // Verify that the group already exists
-        assertTrue(groupService.existByGroupName(newGroupName));
+        assertTrue(groupRepository.existsByName(newGroupName));
 
         mockMvc.perform(post("/group/addGroup")
-                        .param("newGroupName", newGroupName))
+                        .param("name", newGroupName))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/group/management"))
                 .andExpect(flash().attributeExists("errorMessage"))
@@ -129,17 +145,17 @@ class GroupControllerIntegrationTest {
         groupRepository.save(testGroup);
 
         // Verify that the group was saved to database
-        assertTrue(groupService.existByGroupName(testGroup.getName()));
+        assertTrue(groupRepository.existsByName(testGroup.getName()));
 
         mockMvc.perform(post("/group/delete")
                         .param("groupId", String.valueOf(testGroup.getId())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/group/management"))
-                .andExpect(flash().attributeExists("deletionSucceeded"))
-                .andExpect(flash().attribute("deletionSucceeded", "Group deleted successfully!"));
+                .andExpect(flash().attributeExists("successMessage"))
+                .andExpect(flash().attribute("successMessage", "Group deleted successfully!"));
 
         // Verify that the group was deleted from the database
-        assertFalse(groupService.existByGroupName(testGroup.getName()));
+        assertFalse(groupRepository.existsByName(testGroup.getName()));
     }
 
     @Test
@@ -148,14 +164,14 @@ class GroupControllerIntegrationTest {
         long nonExistingGroupId = 77L;
 
         // Verify that Student does not exist in database
-        assertFalse(groupService.existByGroupId(nonExistingGroupId));
+        assertFalse(groupRepository.existsById(nonExistingGroupId));
 
         mockMvc.perform(post("/group/delete")
                         .param("groupId", String.valueOf(nonExistingGroupId)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/group/management"))
-                .andExpect(flash().attributeExists("deletionError"))
-                .andExpect(flash().attribute("deletionError", "Course not found or could not be deleted"));
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Course not found or could not be deleted"));
     }
 
     @Test

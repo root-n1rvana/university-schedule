@@ -2,7 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,16 +15,15 @@ public class Schedule {
     private long id;
 
     @Column(name = "date", unique = true, nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date scheduleDate;
+    private LocalDate scheduleDate;
 
     @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.EAGER)
-    private Set<Lesson> lessonsList;
+    private Set<Lesson> lessons;
 
     public Schedule() {
     }
 
-    public Schedule(int id, Date scheduleDate) {
+    public Schedule(long id, LocalDate scheduleDate) {
         this.id = id;
         this.scheduleDate = scheduleDate;
     }
@@ -37,20 +36,20 @@ public class Schedule {
         this.id = id;
     }
 
-    public Date getScheduleDate() {
+    public LocalDate getScheduleDate() {
         return scheduleDate;
     }
 
-    public void setScheduleDate(Date scheduleDate) {
+    public void setScheduleDate(LocalDate scheduleDate) {
         this.scheduleDate = scheduleDate;
     }
 
-    public Set<Lesson> getLessonsList() {
-        return lessonsList;
+    public Set<Lesson> getLessons() {
+        return lessons;
     }
 
-    public void setLessonsList(Set<Lesson> lessonsList) {
-        this.lessonsList = lessonsList;
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
     }
 
     @Override
@@ -64,13 +63,5 @@ public class Schedule {
     @Override
     public int hashCode() {
         return Objects.hash(id, scheduleDate);
-    }
-
-    @Override
-    public String toString() {
-        return "Schedule{" +
-                "id=" + id +
-                ", scheduleDate=" + scheduleDate +
-                '}';
     }
 }
