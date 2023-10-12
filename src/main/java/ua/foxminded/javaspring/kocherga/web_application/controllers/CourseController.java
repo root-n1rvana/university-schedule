@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.CourseServiceImpl;
+import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 
 import java.util.List;
 
@@ -18,9 +18,10 @@ public class CourseController {
 
     private final static String COURSE_MANAGEMENT_PAGE = "management/course-management";
     private final static String REDIRECT_TO_COURSE_MANAGEMENT_PAGE = "redirect:/course/management";
-    private final CourseServiceImpl courseService;
 
-    public CourseController(CourseServiceImpl courseService) {
+    private final CourseService courseService;
+
+    public CourseController(CourseService courseService) {
         this.courseService = courseService;
     }
 

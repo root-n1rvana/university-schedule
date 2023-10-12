@@ -7,9 +7,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.RoleServiceImpl;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
+import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
+import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
+import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
 @Controller
 @RequestMapping("/user")
@@ -21,11 +21,11 @@ public class UserController {
     private final static String STUDENT_MANAGEMENT_PAGE = "management/student-management";
     private final static String TEACHER_MANAGEMENT_PAGE = "management/teacher-management";
 
-    private final UserServiceImpl userService;
-    private final GroupServiceImpl groupService;
-    private final RoleServiceImpl roleService;
+    private final UserService userService;
+    private final GroupService groupService;
+    private final RoleService roleService;
 
-    public UserController(UserServiceImpl userService, GroupServiceImpl groupService, RoleServiceImpl roleService) {
+    public UserController(UserService userService, GroupService groupService, RoleService roleService) {
         this.userService = userService;
         this.groupService = groupService;
         this.roleService = roleService;

@@ -4,24 +4,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.*;
+import ua.foxminded.javaspring.kocherga.web_application.service.*;
 
 @Controller
 @RequestMapping("/entity")
 public class DatabaseController {
 
-    private final UserServiceImpl userService;
-    private final CourseServiceImpl courseService;
-    private final RoomServiceImpl roomService;
-    private final GroupServiceImpl groupService;
-    private final LessonServiceImpl lessonService;
-    private final RoleServiceImpl roleService;
-    private final LessonTimeServiceImpl lessonTimeService;
-    private final ScheduleServiceImpl scheduleService;
+    private final UserService userService;
+    private final CourseService courseService;
+    private final RoomService roomService;
+    private final GroupService groupService;
+    private final LessonService lessonService;
+    private final RoleService roleService;
+    private final LessonTimeService lessonTimeService;
+    private final ScheduleService scheduleService;
 
-    public DatabaseController(UserServiceImpl userService, CourseServiceImpl courseService, RoomServiceImpl roomService,
-                              GroupServiceImpl groupService, LessonServiceImpl lessonService, RoleServiceImpl roleService,
-                              LessonTimeServiceImpl lessonTimeService, ScheduleServiceImpl scheduleService) {
+    public DatabaseController(UserService userService, CourseService courseService, RoomService roomService,
+                              GroupService groupService, LessonService lessonService, RoleService roleService,
+                              LessonTimeService lessonTimeService, ScheduleService scheduleService) {
         this.userService = userService;
         this.courseService = courseService;
         this.roomService = roomService;

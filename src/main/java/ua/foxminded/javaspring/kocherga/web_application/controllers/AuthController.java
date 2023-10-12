@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.UserServiceImpl;
+import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
 @Controller
 public class AuthController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public AuthController(UserServiceImpl userService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
     }
 

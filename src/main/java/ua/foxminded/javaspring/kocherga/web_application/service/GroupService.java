@@ -21,4 +21,6 @@ public interface GroupService {
 
     @Transactional
     void deleteGroup(Long groupId, RedirectAttributes redirectAttributes);
+
+    public List<GroupDto> getAllStudentsGroups();
 }

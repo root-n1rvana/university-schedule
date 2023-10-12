@@ -7,4 +7,6 @@ import java.util.List;
 public interface LessonTimeService {
 
     List<LessonTimeDto> getAllLessonsTime();
+
+    List<LessonTimeDto> getAllLessonsTimeDto();
 }

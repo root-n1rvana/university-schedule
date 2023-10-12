@@ -46,6 +46,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         return sortScheduleList(scheduleMapper.scheduleListToScheduleDtoList(schedules));
     }
 
+    @Override
+    public List<ScheduleDto> getScheduleInDateRangeForGroupQuery(Long groupId, String yearMonth) {
+        if (isInvalidInput(yearMonth, groupId)) {
+            return Collections.emptyList();
+        }
+        YearMonth ym = YearMonth.parse(yearMonth);
+        LocalDate startDate = ym.atDay(1);
+        LocalDate endDate = ym.atEndOfMonth();
+        return scheduleMapper.scheduleListToScheduleDtoList(scheduleRepository.findScheduleInDateRangeForGroup(groupId, startDate, endDate));
+    }
+
     private List<ScheduleDto> sortScheduleList(List<ScheduleDto> schedules) {
         return schedules.stream()
                 .filter(schedule -> !schedule.getLessons().isEmpty())
@@ -55,6 +66,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList());
     }
+
 
     public List<ScheduleDto> getScheduleInDateRangeForGroup(Long groupId, String yearMonth) {
         if (isInvalidInput(yearMonth, groupId)) {

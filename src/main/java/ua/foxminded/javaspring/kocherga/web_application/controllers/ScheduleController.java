@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.*;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.*;
+import ua.foxminded.javaspring.kocherga.web_application.service.*;
 
 import java.util.List;
 
@@ -19,16 +19,19 @@ public class ScheduleController {
     private final static String SCHEDULE_MANAGEMENT_PAGE = "management/schedule-management";
     private final static String REDIRECT_TO_SCHEDULE_MANAGEMENT_PAGE = "redirect:/schedule/management";
 
-    private final ScheduleServiceImpl scheduleService;
-    private final GroupServiceImpl groupService;
-    private final RoomServiceImpl roomService;
-    private final LessonTimeServiceImpl lessonTimeService;
-    private final CourseServiceImpl courseService;
-    private final LessonServiceImpl lessonService;
+    private final ScheduleService scheduleService;
+    private final GroupService groupService;
+    private final RoomService roomService;
+    private final LessonTimeService lessonTimeService;
+    private final CourseService courseService;
+    private final LessonService lessonService;
 
-    public ScheduleController(ScheduleServiceImpl scheduleService, GroupServiceImpl groupService,
-                              RoomServiceImpl roomService, LessonTimeServiceImpl lessonTimeService,
-                              CourseServiceImpl courseService, LessonServiceImpl lessonService) {
+    public ScheduleController(ScheduleService scheduleService,
+                              GroupService groupService,
+                              RoomService roomService,
+                              LessonTimeService lessonTimeService,
+                              CourseService courseService,
+                              LessonService lessonService) {
         this.scheduleService = scheduleService;
         this.groupService = groupService;
         this.roomService = roomService;
@@ -41,6 +44,12 @@ public class ScheduleController {
     public String showSchedulePage(String yearMonth, Long groupId, Model model) {
         List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(groupId, yearMonth);
         model.addAttribute("scheduleInDateRangeForGroup", scheduleInDateRangeForGroup);
+
+        System.out.println("==============================");
+        System.out.println(scheduleService.getScheduleInDateRangeForGroup(groupId, yearMonth));
+        System.out.println("==============================");
+        System.out.println(scheduleService.getScheduleInDateRangeForGroupQuery(groupId, yearMonth));
+
         return "schedule";
     }
 

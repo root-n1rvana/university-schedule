@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
-import ua.foxminded.javaspring.kocherga.web_application.service.impl.GroupServiceImpl;
+import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 
 import java.util.List;
 
@@ -18,9 +18,10 @@ public class GroupController {
 
     private final static String GROUP_MANAGEMENT_PAGE = "management/group-management";
     private final static String REDIRECT_TO_GROUP_MANAGEMENT_PAGE = "redirect:/group/management";
-    private final GroupServiceImpl groupService;
 
-    public GroupController(GroupServiceImpl groupService) {
+    private final GroupService groupService;
+
+    public GroupController(GroupService groupService) {
         this.groupService = groupService;
     }
 
