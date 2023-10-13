@@ -2,6 +2,8 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "lessons")
 public class Lesson {
@@ -88,5 +90,18 @@ public class Lesson {
 
     public void setOwnerLessonTime(LessonTime ownerLessonTime) {
         this.ownerLessonTime = ownerLessonTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lesson lesson = (Lesson) o;
+        return id == lesson.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

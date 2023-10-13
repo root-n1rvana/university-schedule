@@ -10,7 +10,5 @@ public interface ScheduleService {
 
     List<ScheduleDto> getScheduleInDateRange(String yearMonth);
 
-    List<ScheduleDto> getScheduleInDateRangeForGroupQuery(Long groupId, String yearMonth);
-
     List<ScheduleDto> getScheduleInDateRangeForGroup(Long groupId, String yearMonth);
 }

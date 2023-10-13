@@ -44,12 +44,6 @@ public class ScheduleController {
     public String showSchedulePage(String yearMonth, Long groupId, Model model) {
         List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(groupId, yearMonth);
         model.addAttribute("scheduleInDateRangeForGroup", scheduleInDateRangeForGroup);
-
-        System.out.println("==============================");
-        System.out.println(scheduleService.getScheduleInDateRangeForGroup(groupId, yearMonth));
-        System.out.println("==============================");
-        System.out.println(scheduleService.getScheduleInDateRangeForGroupQuery(groupId, yearMonth));
-
         return "schedule";
     }
 

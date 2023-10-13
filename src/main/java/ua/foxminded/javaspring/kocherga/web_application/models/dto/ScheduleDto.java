@@ -4,7 +4,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 public class ScheduleDto {
 
@@ -13,18 +12,15 @@ public class ScheduleDto {
     @DateTimeFormat
     private LocalDate scheduleDate;
 
-    private Set<LessonDto> lessons;
-
-    private List<LessonDto> lessonsList;
+    private List<LessonDto> lessons;
 
     public ScheduleDto() {
     }
 
-    public ScheduleDto(long id, LocalDate scheduleDate, Set<LessonDto> lessons, List<LessonDto> lessonsList) {
+    public ScheduleDto(long id, LocalDate scheduleDate, List<LessonDto> lessons) {
         this.id = id;
         this.scheduleDate = scheduleDate;
         this.lessons = lessons;
-        this.lessonsList = lessonsList;
     }
 
     public long getId() {
@@ -43,19 +39,11 @@ public class ScheduleDto {
         this.scheduleDate = scheduleDate;
     }
 
-    public Set<LessonDto> getLessons() {
+    public List<LessonDto> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Set<LessonDto> lessons) {
+    public void setLessons(List<LessonDto> lessons) {
         this.lessons = lessons;
-    }
-
-    public List<LessonDto> getLessonsList() {
-        return lessonsList;
-    }
-
-    public void setLessonsList(List<LessonDto> lessonsList) {
-        this.lessonsList = lessonsList;
     }
 }

@@ -11,32 +11,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"
           rel="stylesheet">
     <style>
-        .menu {
-            display: flex;
-            align-items: center;
-            background-color: #333;
-            color: white;
-            height: 50px;
-        }
-
         .form-group label {
             display: block;
-            font-weight: bold;
-        }
-
-        .menu-item {
-            padding: 0 20px;
-            cursor: pointer;
-        }
-
-        .logout-btn {
-            margin-left: auto;
-            margin-right: 20px;
-            padding: 5px 10px;
-            background-color: #fff;
-            color: #333;
-            border-radius: 5px;
-            text-decoration: none;
             font-weight: bold;
         }
 
@@ -124,7 +100,7 @@
             min-width: 170px;
             text-align: left;
             padding-top: 20px;
-            box-shadow: 0px 3px 5px -1px #ccc;
+            box-shadow: 0 3px 5px -1px #ccc;
         }
 
         nav.primary-navigation ul li ul li {
@@ -291,7 +267,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="lesson : ${schedule.lessonsList}">
+                    <tr th:each="lesson : ${schedule.lessons}">
                         <td th:text="${lesson.ownerGroup.name}"></td>
                         <td th:text="${lesson.ownerCourse.courseName}"></td>
                         <td th:text="${lesson.ownerRoom.roomLabel}"></td>

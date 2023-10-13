@@ -3,6 +3,7 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,8 +18,8 @@ public class Schedule {
     @Column(name = "date", unique = true, nullable = false)
     private LocalDate scheduleDate;
 
-    @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.EAGER)
-    private Set<Lesson> lessons;
+    @OneToMany(mappedBy = "ownerSchedule", fetch = FetchType.LAZY)
+    private List<Lesson> lessons;
 
     public Schedule() {
     }
@@ -44,11 +45,11 @@ public class Schedule {
         this.scheduleDate = scheduleDate;
     }
 
-    public Set<Lesson> getLessons() {
+    public List<Lesson> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Set<Lesson> lessons) {
+    public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
     }
 
