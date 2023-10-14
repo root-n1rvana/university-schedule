@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="headerfiles">
+  <meta charset="UTF-8" />
+</head>
+<body>
+
+<div th:fragment="menu">
+  <nav role="navigation" class="primary-navigation">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li sec:authorize="hasAnyRole('ROLE_PROFESSOR', 'ROLE_STUDENT')"><a href="/schedule/">Schedule</a></li>
+      <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/course/management">Courses</a></li>
+      <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/group/management">Groups</a></li>
+      <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/user/student-management">Students</a></li>
+      <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/entity">Database</a></li>
+      <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="#">Management&dtrif;</a>
+        <ul class="dropdown">
+          <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/user/user-management">Users</a></li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="/course/management">Courses</a></li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="/group/management">Groups</a></li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="/user/student-management">Students</a></li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="/user/teacher-management">Teachers</a></li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="/schedule/management">Schedule</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="/logout">Logout <span style="text-decoration: underline" th:text="${#authentication.name}"></span></a></li>
+    </ul>
+  </nav>
+</div>
+
+<div th:fragment="flash-msgs">
+  <div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+      <span th:text="${errorMessage}"></span>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-info">
+      <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${warnMessage}" class="alert alert-danger">
+      <span th:text="${warnMessage}"></span>
+    </div>
+  </div>
+</div>
+
+
+
+</body>
+</html>
