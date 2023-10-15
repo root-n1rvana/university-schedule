@@ -4,11 +4,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
@@ -56,14 +58,20 @@ class UserControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/student-management"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("management/student-management"))
-                .andExpect(model().attributeExists("users"))
-                .andExpect(model().attribute("users", hasSize(37)))
-                .andExpect(model().attribute("users", hasItem(
+                .andExpect(model().attributeExists("page"))
+                .andExpect(model().attribute("page", instanceOf(Page.class)))
+                .andExpect(model().attribute("page", hasProperty("content", hasSize(10))))
+                .andExpect(model().attribute("page", hasProperty("content", hasItem(
                         allOf(
-                                hasProperty("id", is(43L)),
-                                hasProperty("login", is("test1"))
+                                hasProperty("id", is(7L)),
+                                hasProperty("firstname", is("Pavel")),
+                                hasProperty("lastname", is("Ivanov")),
+                                hasProperty("ownerGroup", hasProperty("name", is("GR-1"))),
+                                hasProperty("roles", hasItem(
+                                        allOf(hasProperty("roleName", is(RoleName.ROLE_STUDENT))
+                                        )))
                         )
-                )));
+                ))));
     }
 
     @WithMockUser(roles = "ADMIN")
@@ -72,14 +80,20 @@ class UserControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/teacher-management"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("management/teacher-management"))
-                .andExpect(model().attributeExists("teachers"))
-                .andExpect(model().attribute("teachers", hasSize(5)))
-                .andExpect(model().attribute("teachers", hasItem(
+                .andExpect(model().attributeExists("page"))
+                .andExpect(model().attribute("page", instanceOf(Page.class)))
+                .andExpect(model().attribute("page", hasProperty("content", hasSize(6))))
+                .andExpect(model().attribute("page", hasProperty("content", hasItem(
                         allOf(
                                 hasProperty("id", is(6L)),
-                                hasProperty("login", is("teach5"))
+                                hasProperty("firstname", is("Artur")),
+                                hasProperty("lastname", is("Morozov")),
+                                hasProperty("ownerGroup", hasProperty("name", is("professor"))),
+                                hasProperty("roles", hasItem(
+                                        allOf(hasProperty("roleName", is(RoleName.ROLE_PROFESSOR))
+                                        )))
                         )
-                )));
+                ))));
     }
 
     @Test

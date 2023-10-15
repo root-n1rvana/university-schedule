@@ -1,5 +1,7 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
+
 
 @Controller
 @RequestMapping("/user")
@@ -32,23 +35,23 @@ public class UserController {
     }
 
     @GetMapping("/user-management")
-    public String showUserManagementPage(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+    public String showUserManagementPage(Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("page", userService.getUsersPage(pageable));
         model.addAttribute("groups", groupService.getAllGroups());
         model.addAttribute("roles", roleService.getAllRoles());
         return "management/user-management";
     }
 
     @GetMapping("/student-management")
-    public String showStudentManagementPage(Model model) {
-        model.addAttribute("users", userService.getAllStudentUsers());
+    public String showStudentManagementPage(Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("page", userService.getAllStudents(pageable));
         model.addAttribute("groups", groupService.getAllStudentsGroups());
-        return STUDENT_MANAGEMENT_PAGE;
+        return "management/student-management";
     }
 
     @GetMapping("/teacher-management")
-    public String showTeacherManagementPage(Model model) {
-        model.addAttribute("teachers", userService.getAllTeacherUsers());
+    public String showTeacherManagementPage(Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("page", userService.getAllTeacherUsers(pageable));
         return TEACHER_MANAGEMENT_PAGE;
     }
 

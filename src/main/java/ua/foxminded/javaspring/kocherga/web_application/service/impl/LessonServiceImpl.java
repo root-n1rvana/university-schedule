@@ -1,6 +1,8 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,7 +18,6 @@ import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.Lesso
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -52,10 +53,9 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonDto> getAllLessons() {
-        return lessonRepository.findAll().stream()
-                .map(lessonMapper::lessonToLessonDto)
-                .toList();
+    public Page<LessonDto> getAllLessons(Pageable pageable) {
+        Page<Lesson> lessonPage = lessonRepository.findAllBy(pageable);
+        return lessonMapper.pageLessonToPageLessonDto(lessonPage);
     }
 
     @Transactional

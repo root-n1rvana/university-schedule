@@ -17,10 +17,7 @@
 
 <!-- Main content -->
 <br>
-<br>
-<div class="content">
     <h2 style="text-align: center; font-size: 1.5rem !important;">Students</h2>
-</div>
 <div style="display: flex; justify-content: center">
     <div>
         <div th:insert="~{fragments/general :: flash-msgs}"></div>
@@ -77,7 +74,7 @@
             </div>
         </div>
         <br>
-        <div class="content">
+        <div>
             <table>
                 <thead>
                 <tr>
@@ -92,7 +89,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user, iterStat  : ${users}">
+                <tr th:each="user, iterStat : ${page.content}">
                     <td th:text="${iterStat.count}"></td>
                     <td th:text="${user.login}"></td>
                     <td th:text="${user.firstname}"></td>
@@ -222,6 +219,25 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <br>
+        <div>
+            <nav>
+                <ul class="pagination">
+                    <li th:if="${page.hasPrevious()}"
+                        class="page-item">
+                        <a th:attr="href=@{${'/user/student-management'} + '?page=' + ${page.number - 1}}" class="page-link">Previous</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                        class="page-item" th:classappend="${i == page.number} ? 'active' : ''">
+                        <a th:attr="href=@{${'/user/student-management'} + '?page=' + ${i}}" class="page-link" th:text="${i + 1}"></a>
+                    </li>
+                    <li th:if="${page.hasNext()}"
+                        class="page-item">
+                        <a th:attr="href=@{${'/user/student-management'} + '?page=' + ${page.number + 1}}" class="page-link">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

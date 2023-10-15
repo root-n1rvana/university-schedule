@@ -1,6 +1,8 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -22,8 +24,10 @@ import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.Stude
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.TeacherValidationException;
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.UserValidationException;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -101,31 +105,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(userMapper::userToUserDto)
-                .sorted(Comparator.comparing(UserDto::getId))
-                .collect(Collectors.toList());
+    public Page<UserDto> getUsersPage(Pageable pageable) {
+        Page<User> usersPage = userRepository.findAllByOrderByIdAsc(pageable);
+        return userMapper.pageUserToPageUserDto(usersPage);
     }
 
     @Override
-    public List<UserDto> getAllStudentUsers() {
-        List<User> students = getUsersByRoleExceptAdmin(RoleName.ROLE_STUDENT);
-        return userMapper.userListToUserDtoList(students);
-    }
-
-    @Override
-    public List<UserDto> getAllTeacherUsers() {
-        List<User> teachers = getUsersByRoleExceptAdmin(RoleName.ROLE_PROFESSOR);
-        return userMapper.userListToUserDtoList(teachers);
-    }
-
-    private List<User> getUsersByRoleExceptAdmin(RoleName roleName) {
-        return userRepository.findByRoleName(roleName).stream()
+    public Page<UserDto> getAllTeacherUsers(Pageable pageable) {
+        Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_PROFESSOR, pageable);
+        Stream<User> userStream = userPage.get()
                 .filter(user -> user.getRoles().stream()
                         .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
-                .sorted(Comparator.comparing(User::getId))
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(User::getId));
+        return userMapper.pageUserToPageUserDto(userPage);
+    }
+
+    @Override
+    public Page<UserDto> getAllStudents(Pageable pageable) {
+        Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_STUDENT, pageable);
+        Stream<User> userStream = userPage.get()
+                .filter(user -> user.getRoles().stream()
+                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
+                .sorted(Comparator.comparing(User::getId));
+        return userMapper.pageUserToPageUserDto(userPage);
     }
 
     @Transactional

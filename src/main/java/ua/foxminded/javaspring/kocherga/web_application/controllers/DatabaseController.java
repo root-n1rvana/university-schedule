@@ -1,5 +1,7 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +40,8 @@ public class DatabaseController {
     }
 
     @GetMapping("/users")
-    public String getUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+    public String getUsers(Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("page", userService.getUsersPage(pageable));
         return "db/users";
     }
 
@@ -62,8 +64,8 @@ public class DatabaseController {
     }
 
     @GetMapping("/lessons")
-    public String getLessons(Model model) {
-        model.addAttribute("lessons", lessonService.getAllLessons());
+    public String getLessons(Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("page", lessonService.getAllLessons(pageable));
         return "db/lessons";
     }
 

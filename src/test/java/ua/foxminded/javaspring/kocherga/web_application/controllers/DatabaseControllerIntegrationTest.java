@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,13 +35,14 @@ public class DatabaseControllerIntegrationTest {
 
     @WithMockUser("spring")
     @Test
-    void getAllUsers_Controller_ShouldReturnListOfAllUsers() throws Exception {
+    void getAllUsers_Controller_ShouldReturnPageOfUsers() throws Exception {
         mockMvc.perform(get("/entity/users"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/users"))
-                .andExpect(model().attributeExists("users"))
-                .andExpect(model().attribute("users", hasSize(44)))
-                .andExpect(model().attribute("users", hasItem(
+                .andExpect(model().attributeExists("page"))
+                .andExpect(model().attribute("page", instanceOf(Page.class)))
+                .andExpect(model().attribute("page", hasProperty("content", hasSize(10))))
+                .andExpect(model().attribute("page", hasProperty("content", hasItem(
                         allOf(
                                 hasProperty("id", is(6L)),
                                 hasProperty("firstname", is("Artur")),
@@ -50,18 +52,7 @@ public class DatabaseControllerIntegrationTest {
                                         allOf(hasProperty("roleName", is(RoleName.ROLE_PROFESSOR))
                                         )))
                         )
-                )))
-                .andExpect(model().attribute("users", hasItem(
-                        allOf(
-                                hasProperty("id", is(7L)),
-                                hasProperty("firstname", is("Pavel")),
-                                hasProperty("lastname", is("Ivanov")),
-                                hasProperty("ownerGroup", hasProperty("name", is("GR-1"))),
-                                hasProperty("roles", hasItem(
-                                        allOf(hasProperty("roleName", is(RoleName.ROLE_STUDENT))
-                                        )))
-                        )
-                )));
+                ))));
     }
 
     @WithMockUser("spring")
@@ -167,32 +158,23 @@ public class DatabaseControllerIntegrationTest {
 
     @WithMockUser("spring")
     @Test
-    void getAllLessons_Controller_ShouldReturnListOfAllLessons() throws Exception {
-        String expectedGroup = "GR-3";
-        String expectedGroup1 = "GR-6";
+    void getAllLessons_Controller_ShouldReturnPagesOfLessons() throws Exception {
+        String expectedGroup = "GR-2";
 
         mockMvc.perform(get("/entity/lessons"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("db/lessons"))
-                .andExpect(model().attributeExists("lessons"))
-                .andExpect(model().attribute("lessons", hasSize(60)))
-                .andExpect(model().attribute("lessons", hasItem(
+                .andExpect(model().attributeExists("page"))
+                .andExpect(model().attribute("page", instanceOf(Page.class)))
+                .andExpect(model().attribute("page", hasProperty("content", hasSize(10))))
+                .andExpect(model().attribute("page", hasProperty("content", hasItem(
                         allOf(
-                                hasProperty("id", is(15L)),
-                                hasProperty("ownerCourse", hasProperty("courseName", is("History"))),
-                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A2"))),
-                                hasProperty("ownerGroup", hasProperty("name", is(expectedGroup))),
-                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("15:15-16:45")))
-                        )
-                )))
-                .andExpect(model().attribute("lessons", hasItem(
-                        allOf(
-                                hasProperty("id", is(30L)),
+                                hasProperty("id", is(9L)),
                                 hasProperty("ownerCourse", hasProperty("courseName", is("Chemistry"))),
-                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A8"))),
-                                hasProperty("ownerGroup", hasProperty("name", is(expectedGroup1))),
-                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("15:15-16:45")))
+                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A9"))),
+                                hasProperty("ownerGroup", hasProperty("name", is(expectedGroup))),
+                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("13:30-15:00")))
                         )
-                )));
+                ))));
     }
 }

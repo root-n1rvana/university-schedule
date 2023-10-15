@@ -23,27 +23,50 @@
     <a href="/entity/lessonsTime" class="btn">Lessons Time</a>
     <a href="/entity/schedules" class="btn">Schedules</a>
 </div>
+<br>
 <h2 style="text-align: center; font-size: 1.5rem !important;">Lessons</h2>
-<div style="display: flex; justify-content: center" class="content">
-    <table>
-        <thead>
-        <tr>
-            <th>Course</th>
-            <th>Room</th>
-            <th>Group</th>
-            <th>Time</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Iterate over the list of lessons and display the data in rows -->
-        <tr th:each="lesson : ${lessons}">
-            <td th:text="${lesson.ownerCourse.courseName}"></td>
-            <td th:text="${lesson.ownerRoom.roomLabel}"></td>
-            <td th:text="${lesson.ownerGroup.name}"></td>
-            <td th:text="${lesson.ownerLessonTime.lessonTime}"></td>
-        </tr>
-        </tbody>
-    </table>
+<br>
+<div style="display: flex; justify-content: center">
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Course</th>
+                <th>Room</th>
+                <th>Group</th>
+                <th>Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Iterate over the list of lessons and display the data in rows -->
+            <tr th:each="lesson, iterStat : ${page.content}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${lesson.ownerCourse.courseName}"></td>
+                <td th:text="${lesson.ownerRoom.roomLabel}"></td>
+                <td th:text="${lesson.ownerGroup.name}"></td>
+                <td th:text="${lesson.ownerLessonTime.lessonTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <nav>
+            <ul class="pagination">
+                <li th:if="${page.hasPrevious()}"
+                    class="page-item">
+                    <a th:attr="href=@{${'/entity/lessons'} + '?page=' + ${page.number - 1}}" class="page-link">Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                    class="page-item" th:classappend="${i == page.number} ? 'active' : ''">
+                    <a th:attr="href=@{${'/entity/lessons'} + '?page=' + ${i}}" class="page-link" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${page.hasNext()}"
+                    class="page-item">
+                    <a th:attr="href=@{${'/entity/lessons'} + '?page=' + ${page.number + 1}}" class="page-link">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 </body>
 </html>
