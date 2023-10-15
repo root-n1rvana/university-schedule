@@ -2,6 +2,9 @@ package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import ua.foxminded.javaspring.kocherga.web_application.models.Course;
+
+import java.util.List;
 
 public class GroupDto {
 
@@ -10,6 +13,8 @@ public class GroupDto {
     @NotBlank
     @Size(min = 2, max = 10, message = "name should have at least 2 and max 20 characters")
     private String name;
+
+    private List<CourseDto> groupCourses;
 
     public GroupDto() {
     }
@@ -37,5 +42,13 @@ public class GroupDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<CourseDto> getGroupCourses() {
+        return groupCourses;
+    }
+
+    public void setGroupCourses(List<CourseDto> groupCourses) {
+        this.groupCourses = groupCourses;
     }
 }

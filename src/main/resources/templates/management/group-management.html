@@ -109,6 +109,7 @@
     <thead>
     <tr>
         <th>Group Name</th>
+        <th>Courses</th>
         <th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
         <th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
     </tr>
@@ -116,6 +117,12 @@
     <tbody>
     <tr th:each="group : ${groups}">
         <td th:text="${group.name}"></td>
+        <td>
+            <span th:each="course, iterStat : ${group.getGroupCourses}">
+                    <span th:text="${course.getCourseName}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                </span>
+        </td>
         <td sec:authorize="hasRole('ROLE_ADMIN')">
             <div style="text-align: center">
                 <i class="fa-regular fa-pen-to-square" data-bs-toggle="modal"

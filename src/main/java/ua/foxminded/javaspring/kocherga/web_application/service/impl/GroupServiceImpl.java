@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.DefaultGroup;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
@@ -42,7 +41,8 @@ public class GroupServiceImpl implements GroupService {
     public List<GroupDto> getAllGroupsForManagement() {
         return getAllGroups()
                 .stream()
-                .filter(group -> !Objects.equals(group.getId(), DefaultGroup.UNSELECTED.getId()))
+//                .filter(group -> !Objects.equals(group.getId(), DefaultGroup.UNSELECTED.getId()))
+                .filter(group -> !Objects.equals(group.getId(), null))
                 .sorted(Comparator.comparing(GroupDto::getId))
                 .collect(Collectors.toList());
     }

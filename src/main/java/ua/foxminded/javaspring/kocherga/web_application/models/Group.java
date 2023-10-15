@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,6 +22,13 @@ public class Group {
 
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
     private Set<Lesson> lessons;
+
+    @ManyToMany
+    @JoinTable(
+            name = "student_groups_courses",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> groupCourses;
 
     public Group() {
     }
@@ -60,6 +68,14 @@ public class Group {
 
     public void setLessons(Set<Lesson> lessonsList) {
         this.lessons = lessonsList;
+    }
+
+    public List<Course> getGroupCourses() {
+        return groupCourses;
+    }
+
+    public void setGroupCourses(List<Course> groupCourses) {
+        this.groupCourses = groupCourses;
     }
 
     @Override

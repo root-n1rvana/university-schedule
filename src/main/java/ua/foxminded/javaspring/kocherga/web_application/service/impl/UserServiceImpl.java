@@ -5,7 +5,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.DefaultGroup;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
@@ -64,7 +63,8 @@ public class UserServiceImpl implements UserService {
         checkIfUserExists(userDto);
         User user = new User();
         fillUserByUserDto(userDto, user);
-        user.setOwnerGroup(groupRepository.getGroupById(DefaultGroup.UNSELECTED.getId()));
+//        user.setOwnerGroup(groupRepository.getGroupById(DefaultGroup.UNSELECTED.getId()));
+        user.setOwnerGroup(null);
         userRepository.save(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "You have successfully registered!");
     }
@@ -91,13 +91,19 @@ public class UserServiceImpl implements UserService {
         if (userDto.getOwnerGroup() != null) {
             user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
         }
-        if (userDto.getRoleIds() == null) {
-            Set<Role> roles = new HashSet<>();
-            roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
-            user.setRoles(roles);
+        if(userDto.getRoles2() == null) {
+            user.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
         } else {
-            user.setRoles(roleService.getRolesByIds(userDto.getRoleIds()));
+            user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles2()));
         }
+
+//        if (userDto.getRoleIds() == null) {
+//            Set<Role> roles = new HashSet<>();
+//            roles.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
+//            user.setRoles(roles);
+//        } else {
+//            user.setRoles(roleService.getRolesByIds(userDto.getRoleIds()));
+//        }
     }
 
     @Override
@@ -123,7 +129,7 @@ public class UserServiceImpl implements UserService {
     private List<User> getUsersByRoleExceptAdmin(RoleName roleName) {
         return userRepository.findByRoleName(roleName).stream()
                 .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
+                        .noneMatch(role -> RoleName.ROLE_ADMIN.equals(role.getRoleName().name())))
                 .sorted(Comparator.comparing(User::getId))
                 .collect(Collectors.toList());
     }

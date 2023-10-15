@@ -116,12 +116,11 @@
                                     th:selected="${group.id == 9}"></option>
                         </select>
                     </div>
-                    <label class="col-form-label">Choose Roles</label>
-                    <div class="form-check" th:each="role : ${roles}">
-                        <label class="form-check-label" th:text="${role.roleName}"
-                               th:for="'role-' + ${role.id}"></label>
+                    <label class="col-form-label">Choose Roles2</label>
+                    <div class="form-check" th:each="role2 : ${roles2}">
+                        <label class="form-check-label" th:text="${role2}" th:for="${role2}"></label>
                         <input class="form-check-input" type="checkbox"
-                               th:id="'role-' + ${role.id}" th:name="'roleIds'" th:value="${role.id}">
+                               th:id="${role2}" th:name="'role2'" th:value="${role2}">
                     </div>
                     <br>
                     <div class="modal-footer">
@@ -143,6 +142,7 @@
             <th>Last Name</th>
             <th>Group</th>
             <th>Roles</th>
+            <th>Professor courses</th>
             <th>Edit</th>
             <th>Edit</th>
             <th>Delete</th>
@@ -158,6 +158,12 @@
             <td>
                 <span th:each="role, iterStat : ${user.roles}">
                     <span th:text="${role.getRoleName}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                </span>
+            </td>
+            <td>
+                <span th:each="professorCourse, iterStat : ${user.professorCourses}">
+                    <span th:text="${professorCourse.getCourseName}"></span>
                     <span th:if="${!iterStat.last}">,</span>
                 </span>
             </td>
@@ -195,14 +201,25 @@
                                                     th:selected="${group.id == user.ownerGroup.id}"></option>
                                         </select>
                                     </div>
-                                    <label class="col-form-label">Choose Roles</label>
-                                    <div class="form-check" th:each="role : ${roles}">
-                                        <label class="form-check-label" th:text="${role.roleName}"
-                                               th:for="'role-' + ${role.id}"></label>
+<!--                                    <label class="col-form-label">Choose Roles</label>-->
+<!--                                    <div class="form-check" th:each="role : ${roles}">-->
+<!--                                        <label class="form-check-label" th:text="${role.roleName}"-->
+<!--                                               th:for="'role-' + ${role.id}"></label>-->
+<!--                                        <input class="form-check-input" type="checkbox"-->
+<!--                                               th:id="'role-' + ${role.id}" th:name="'roleIds'" th:value="${role.id}"-->
+<!--                                               th:checked="${user.roles.contains(role)}">-->
+<!--                                    </div>-->
+
+                                    <!-- roles2 -->
+                                    <label class="col-form-label">Choose Roles2</label>
+                                    <div class="form-check" th:each="role2 : ${roles2}">
+                                        <label class="form-check-label" th:text="${role2}"
+                                               th:for="${role2}"></label>
                                         <input class="form-check-input" type="checkbox"
-                                               th:id="'role-' + ${role.id}" th:name="'roleIds'" th:value="${role.id}"
-                                               th:checked="${user.roles.contains(role)}">
+                                               th:name="'roles2'" th:value="${role2}"
+                                               th:checked="${user.roles2.contains(role2)}">
                                     </div>
+
                                     <br>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
