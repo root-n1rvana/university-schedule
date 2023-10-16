@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +18,9 @@ public class Course {
 
     @Column(name = "description", length = 100)
     private String courseDescription;
+
+    @ManyToMany(mappedBy = "groupCourses")
+    private List<Group> groups;
 
     public Course() {
     }
@@ -48,6 +52,14 @@ public class Course {
 
     public void setCourseDescription(String courseDescription) {
         this.courseDescription = courseDescription;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     @Override

@@ -8,11 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -38,7 +42,7 @@ public class UserController {
     public String showUserManagementPage(Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("page", userService.getUsersPage(pageable));
         model.addAttribute("groups", groupService.getAllGroups());
-        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("roles2", Arrays.asList(RoleName.values()));
         return "management/user-management";
     }
 
