@@ -78,29 +78,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void fillUserByUserDto(UserDto userDto, User user) {
-        if (userDto.getFirstname() != null) {
-            user.setFirstname(userDto.getFirstname());
-        }
-        if (userDto.getLastname() != null) {
-            user.setLastname(userDto.getLastname());
-        }
-        if (userDto.getLogin() != null) {
-            user.setLogin(userDto.getLogin());
-        }
-        if (userDto.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        }
-        if (userDto.getOwnerGroup() != null) {
-            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
-        }
-        if (userDto.getRoles2() == null) {
-            user.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
-        } else {
-            user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles2()));
-        }
-    }
-
     @Override
     public Page<UserDto> getUsersPage(Pageable pageable) {
         Page<User> usersPage = userRepository.findAllByOrderByIdAsc(pageable);
@@ -121,7 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDto> getAllStudents(Pageable pageable) {
+    public Page<UserDto> getAllStudents(Pageable pageable) { //todo
         Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_STUDENT, pageable);
         Stream<User> userStream = userPage.get()
                 .filter(user -> user.getRoles().stream()
@@ -137,7 +114,9 @@ public class UserServiceImpl implements UserService {
         checkLoginDuplication(userDto);
         User user = new User();
         fillUserByUserDto(userDto, user);
-        userRepository.save(user);
+        user = userRepository.saveAndFlush(user);
+        user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        userRepository.saveAndFlush(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User added successfully!");
     }
 
@@ -186,6 +165,30 @@ public class UserServiceImpl implements UserService {
         fillUserByUserDto(userDto, userToEdit);
         userRepository.save(userToEdit);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "Credential modification was successful!");
+    }
+
+    private void fillUserByUserDto(UserDto userDto, User user) {
+        if (userDto.getFirstname() != null) {
+            user.setFirstname(userDto.getFirstname());
+        }
+        if (userDto.getLastname() != null) {
+            user.setLastname(userDto.getLastname());
+        }
+        if (userDto.getLogin() != null) {
+            user.setLogin(userDto.getLogin());
+        }
+        if (userDto.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
+//        if (userDto.getOwnerGroup() != null) {
+//            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+//        }
+        user.setOwnerGroup(null);
+        if (userDto.getRoles2() == null) {
+            user.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
+        } else {
+            user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles2()));
+        }
     }
 
     @Transactional
