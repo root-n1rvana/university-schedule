@@ -11,12 +11,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
-import ua.foxminded.javaspring.kocherga.web_application.service.RoleService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
-
 import java.util.Arrays;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -30,12 +27,10 @@ public class UserController {
 
     private final UserService userService;
     private final GroupService groupService;
-    private final RoleService roleService;
 
-    public UserController(UserService userService, GroupService groupService, RoleService roleService) {
+    public UserController(UserService userService, GroupService groupService) {
         this.userService = userService;
         this.groupService = groupService;
-        this.roleService = roleService;
     }
 
     @GetMapping("/user-management")
@@ -50,7 +45,7 @@ public class UserController {
     public String showStudentManagementPage(Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("page", userService.getAllStudents(pageable));
         model.addAttribute("groups", groupService.getAllStudentsGroups());
-        return "management/student-management";
+        return STUDENT_MANAGEMENT_PAGE;
     }
 
     @GetMapping("/teacher-management")

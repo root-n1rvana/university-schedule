@@ -6,7 +6,6 @@ INSERT INTO groups (name) VALUES ('GR-3');
 INSERT INTO groups (name) VALUES ('GR-4');
 INSERT INTO groups (name) VALUES ('GR-5');
 INSERT INTO groups (name) VALUES ('GR-6');
---INSERT INTO groups (name) VALUES ('Unselected');
 
 INSERT INTO courses (name, description) VALUES ('History', 'the study of change over time');
 INSERT INTO courses (name, description) VALUES ('Topography', 'the study of the land surface');
@@ -35,7 +34,7 @@ INSERT INTO roles (name) VALUES ('ROLE_ADMIN'), ('ROLE_PROFESSOR'), ('ROLE_STUDE
 INSERT INTO lessons_time (lesson_time) VALUES ('8:00-9:30'), ('9:45-11:15'), ('11:30-13:00'), ('13:30-15:00'), ('15:15-16:45');
 
 INSERT INTO users (firstname, lastname, login, password)
-VALUES ('admin', '', 'admin', '$2a$10$gqHrslMttQWSsDSVRTK1OehkkBiXsJ/a4z2OURU./dizwOQu5Lovu');
+VALUES ('admin', 'admin', 'admin', '$2a$10$gqHrslMttQWSsDSVRTK1OehkkBiXsJ/a4z2OURU./dizwOQu5Lovu');
 
 INSERT INTO users (firstname, lastname, login, password)
 VALUES ('Victoria', 'Nazarova', 'teach1', '$2a$10$nyoZIQ7OA7N69DryA41JiuSVi.UD5bqxPRP9fimqoCxjI0cenxmIG');
@@ -107,7 +106,6 @@ INSERT INTO users (firstname, lastname, login, password) VALUES ('Olga', 'Popova
 
 INSERT INTO users_roles VALUES (1, 1);
 INSERT INTO users_roles VALUES (1, 2);
-INSERT INTO users_roles VALUES (1, 3);
 INSERT INTO users_roles VALUES (2, 2);
 INSERT INTO users_roles VALUES (3, 2);
 INSERT INTO users_roles VALUES (4, 2);
@@ -208,50 +206,6 @@ INSERT INTO student_groups_courses VALUES (4, 4);
 INSERT INTO student_groups_courses VALUES (5, 4);
 INSERT INTO student_groups_courses VALUES (5, 5);
 INSERT INTO student_groups_courses VALUES (6, 6);
-
---INSERT INTO students_courses VALUES (8, 6);
---INSERT INTO students_courses VALUES (9, 5);
---INSERT INTO students_courses VALUES (10, 9);
---INSERT INTO students_courses VALUES (11, 3);
---INSERT INTO students_courses VALUES (12, 5);
---INSERT INTO students_courses VALUES (13, 2);
---INSERT INTO students_courses VALUES (14, 1);
---INSERT INTO students_courses VALUES (15, 7);
---INSERT INTO students_courses VALUES (16, 3);
---INSERT INTO students_courses VALUES (17, 7);
---INSERT INTO students_courses VALUES (18, 10);
---INSERT INTO students_courses VALUES (18, 9);
---INSERT INTO students_courses VALUES (19, 4);
---INSERT INTO students_courses VALUES (20, 9);
---INSERT INTO students_courses VALUES (21, 5);
---INSERT INTO students_courses VALUES (21, 10);
---INSERT INTO students_courses VALUES (22, 6);
---INSERT INTO students_courses VALUES (22, 8);
---INSERT INTO students_courses VALUES (23, 6);
---INSERT INTO students_courses VALUES (24, 4);
---INSERT INTO students_courses VALUES (25, 10);
---INSERT INTO students_courses VALUES (25, 2);
---INSERT INTO students_courses VALUES (26, 2);
---INSERT INTO students_courses VALUES (27, 1);
---INSERT INTO students_courses VALUES (26, 6);
---INSERT INTO students_courses VALUES (26, 8);
---INSERT INTO students_courses VALUES (29, 1);
---INSERT INTO students_courses VALUES (30, 9);
---INSERT INTO students_courses VALUES (31, 1);
---INSERT INTO students_courses VALUES (32, 5);
---INSERT INTO students_courses VALUES (33, 6);
---INSERT INTO students_courses VALUES (33, 7);
---INSERT INTO students_courses VALUES (34, 6);
---INSERT INTO students_courses VALUES (35, 4);
---INSERT INTO students_courses VALUES (36, 1);
---INSERT INTO students_courses VALUES (37, 2);
---INSERT INTO students_courses VALUES (37, 10);
---INSERT INTO students_courses VALUES (38, 6);
---INSERT INTO students_courses VALUES (39, 6);
---INSERT INTO students_courses VALUES (40, 5);
---INSERT INTO students_courses VALUES (41, 1);
---INSERT INTO students_courses VALUES (42, 2);
---INSERT INTO students_courses VALUES (42, 10);
 
 INSERT INTO schedules (date) VALUES ('2023-09-04');
 INSERT INTO schedules (date) VALUES ('2023-09-05');

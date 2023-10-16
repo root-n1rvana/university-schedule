@@ -1,9 +1,9 @@
 package ua.foxminded.javaspring.kocherga.web_application.models.mappers;
 
 import org.mapstruct.Mapper;
-import org.springframework.data.domain.Page;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.springframework.data.domain.Page;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;

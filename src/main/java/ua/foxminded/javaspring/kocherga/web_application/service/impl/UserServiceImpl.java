@@ -2,6 +2,7 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,10 @@ import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.Teach
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.UserValidationException;
 
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -36,7 +39,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final RoleServiceImpl roleService;
     private final GroupRepository groupRepository;
     private final UserMapper userMapper;
     private final RedirectAttributesMessageHandler attrMsgHandler;
@@ -45,7 +47,6 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository,
-                           RoleServiceImpl roleService,
                            GroupRepository groupRepository,
                            UserMapper userMapper,
                            RedirectAttributesMessageHandler attrMsgHandler,
@@ -53,7 +54,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
-        this.roleService = roleService;
         this.groupRepository = groupRepository;
         this.userMapper = userMapper;
         this.attrMsgHandler = attrMsgHandler;
@@ -67,7 +67,6 @@ public class UserServiceImpl implements UserService {
         checkIfUserExists(userDto);
         User user = new User();
         fillUserByUserDto(userDto, user);
-//        user.setOwnerGroup(groupRepository.getGroupById(DefaultGroup.UNSELECTED.getId()));
         user.setOwnerGroup(null);
         userRepository.save(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "You have successfully registered!");
@@ -95,7 +94,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getOwnerGroup() != null) {
             user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
         }
-        if(userDto.getRoles2() == null) {
+        if (userDto.getRoles2() == null) {
             user.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
         } else {
             user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles2()));
@@ -111,11 +110,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> getAllTeacherUsers(Pageable pageable) {
         Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_PROFESSOR, pageable);
-        Stream<User> userStream = userPage.get()
+        List<User> filteredUsers = userPage
+                .getContent()
+                .stream()
                 .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
-                .sorted(Comparator.comparing(User::getId));
-        return userMapper.pageUserToPageUserDto(userPage);
+                        .noneMatch(role -> role.getRoleName() == RoleName.ROLE_ADMIN))
+                .collect(Collectors.toList());
+        Page<User> filteredUserPage = new PageImpl<>(filteredUsers, pageable, filteredUsers.size());
+        return userMapper.pageUserToPageUserDto(filteredUserPage);
     }
 
     @Override
@@ -123,7 +125,7 @@ public class UserServiceImpl implements UserService {
         Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_STUDENT, pageable);
         Stream<User> userStream = userPage.get()
                 .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> RoleName.ROLE_ADMIN.equals(role.getRoleName().name())))
+                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
                 .sorted(Comparator.comparing(User::getId));
         return userMapper.pageUserToPageUserDto(userPage);
     }
