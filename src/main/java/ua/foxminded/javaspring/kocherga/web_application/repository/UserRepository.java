@@ -26,7 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsById(long id);
 
-    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleName = :roleName")
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleName = :roleName and u.ownerGroup.id <> 1")
     Page<User> findByRoleName(RoleName roleName, Pageable pageable);
 
 

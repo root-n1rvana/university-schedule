@@ -87,14 +87,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> getAllTeacherUsers(Pageable pageable) {
         Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_PROFESSOR, pageable);
-        List<User> filteredUsers = userPage
-                .getContent()
-                .stream()
-                .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName() == RoleName.ROLE_ADMIN))
-                .collect(Collectors.toList());
-        Page<User> filteredUserPage = new PageImpl<>(filteredUsers, pageable, filteredUsers.size());
-        return userMapper.pageUserToPageUserDto(filteredUserPage);
+//        List<User> filteredUsers = userPage
+//                .getContent()
+//                .stream()
+//                .filter(user -> user.getRoles().stream()
+//                        .noneMatch(role -> role.getRoleName() == RoleName.ROLE_ADMIN))
+//                .collect(Collectors.toList());
+//        Page<User> filteredUserPage = new PageImpl<>(filteredUsers, pageable, filteredUsers.size());
+        return userMapper.pageUserToPageUserDto(userPage);
     }
 
     @Override

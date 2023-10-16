@@ -32,7 +32,6 @@ public class UserDto {
     private Set<RoleDto> roles; //todo remove it
     private Set<RoleName> roles2; // todo roleNames
     private Set<CourseDto> professorCourses;
-//    private Collection<Long> roleIds;
     private String uiPage;
 
     public UserDto() {
