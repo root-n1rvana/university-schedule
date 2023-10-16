@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
+import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 import ua.foxminded.javaspring.kocherga.web_application.service.UserService;
 
@@ -27,10 +28,12 @@ public class UserController {
 
     private final UserService userService;
     private final GroupService groupService;
+    private final CourseService courseService;
 
-    public UserController(UserService userService, GroupService groupService) {
+    public UserController(UserService userService, GroupService groupService,CourseService courseService) {
         this.userService = userService;
         this.groupService = groupService;
+        this.courseService = courseService;
     }
 
     @GetMapping("/user-management")
@@ -50,6 +53,7 @@ public class UserController {
 
     @GetMapping("/teacher-management")
     public String showTeacherManagementPage(Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("courses", courseService.getAllCourses());
         model.addAttribute("page", userService.getAllTeacherUsers(pageable));
         return TEACHER_MANAGEMENT_PAGE;
     }

@@ -34,36 +34,55 @@
                     <div class="modal-body">
                         <form th:action="@{addTeacher}" method="post">
                             <input type="hidden" th:name="ownerGroup.id" th:value="2"/>
+                            <input type="hidden" th:name="'roles2'" th:value="2"/>
                             <input type="hidden" th:name="uiPage" th:value="teacher"/>
 
-                    <div class="mb-3">
-                        <label for="newFirstname" class="col-form-label">First Name:</label>
-                        <input type="text" class="form-control" id="newFirstname" name="firstname"
-                               maxlength="50" required/>
+                            <div class="mb-3">
+                                <label for="newFirstname" class="col-form-label">First Name:</label>
+                                <input type="text" class="form-control" id="newFirstname" name="firstname"
+                                       maxlength="50" required/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newLastname" class="col-form-label">Last Name:</label>
+                                <input type="text" class="form-control" id="newLastname" name="lastname" maxlength="50"
+                                       required/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="newCourseName" class="col-form-label">Choose Group</label>
+                                <select class="form-select" id="newCourseName" name="professorCourses.id">
+                                    <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"
+                                            ></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="newLogin" class="col-form-label">Login:</label>
+                                <input type="text" class="form-control" id="newLogin" name="login" maxlength="20"
+                                       required/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="col-form-label">Password:</label>
+                                <input type="password" class="form-control" id="newPassword" name="password" required/>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add Teacher</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="newLastname" class="col-form-label">Last Name:</label>
-                        <input type="text" class="form-control" id="newLastname" name="lastname" maxlength="50"
-                               required/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newLogin" class="col-form-label">Login:</label>
-                        <input type="text" class="form-control" id="newLogin" name="login" maxlength="20" required/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newPassword" class="col-form-label">Password:</label>
-                        <input type="password" class="form-control" id="newPassword" name="password" required/>
-                    </div>
-                    <br>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add Teacher</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+
+
+
+
+
+
+
+
 <br>
 <div>
     <table>
