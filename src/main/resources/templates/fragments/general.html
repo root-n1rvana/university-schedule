@@ -14,7 +14,7 @@
       <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/group/management">Groups</a></li>
       <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/user/student-management">Students</a></li>
       <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/entity">Database</a></li>
-      <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="#">Management&dtrif;</a>
+      <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="#">Management &dtrif;</a>
         <ul class="dropdown">
           <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/user/user-management">Users</a></li>
           <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="/course/management">Courses</a></li>

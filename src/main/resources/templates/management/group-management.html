@@ -20,10 +20,9 @@
 <div style="display: flex; justify-content: center">
     <div>
         <div th:insert="~{fragments/general :: flash-msgs}"></div>
-        <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"
-             data-bs-target="#AddNewGroupModal">
-            <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
-        </div>
+        <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"
+             data-bs-target="#AddNewGroupModal" class="btn">New Group</a>
+
         <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewGroupModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

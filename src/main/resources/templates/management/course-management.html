@@ -21,10 +21,8 @@
     <div>
         <div th:insert="~{fragments/general :: flash-msgs}"></div>
 
-        <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"
-             data-bs-target="#AddNewCourseModal">
-            <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
-        </div>
+        <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"
+             data-bs-target="#AddNewCourseModal" class="btn">New Course</a>
 
         <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" class="modal fade" id="AddNewCourseModal">
             <div class="modal-dialog modal-dialog-centered">
