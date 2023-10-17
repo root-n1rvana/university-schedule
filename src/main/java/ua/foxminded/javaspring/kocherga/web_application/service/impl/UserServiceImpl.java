@@ -169,21 +169,21 @@ public class UserServiceImpl implements UserService {
         if (userDto.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
-
         if (userDto.getProfessorCourses() !=null) {
             Set<Course> newProfessorCourse = new HashSet<>();
             String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
             newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
             user.setProfessorCourses(newProfessorCourse);
         }
-
         if (userDto.getOwnerGroup() != null) {
             user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
         }
-        if (userDto.getRoles2() == null) {
-            user.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
+        if (userDto.getRoles() == null) {
+            Set<Role> studentRole = new HashSet<>();
+            studentRole.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
+            user.setRoles(studentRole);
         } else {
-            user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles2()));
+            user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles()));
         }
     }
 
