@@ -38,14 +38,7 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> roles;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "students_courses",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "course_id"))
-//    private Set<Course> studentCourses;
-
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "professors_courses",
             joinColumns = @JoinColumn(name = "professor_id"),
@@ -55,13 +48,15 @@ public class User {
     public User() {
     }
 
-    public User(long id, String firstname, String lastname, String login, String password, Group ownerGroup) {
+    public User(long id, String firstname, String lastname, String login, String password, Group ownerGroup, Set<Role> roles, Set<Course> professorCourses) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.login = login;
         this.password = password;
         this.ownerGroup = ownerGroup;
+        this.roles = roles;
+        this.professorCourses = professorCourses;
     }
 
     public long getId() {
@@ -119,14 +114,6 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
-//    public Set<Course> getStudentCourses() {
-//        return studentCourses;
-//    }
-//
-//    public void setStudentCourses(Set<Course> studentCourses) {
-//        this.studentCourses = studentCourses;
-//    }
 
     public Set<Course> getProfessorCourses() {
         return professorCourses;
