@@ -13,11 +13,6 @@ th, td {
     background-color: #e1e1e0;
 }
 
-.alert {
-    max-width: 350px;
-    padding: initial;
-}
-
 nav.primary-navigation {
     margin: 0 auto;
     display: block;

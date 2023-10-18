@@ -68,7 +68,7 @@ class UserControllerIntegrationTest {
                                 hasProperty("lastname", is("Ivanov")),
                                 hasProperty("ownerGroup", hasProperty("name", is("GR-1"))) //ToDo
 //                                hasProperty("roles", hasItem(
-//                                        allOf(hasProperty("roleName", is(RoleName.ROLE_STUDENT))
+//                                        allOf(hasProperty("role", is(RoleName.ROLE_STUDENT))
 //                                        )))
                         )
                 ))));
