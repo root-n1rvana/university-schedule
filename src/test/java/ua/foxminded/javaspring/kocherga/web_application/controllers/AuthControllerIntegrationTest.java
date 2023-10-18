@@ -11,9 +11,11 @@ import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,17 +44,37 @@ public class AuthControllerIntegrationTest {
 
     @Test
     public void testRegistrationSuccess() throws Exception {
+        String login = "testuser123";
+
         mockMvc.perform(post("/register/save")
                         .param("firstname", "testuser123")
                         .param("lastname", "testuser123")
-                        .param("login", "testuser123")
+                        .param("login", login)
                         .param("password", "testpassword"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
-        User user = userRepository.findByLogin("testuser123");
-        user.getRoles().clear();
-        userRepository.save(user);
-        userRepository.delete(user);
+
+        // Verify that Student was added to the database
+        assertTrue(userRepository.existsByLogin(login));
+
+        // Cleaning after test
+        userRepository.deleteByLogin(login);
+        assertFalse(userRepository.existsByLogin(login));
+    }
+
+    @Test
+    public void testRegistrationError_LoginExist() throws Exception {
+        String login = "admin";
+
+        mockMvc.perform(post("/register/save")
+                        .param("firstname", "testuser123")
+                        .param("lastname", "testuser123")
+                        .param("login", login)
+                        .param("password", "testpassword"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/register"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andExpect(flash().attribute("errorMessage", "Account with this login already exists"));
     }
 
     @Test

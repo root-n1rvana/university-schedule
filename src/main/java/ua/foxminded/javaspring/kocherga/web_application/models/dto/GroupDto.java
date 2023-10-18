@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.kocherga.web_application.models.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 
 import java.util.List;
 

@@ -27,4 +27,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
             "WHERE s.scheduleDate BETWEEN :startDate AND :endDate " +
             "ORDER BY s.scheduleDate ASC, l.ownerGroup.id ASC, l.ownerLessonTime.id ASC")
     List<Schedule> findScheduleInDateRange(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT s FROM Schedule s " +
+            "JOIN FETCH s.lessons l " +
+            "WHERE l.ownerCourse.id = :courseId " +
+            "AND s.scheduleDate BETWEEN :startDate AND :endDate " +
+            "ORDER BY s.scheduleDate, l.ownerLessonTime.id")
+    List<Schedule> findScheduleInDateRangeForCourse(Long courseId, LocalDate startDate, LocalDate endDate);
 }

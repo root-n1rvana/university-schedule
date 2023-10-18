@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
-import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
@@ -27,9 +25,8 @@ import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.Stude
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.TeacherValidationException;
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.UserValidationException;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -169,7 +166,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
-        if (userDto.getProfessorCourses() !=null) {
+        if (userDto.getProfessorCourses() != null) {
             Set<Course> newProfessorCourse = new HashSet<>();
             String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
             newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));

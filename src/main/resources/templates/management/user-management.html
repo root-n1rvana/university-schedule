@@ -202,7 +202,6 @@
                                 <form th:action="@{/user/updateUserCredentials}" method="post">
                                     <input type="hidden" th:name="uiPage" th:value="user"/>
                                     <input type="hidden" th:name="id" th:value="${user.id}"/>
-                                    <input type="hidden" th:name="roleIds" th:value="3"/>
                                     <div class="mb-3">
                                         <label for="loginEdit" class="col-form-label">Login:</label>
                                         <input type="text" class="form-control" id="loginEdit" name="login"

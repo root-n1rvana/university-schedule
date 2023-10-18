@@ -15,6 +15,7 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.ScheduleRepos
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,23 +37,54 @@ class ScheduleControllerIntegrationTest {
     private final long ownerLessonTimeId = 1L;
     private final String newScheduleDate = "2023-11-01";
 
-    //ToDo Need help with this test. /schedule page taking groupId from authenticated user to show Shedule. How to do it in tests?
-//    @Test
-//    @WithUserDetails("std1")
-//    public void testSchedulePage() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get("/schedule"))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.view().name("schedule"))
-//                .andExpect(model().attributeExists("scheduleInDateRangeForGroup"));
-//    }
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testSchedulePage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("schedule"));
+    }
 
     @Test
     @WithMockUser(roles = "PROFESSOR")
-    public void testScheduleManagementPage() throws Exception {
+    public void testScheduleManagementPageEmptyParam() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/schedule/management"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("management/schedule-management"))
                 .andExpect(model().attributeExists("scheduleInDateRange"));
+    }
+
+    @Test
+    @WithMockUser(roles = "PROFESSOR")
+    public void testScheduleManagementPage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/management")
+                        .param("yearMonth", "2023-09"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("management/schedule-management"))
+                .andExpect(model().attributeExists("scheduleInDateRange"))
+                .andExpect(model().attribute("scheduleInDateRange", hasItem(
+                        allOf(
+                                hasProperty("id", is(2L)),
+                                hasProperty("lessons", hasItem(
+                                        allOf(
+                                                hasProperty("id", is(11L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("Geography"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A3"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-3"))),
+                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("8:00-9:30")))
+                                        )
+                                )),
+                                hasProperty("lessons", hasItem(
+                                        allOf(
+                                                hasProperty("id", is(20L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("Physics"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A4"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-4"))),
+                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("15:15-16:45")))
+                                        )
+                                ))
+                        )
+                )));
     }
 
     @Test
@@ -197,5 +229,105 @@ class ScheduleControllerIntegrationTest {
                 .andExpect(redirectedUrl("/schedule/management"))
                 .andExpect(flash().attributeExists("errorMessage"))
                 .andExpect(flash().attribute("errorMessage", "Lesson not found or could not be deleted"));
+    }
+
+    @WithMockUser(roles = "ADMIN")
+    @Test
+    public void testScheduleInDateRangeForGroup() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
+                        .param("groupId", "3")
+                        .param("yearMonth", "2023-10"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("schedule"))
+                .andExpect(model().attributeExists("scheduleInDateRangeForGroup"))
+                .andExpect(model().attribute("scheduleInDateRangeForGroup", hasItem(
+                        allOf(
+                                hasProperty("id", is(4L)),
+                                hasProperty("lessons", hasItem(
+                                        allOf(
+                                                hasProperty("id", is(31L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("Math"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A1"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-1"))),
+                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("8:00-9:30")))
+                                        )
+                                ))
+                        )
+                )));
+    }
+
+    @WithMockUser(roles = "ADMIN")
+    @Test
+    public void testScheduleInDateRangeForTeacher() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
+                        .param("courseId", "2")
+                        .param("yearMonth", "2023-10"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("schedule"))
+                .andExpect(model().attributeExists("scheduleInDateRangeForTeacher"))
+                .andExpect(model().attribute("scheduleInDateRangeForTeacher", hasItem(
+                        allOf(
+                                hasProperty("id", is(5L)),
+                                hasProperty("lessons", hasItem(
+                                        allOf(
+                                                hasProperty("id", is(46L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("Topography"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A0"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-4"))),
+                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("8:00-9:30")))
+                                        )
+                                ))
+                        )
+                )));
+    }
+
+    @WithMockUser(roles = "ADMIN")
+    @Test
+    public void testScheduleForDayForGroup() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
+                        .param("groupId", "3")
+                        .param("yearMonthDay", "2023-10-10"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("schedule"))
+                .andExpect(model().attributeExists("scheduleForStudentDay"))
+                .andExpect(model().attribute("scheduleForStudentDay", hasItem(
+                        allOf(
+                                hasProperty("id", is(4L)),
+                                hasProperty("lessons", hasItem(
+                                        allOf(
+                                                hasProperty("id", is(33L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("Geography"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A3"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-1"))),
+                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("11:30-13:00")))
+                                        )
+                                ))
+                        )
+                )));
+    }
+
+    @WithMockUser(roles = "ADMIN")
+    @Test
+    public void testScheduleForDayForTeacher() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
+                        .param("courseId", "2")
+                        .param("yearMonthDay", "2023-10-12"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("schedule"))
+                .andExpect(model().attributeExists("scheduleForTeacherDay"))
+                .andExpect(model().attribute("scheduleForTeacherDay", hasItem(
+                        allOf(
+                                hasProperty("id", is(6L)),
+                                hasProperty("lessons", hasItem(
+                                        allOf(
+                                                hasProperty("id", is(53L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("Topography"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A2"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-5"))),
+                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("11:30-13:00")))
+                                        )
+                                ))
+                        )
+                )));
     }
 }

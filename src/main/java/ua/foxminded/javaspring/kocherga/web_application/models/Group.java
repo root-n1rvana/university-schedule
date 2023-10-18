@@ -23,7 +23,7 @@ public class Group {
     @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
     private Set<Lesson> lessons;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "student_groups_courses",
             joinColumns = @JoinColumn(name = "group_id"),
