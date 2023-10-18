@@ -103,7 +103,9 @@ public class UserServiceImpl implements UserService {
         checkLoginDuplication(userDto);
         User user = new User();
         fillUserByUserDto(userDto, user);
-        userRepository.save(user);
+        user = userRepository.saveAndFlush(user);
+        user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        userRepository.saveAndFlush(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User added successfully!");
     }
 
@@ -172,9 +174,9 @@ public class UserServiceImpl implements UserService {
             newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
             user.setProfessorCourses(newProfessorCourse);
         }
-        if (userDto.getOwnerGroup() != null) {
-            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
-        }
+//        if (userDto.getOwnerGroup() != null) {
+//            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+//        }
         if (userDto.getRoles() == null) {
             Set<Role> studentRole = new HashSet<>();
             studentRole.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
