@@ -104,7 +104,15 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         fillUserByUserDto(userDto, user);
         user = userRepository.saveAndFlush(user);
-        user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        if (userDto.getOwnerGroup() != null) {
+            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        }
+        if (userDto.getProfessorCourses() != null) {
+            Set<Course> newProfessorCourse = new HashSet<>();
+            String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
+            newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
+            user.setProfessorCourses(newProfessorCourse);
+        }
         userRepository.saveAndFlush(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User added successfully!");
     }
@@ -168,15 +176,6 @@ public class UserServiceImpl implements UserService {
         if (userDto.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
-        if (userDto.getProfessorCourses() != null) {
-            Set<Course> newProfessorCourse = new HashSet<>();
-            String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
-            newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
-            user.setProfessorCourses(newProfessorCourse);
-        }
-//        if (userDto.getOwnerGroup() != null) {
-//            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
-//        }
         if (userDto.getRoles() == null) {
             Set<Role> studentRole = new HashSet<>();
             studentRole.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
