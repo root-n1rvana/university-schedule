@@ -7,10 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.Course;
-import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
+import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
@@ -148,7 +145,17 @@ public class UserServiceImpl implements UserService {
         checkLoginDuplication(userDto);
         User userToEdit = userRepository.getUserById(userDto.getId());
         fillUserByUserDto(userDto, userToEdit);
-        userRepository.save(userToEdit);
+        userRepository.saveAndFlush(userToEdit);
+        if (userDto.getOwnerGroup() != null) {
+            userToEdit.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        }
+        if (userDto.getProfessorCourses() != null) {
+            Set<Course> newProfessorCourse = new HashSet<>();
+            String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
+            newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
+            userToEdit.setProfessorCourses(newProfessorCourse);
+        }
+        userRepository.saveAndFlush(userToEdit);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User updated successfully!");
     }
 
@@ -176,6 +183,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
+        user.setOwnerGroup(null);
         if (userDto.getRoles() == null) {
             Set<Role> studentRole = new HashSet<>();
             studentRole.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
