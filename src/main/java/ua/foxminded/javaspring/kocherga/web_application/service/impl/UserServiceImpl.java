@@ -7,7 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.*;
+import ua.foxminded.javaspring.kocherga.web_application.models.Course;
+import ua.foxminded.javaspring.kocherga.web_application.models.Role;
+import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
+import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
         bindingResultErrHandler.RegistrationBindingResultErrors(bindingResult);
         checkIfUserExists(userDto);
         User user = new User();
-        fillUserByUserDto(userDto, user);
+        mapUserByUserDtoExceptGroups(userDto, user);
         user.setOwnerGroup(null);
         userRepository.save(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "You have successfully registered!");
@@ -99,17 +102,9 @@ public class UserServiceImpl implements UserService {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
         User user = new User();
-        fillUserByUserDto(userDto, user);
+        mapUserByUserDtoExceptGroups(userDto, user);
         user = userRepository.saveAndFlush(user);
-        if (userDto.getOwnerGroup() != null) {
-            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
-        }
-        if (userDto.getProfessorCourses() != null) {
-            Set<Course> newProfessorCourse = new HashSet<>();
-            String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
-            newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
-            user.setProfessorCourses(newProfessorCourse);
-        }
+        mapUserGroupsByUserDto(userDto, user);
         userRepository.saveAndFlush(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User added successfully!");
     }
@@ -144,17 +139,9 @@ public class UserServiceImpl implements UserService {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
         User userToEdit = userRepository.getUserById(userDto.getId());
-        fillUserByUserDto(userDto, userToEdit);
+        mapUserByUserDtoExceptGroups(userDto, userToEdit);
         userRepository.saveAndFlush(userToEdit);
-        if (userDto.getOwnerGroup() != null) {
-            userToEdit.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
-        }
-        if (userDto.getProfessorCourses() != null) {
-            Set<Course> newProfessorCourse = new HashSet<>();
-            String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
-            newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
-            userToEdit.setProfessorCourses(newProfessorCourse);
-        }
+        mapUserGroupsByUserDto(userDto, userToEdit);
         userRepository.saveAndFlush(userToEdit);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User updated successfully!");
     }
@@ -165,12 +152,14 @@ public class UserServiceImpl implements UserService {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
         User userToEdit = userRepository.getUserById(userDto.getId());
-        fillUserByUserDto(userDto, userToEdit);
-        userRepository.save(userToEdit);
+        mapUserByUserDtoExceptGroups(userDto, userToEdit);
+        userRepository.saveAndFlush(userToEdit);
+        mapUserGroupsByUserDto(userDto, userToEdit);
+        userRepository.saveAndFlush(userToEdit);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "Credential modification was successful!");
     }
 
-    private void fillUserByUserDto(UserDto userDto, User user) {
+    private void mapUserByUserDtoExceptGroups(UserDto userDto, User user) {
         if (userDto.getFirstname() != null) {
             user.setFirstname(userDto.getFirstname());
         }
@@ -190,6 +179,18 @@ public class UserServiceImpl implements UserService {
             user.setRoles(studentRole);
         } else {
             user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles()));
+        }
+    }
+
+    private void mapUserGroupsByUserDto(UserDto userDto, User user) {
+        if (userDto.getOwnerGroup() != null) {
+            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        }
+        if (userDto.getProfessorCourses() != null) {
+            Set<Course> newProfessorCourse = new HashSet<>();
+            String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
+            newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
+            user.setProfessorCourses(newProfessorCourse);
         }
     }
 
