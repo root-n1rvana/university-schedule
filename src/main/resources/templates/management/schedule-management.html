@@ -26,10 +26,8 @@
         <div th:insert="~{fragments/general :: flash-msgs}"></div>
 
         <br>
-        <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"
-             data-bs-target="#AddNewLessonModal">
-            <span>Add new</span> <i class="fa-regular fa-square-plus"></i>
-        </div>
+        <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')" data-bs-toggle="modal"
+             data-bs-target="#AddNewLessonModal" class="btn">New Schedule</a>
         <br>
         <div>
             <form th:action="@{management}" method="get" autocomplete="off">
@@ -251,6 +249,11 @@
         startView: "days",
         format: "yyyy-mm-dd"
     });
+</script>
+<script>
+    setTimeout(function() {
+        bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+    }, 3000)
 </script>
 </body>
 </html>

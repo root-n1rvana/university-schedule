@@ -2,17 +2,18 @@ package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.Role;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 import ua.foxminded.javaspring.kocherga.web_application.models.User;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
+import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
@@ -24,12 +25,8 @@ import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.Stude
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.TeacherValidationException;
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.UserValidationException;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final GroupRepository groupRepository;
+    private final CourseRepository courseRepository;
     private final UserMapper userMapper;
     private final RedirectAttributesMessageHandler attrMsgHandler;
     private final BindingResultErrorsHandler bindingResultErrHandler;
@@ -48,6 +46,7 @@ public class UserServiceImpl implements UserService {
                            PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository,
                            GroupRepository groupRepository,
+                           CourseRepository courseRepository,
                            UserMapper userMapper,
                            RedirectAttributesMessageHandler attrMsgHandler,
                            BindingResultErrorsHandler bindingResultErrHandler) {
@@ -55,6 +54,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.groupRepository = groupRepository;
+        this.courseRepository = courseRepository;
         this.userMapper = userMapper;
         this.attrMsgHandler = attrMsgHandler;
         this.bindingResultErrHandler = bindingResultErrHandler;
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         bindingResultErrHandler.RegistrationBindingResultErrors(bindingResult);
         checkIfUserExists(userDto);
         User user = new User();
-        fillUserByUserDto(userDto, user);
+        mapUserByUserDtoExceptGroups(userDto, user);
         user.setOwnerGroup(null);
         userRepository.save(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "You have successfully registered!");
@@ -86,24 +86,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> getAllTeacherUsers(Pageable pageable) {
-        Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_PROFESSOR, pageable);
-//        List<User> filteredUsers = userPage
-//                .getContent()
-//                .stream()
-//                .filter(user -> user.getRoles().stream()
-//                        .noneMatch(role -> role.getRoleName() == RoleName.ROLE_ADMIN))
-//                .collect(Collectors.toList());
-//        Page<User> filteredUserPage = new PageImpl<>(filteredUsers, pageable, filteredUsers.size());
+        Page<User> userPage = userRepository.findByRoleNameExceptAdminGroup(RoleName.ROLE_PROFESSOR, pageable);
         return userMapper.pageUserToPageUserDto(userPage);
     }
 
     @Override
-    public Page<UserDto> getAllStudents(Pageable pageable) { //todo
-        Page<User> userPage = userRepository.findByRoleName(RoleName.ROLE_STUDENT, pageable);
-        Stream<User> userStream = userPage.get()
-                .filter(user -> user.getRoles().stream()
-                        .noneMatch(role -> role.getRoleName().equals(RoleName.ROLE_ADMIN)))
-                .sorted(Comparator.comparing(User::getId));
+    public Page<UserDto> getAllStudents(Pageable pageable) {
+        Page<User> userPage = userRepository.findByRoleNameExceptAdminGroup(RoleName.ROLE_STUDENT, pageable);
         return userMapper.pageUserToPageUserDto(userPage);
     }
 
@@ -113,9 +102,9 @@ public class UserServiceImpl implements UserService {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
         User user = new User();
-        fillUserByUserDto(userDto, user);
+        mapUserByUserDtoExceptGroups(userDto, user);
         user = userRepository.saveAndFlush(user);
-        user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        mapUserGroupsByUserDto(userDto, user);
         userRepository.saveAndFlush(user);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User added successfully!");
     }
@@ -150,24 +139,27 @@ public class UserServiceImpl implements UserService {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
         User userToEdit = userRepository.getUserById(userDto.getId());
-        fillUserByUserDto(userDto, userToEdit);
-        userRepository.save(userToEdit);
+        mapUserByUserDtoExceptGroups(userDto, userToEdit);
+        userRepository.saveAndFlush(userToEdit);
+        mapUserGroupsByUserDto(userDto, userToEdit);
+        userRepository.saveAndFlush(userToEdit);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "User updated successfully!");
     }
 
     @Transactional
     @Override
-    public void userCredentialsUpdate(UserDto userDto, BindingResult bindingResult, RedirectAttributes
-            redirectAttributes) {
+    public void userCredentialsUpdate(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
         User userToEdit = userRepository.getUserById(userDto.getId());
-        fillUserByUserDto(userDto, userToEdit);
-        userRepository.save(userToEdit);
+        mapUserByUserDtoExceptGroups(userDto, userToEdit);
+        userRepository.saveAndFlush(userToEdit);
+        mapUserGroupsByUserDto(userDto, userToEdit);
+        userRepository.saveAndFlush(userToEdit);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "Credential modification was successful!");
     }
 
-    private void fillUserByUserDto(UserDto userDto, User user) {
+    private void mapUserByUserDtoExceptGroups(UserDto userDto, User user) {
         if (userDto.getFirstname() != null) {
             user.setFirstname(userDto.getFirstname());
         }
@@ -180,14 +172,25 @@ public class UserServiceImpl implements UserService {
         if (userDto.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
-//        if (userDto.getOwnerGroup() != null) {
-//            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
-//        }
         user.setOwnerGroup(null);
-        if (userDto.getRoles2() == null) {
-            user.setRoles(Set.of(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT)));
+        if (userDto.getRoles() == null) {
+            Set<Role> studentRole = new HashSet<>();
+            studentRole.add(roleRepository.getRoleByRoleName(RoleName.ROLE_STUDENT));
+            user.setRoles(studentRole);
         } else {
-            user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles2()));
+            user.setRoles(roleRepository.findAllByRoleNameIn(userDto.getRoles()));
+        }
+    }
+
+    private void mapUserGroupsByUserDto(UserDto userDto, User user) {
+        if (userDto.getOwnerGroup() != null) {
+            user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
+        }
+        if (userDto.getProfessorCourses() != null) {
+            Set<Course> newProfessorCourse = new HashSet<>();
+            String courseName = userDto.getProfessorCourses().iterator().next().getCourseName();
+            newProfessorCourse.add(courseRepository.getCourseByCourseName(courseName));
+            user.setProfessorCourses(newProfessorCourse);
         }
     }
 

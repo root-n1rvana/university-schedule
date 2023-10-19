@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(target = "roles2", source = "user.roles", qualifiedByName = "roleToRoleName")
+    @Mapping(target = "roles", source = "user.roles", qualifiedByName = "roleToRoleName")
     UserDto userToUserDto(User user);
 
     @Named("roleToRoleName")

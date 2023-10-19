@@ -9,6 +9,7 @@ import ua.foxminded.javaspring.kocherga.web_application.service.ScheduleService;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,17 +44,60 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleDto> getScheduleInDateRangeForGroup(Long groupId, String yearMonth) {
-        if (isInvalidInput(yearMonth, groupId)) {
+    public List<ScheduleDto> getScheduleInDateRangeForGroup(ScheduleDto scheduleDto) {
+        if (isInvalidInput(scheduleDto.getYearMonth(), scheduleDto.getGroupId())) {
             return Collections.emptyList();
         }
+        String yearMonth = scheduleDto.getYearMonth();
+        Long groupId = scheduleDto.getGroupId();
+
         YearMonth ym = YearMonth.parse(yearMonth);
         LocalDate startDate = ym.atDay(1);
         LocalDate endDate = ym.atEndOfMonth();
         return scheduleMapper.scheduleListToScheduleDtoList(scheduleRepository.findScheduleInDateRangeForGroup(groupId, startDate, endDate));
     }
 
-    private boolean isInvalidInput(String yearMonth, Long groupId) {
-        return yearMonth == null || yearMonth.isEmpty() || groupId == null;
+    @Override
+    public List<ScheduleDto> getScheduleForDayForGroup(ScheduleDto scheduleDto) {
+        if (isInvalidInput(scheduleDto.getYearMonthDay(), scheduleDto.getGroupId())) {
+            return Collections.emptyList();
+        }
+        String yearMonthDay = scheduleDto.getYearMonthDay();
+        Long groupId = scheduleDto.getGroupId();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(yearMonthDay, formatter);
+        return scheduleMapper.scheduleListToScheduleDtoList(scheduleRepository.findScheduleInDateRangeForGroup(groupId, localDate, localDate));
+    }
+
+    @Override
+    public List<ScheduleDto> getScheduleInDateRangeForTeacher(ScheduleDto scheduleDto) {
+        if (isInvalidInput(scheduleDto.getYearMonth(), scheduleDto.getCourseId())) {
+            return Collections.emptyList();
+        }
+        String yearMonth = scheduleDto.getYearMonth();
+        Long courseId = scheduleDto.getCourseId();
+
+        YearMonth ym = YearMonth.parse(yearMonth);
+        LocalDate startDate = ym.atDay(1);
+        LocalDate endDate = ym.atEndOfMonth();
+        return scheduleMapper.scheduleListToScheduleDtoList(scheduleRepository.findScheduleInDateRangeForCourse(courseId, startDate, endDate));
+    }
+
+    @Override
+    public List<ScheduleDto> getScheduleForDayForTeacher(ScheduleDto scheduleDto) {
+        if (isInvalidInput(scheduleDto.getYearMonthDay(), scheduleDto.getCourseId())) {
+            return Collections.emptyList();
+        }
+        String yearMonthDay = scheduleDto.getYearMonthDay();
+        Long courseId = scheduleDto.getCourseId();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(yearMonthDay, formatter);
+        return scheduleMapper.scheduleListToScheduleDtoList(scheduleRepository.findScheduleInDateRangeForCourse(courseId, localDate, localDate));
+    }
+
+    private boolean isInvalidInput(String yearMonth, Long id) {
+        return yearMonth == null || yearMonth.isEmpty() || id == null;
     }
 }

@@ -49,7 +49,7 @@
                 <td th:text="${user.ownerGroup.name}"></td>
                 <td>
                 <span th:each="role, iterStat : ${user.roles}">
-                    <span th:text="${role.getRoleName}"></span>
+                    <span th:text="${role}"></span>
                     <span th:if="${!iterStat.last}">,</span>
                 </span>
                 </td>

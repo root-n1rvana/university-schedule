@@ -39,9 +39,10 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupDto> getAllGroupsForManagement() {
+        long defaultGroupId = 9L;
         return getAllGroups()
                 .stream()
-//                .filter(group -> !Objects.equals(group.getId(), DefaultGroup.UNSELECTED.getId()))
+                .filter(group -> !Objects.equals(group.getId(), defaultGroupId))
                 .filter(group -> !Objects.equals(group.getId(), null))
                 .sorted(Comparator.comparing(GroupDto::getId))
                 .collect(Collectors.toList());

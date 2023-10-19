@@ -39,8 +39,9 @@ public class UserController {
     @GetMapping("/user-management")
     public String showUserManagementPage(Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("page", userService.getUsersPage(pageable));
+        model.addAttribute("courses", courseService.getAllCourses());
         model.addAttribute("groups", groupService.getAllGroups());
-        model.addAttribute("roles2", Arrays.asList(RoleName.values()));
+        model.addAttribute("roles", Arrays.asList(RoleName.values()));
         return "management/user-management";
     }
 

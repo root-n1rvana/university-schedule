@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public class UserDto {
@@ -29,15 +27,15 @@ public class UserDto {
     @NotEmpty(message = "Password should not be empty")
     private String password;
     private GroupDto ownerGroup;
-    private Set<RoleDto> roles; //todo remove it
-    private Set<RoleName> roles2; // todo roleNames
+    private Set<RoleName> roles;
     private Set<CourseDto> professorCourses;
     private String uiPage;
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String firstname, String lastname, String login, String password, GroupDto ownerGroup, Set<RoleDto> roles, Set<RoleName> roles2, Set<CourseDto> professorCourses, /*Collection<Long> roleIds,*/ String uiPage) {
+    public UserDto(Long id, String firstname, String lastname, String login, String password, GroupDto ownerGroup,
+                   Set<RoleName> roles, Set<CourseDto> professorCourses, String uiPage) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -45,9 +43,7 @@ public class UserDto {
         this.password = password;
         this.ownerGroup = ownerGroup;
         this.roles = roles;
-        this.roles2 = roles2;
         this.professorCourses = professorCourses;
-//        this.roleIds = roleIds;
         this.uiPage = uiPage;
     }
 
@@ -99,14 +95,6 @@ public class UserDto {
         this.ownerGroup = ownerGroup;
     }
 
-    public Set<RoleDto> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<RoleDto> roles) {
-        this.roles = roles;
-    }
-
     public Set<CourseDto> getProfessorCourses() {
         return professorCourses;
     }
@@ -115,20 +103,12 @@ public class UserDto {
         this.professorCourses = professorCourses;
     }
 
-//    public Collection<Long> getRoleIds() {
-//        return roleIds;
-//    }
-//
-//    public void setRoleIds(Collection<Long> roleIds) {
-//        this.roleIds = roleIds;
-//    }
-
-    public Set<RoleName> getRoles2() {
-        return roles2;
+    public Set<RoleName> getRoles() {
+        return roles;
     }
 
-    public void setRoles2(Set<RoleName> roles2) {
-        this.roles2 = roles2;
+    public void setRoles(Set<RoleName> roles) {
+        this.roles = roles;
     }
 
     public String getUiPage() {

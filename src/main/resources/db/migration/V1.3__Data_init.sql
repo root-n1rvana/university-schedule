@@ -6,6 +6,7 @@ INSERT INTO groups (name) VALUES ('GR-3');
 INSERT INTO groups (name) VALUES ('GR-4');
 INSERT INTO groups (name) VALUES ('GR-5');
 INSERT INTO groups (name) VALUES ('GR-6');
+INSERT INTO groups (name) VALUES ('');
 
 INSERT INTO courses (name, description) VALUES ('History', 'the study of change over time');
 INSERT INTO courses (name, description) VALUES ('Topography', 'the study of the land surface');

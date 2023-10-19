@@ -41,26 +41,26 @@ public class ScheduleController {
     }
 
     @GetMapping("/")
-    public String showSchedulePage(String yearMonth, Long groupId, Model model) {
-        List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(groupId, yearMonth);
+    public String showSchedulePage(@ModelAttribute ScheduleDto scheduleDto, Model model) {
+        List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(scheduleDto);
+        List<ScheduleDto> scheduleForStudentDay = scheduleService.getScheduleForDayForGroup(scheduleDto);
         model.addAttribute("scheduleInDateRangeForGroup", scheduleInDateRangeForGroup);
+        model.addAttribute("scheduleForStudentDay", scheduleForStudentDay);
+
+        List<ScheduleDto> scheduleInDateRangeForTeacher = scheduleService.getScheduleInDateRangeForTeacher(scheduleDto);
+        List<ScheduleDto> scheduleForTeacherDay = scheduleService.getScheduleForDayForTeacher(scheduleDto);
+        model.addAttribute("scheduleInDateRangeForTeacher", scheduleInDateRangeForTeacher);
+        model.addAttribute("scheduleForTeacherDay", scheduleForTeacherDay);
         return "schedule";
     }
 
-    //ToDo schedulePage for Teacher
-
     @GetMapping("/management")
     public String showScheduleManagementPage(String yearMonth, Model model) {
-        List<GroupDto> groups = groupService.getAllStudentsGroups();
-        List<CourseDto> courses = courseService.getAllCourses();
-        List<RoomDto> rooms = roomService.getAllRoomsDto();
-        List<LessonTimeDto> lessonsTime = lessonTimeService.getAllLessonsTimeDto();
-        model.addAttribute("groups", groups);
-        model.addAttribute("courses", courses);
-        model.addAttribute("rooms", rooms);
-        model.addAttribute("lessonsTime", lessonsTime);
-        List<ScheduleDto> scheduleInDateRange = scheduleService.getScheduleInDateRange(yearMonth);
-        model.addAttribute("scheduleInDateRange", scheduleInDateRange);
+        model.addAttribute("groups", groupService.getAllStudentsGroups());
+        model.addAttribute("courses", courseService.getAllCourses());
+        model.addAttribute("rooms", roomService.getAllRoomsDto());
+        model.addAttribute("lessonsTime", lessonTimeService.getAllLessonsTimeDto());
+        model.addAttribute("scheduleInDateRange", scheduleService.getScheduleInDateRange(yearMonth));
         return SCHEDULE_MANAGEMENT_PAGE;
     }
 

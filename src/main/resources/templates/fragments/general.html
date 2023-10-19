@@ -14,7 +14,7 @@
       <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/group/management">Groups</a></li>
       <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/user/student-management">Students</a></li>
       <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/entity">Database</a></li>
-      <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="#">Management&dtrif;</a>
+      <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="#">Management &dtrif;</a>
         <ul class="dropdown">
           <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/user/user-management">Users</a></li>
           <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')"><a href="/course/management">Courses</a></li>
@@ -32,14 +32,17 @@
 
 <div th:fragment="flash-msgs">
   <div>
-    <div th:if="${errorMessage}" class="alert alert-danger">
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
       <span th:text="${errorMessage}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <div th:if="${successMessage}" class="alert alert-info">
+    <div th:if="${successMessage}" class="alert alert-info alert-dismissible fade show" role="alert">
       <span th:text="${successMessage}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <div th:if="${warnMessage}" class="alert alert-danger">
+    <div th:if="${warnMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
       <span th:text="${warnMessage}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   </div>
 </div>

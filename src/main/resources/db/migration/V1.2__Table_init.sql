@@ -1,70 +1,70 @@
- -- isProfessor
- CREATE FUNCTION isProfessor (userId BIGINT)
- RETURNS BOOLEAN
- language plpgsql
- AS
- $$
- BEGIN
-     if exists (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_PROFESSOR') THEN
-         return true;
-     else
-         raise exception 'user % has not role ROLE_PROFESSOR', userId;
-     END if;
- END;
- $$;
+-- isProfessor
+CREATE FUNCTION isProfessor (userId BIGINT)
+RETURNS BOOLEAN
+language plpgsql
+AS
+$$
+BEGIN
+    if exists (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_PROFESSOR') THEN
+        return true;
+    else
+        raise exception 'user % has not role ROLE_PROFESSOR', userId;
+    END if;
+END;
+$$;
 
- -- isStudent
- CREATE FUNCTION isStudent (userId BIGINT)
- RETURNS BOOLEAN
- language plpgsql
- AS
- $$
- BEGIN
-     if exists (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_STUDENT') THEN
-         return true;
-     else
-         raise exception 'user with id=% has not role ROLE_STUDENT', userId;
-     end if;
- END;
- $$;
+-- isStudent
+CREATE FUNCTION isStudent (userId BIGINT)
+RETURNS BOOLEAN
+language plpgsql
+AS
+$$
+BEGIN
+    if exists (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_STUDENT') THEN
+        return true;
+    else
+        raise exception 'user with id=% has not role ROLE_STUDENT', userId;
+    end if;
+END;
+$$;
 
- -- isUserCorrespondingToGroup
- CREATE FUNCTION isUserCorrespondingToGroup (userId BIGINT, groupId BIGINT)
- RETURNS BOOLEAN
- language plpgsql
- AS
- $$
- DECLARE
-    groupName varchar(20);
- BEGIN
-     select name into groupName from groups where id = groupId;
+-- isUserCorrespondingToGroup
+CREATE FUNCTION isUserCorrespondingToGroup (userId BIGINT, groupId BIGINT)
+RETURNS BOOLEAN
+language plpgsql
+AS
+$$
+DECLARE
+   groupName varchar(20);
+BEGIN
+    select name into groupName from groups where id = groupId;
 
-     if groupName = 'admin' and NOT EXISTS (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_ADMIN') THEN
-         raise exception 'user with id=% does not belong to admin group', userId;
-     elseif groupName = 'professor' and NOT EXISTS (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_PROFESSOR') THEN
-         raise exception 'user with id=% does not belong to professor group', userId;
-     END if;
-     return true;
- END;
- $$;
+    if groupName = 'admin' and NOT EXISTS (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_ADMIN') THEN
+        raise exception 'user with id=% does not belong to admin group', userId;
+    elseif groupName = 'professor' and NOT EXISTS (SELECT * FROM users_roles ur join roles r on ur.role_id=r.id WHERE ur.user_id=userId and r.name='ROLE_PROFESSOR') THEN
+        raise exception 'user with id=% does not belong to professor group', userId;
+    END if;
+    return true;
+END;
+$$;
 
- -- isNotAdminOrProfessorGroup
- CREATE FUNCTION isNotAdminOrProfessorGroup (groupId BIGINT)
- RETURNS BOOLEAN
- language plpgsql
- AS
- $$
- DECLARE
-    groupName varchar(20);
- BEGIN
-     select name into groupName from groups where id = groupId;
+-- isNotAdminOrProfessorGroup
+CREATE FUNCTION isNotAdminOrProfessorGroup (groupId BIGINT)
+RETURNS BOOLEAN
+language plpgsql
+AS
+$$
+DECLARE
+   groupName varchar(20);
+BEGIN
+    select name into groupName from groups where id = groupId;
 
-     if groupName = 'admin' or groupName = 'professor' THEN
-         raise exception 'should not be admin or professor group';
-     END if;
-     return true;
- END;
- $$;
+    if groupName = 'admin' or groupName = 'professor' THEN
+        raise exception 'should not be admin or professor group';
+    END if;
+    return true;
+END;
+$$;
 
 CREATE TYPE role_name AS ENUM ('ROLE_ADMIN', 'ROLE_PROFESSOR', 'ROLE_STUDENT');
 
@@ -126,6 +126,14 @@ CREATE TABLE lessons
     lesson_time_id BIGINT NOT NULL REFERENCES lessons_time (id),
     schedule_id    BIGINT NOT NULL REFERENCES schedules (id)
 );
+
+--CREATE TABLE students_courses
+--(
+--    user_id   BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+--    course_id BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
+--    CONSTRAINT user_course UNIQUE (user_id, course_id),
+--    CONSTRAINT students_courses_ck CHECK(isStudent(user_id) = 'true')
+--);
 
 CREATE TABLE student_groups_courses
 (
