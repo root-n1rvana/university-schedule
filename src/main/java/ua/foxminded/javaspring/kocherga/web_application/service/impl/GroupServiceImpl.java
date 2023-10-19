@@ -4,11 +4,15 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 import ua.foxminded.javaspring.kocherga.web_application.models.Group;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
+import ua.foxminded.javaspring.kocherga.web_application.models.mappers.CourseMapper;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.GroupMapper;
+import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
 import ua.foxminded.javaspring.kocherga.web_application.repository.GroupRepository;
 import ua.foxminded.javaspring.kocherga.web_application.service.BindingResultErrorsHandler;
+import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 import ua.foxminded.javaspring.kocherga.web_application.service.RedirectAttributesMessageHandler;
 import ua.foxminded.javaspring.kocherga.web_application.service.exceptions.GroupValidationException;
@@ -23,16 +27,22 @@ import java.util.stream.Collectors;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupMapper groupMapper;
+    private final CourseMapper courseMapper;
     private final GroupRepository groupRepository;
+    private final CourseRepository courseRepository;
     private final RedirectAttributesMessageHandler attrMsgHandler;
     private final BindingResultErrorsHandler bindingResultErrHandler;
 
     public GroupServiceImpl(GroupMapper groupMapper,
+                            CourseMapper courseMapper,
                             GroupRepository groupRepository,
+                            CourseRepository courseRepository,
                             RedirectAttributesMessageHandler attrMsgHandler,
                             BindingResultErrorsHandler bindingResultErrHandler) {
         this.groupMapper = groupMapper;
+        this.courseMapper = courseMapper;
         this.groupRepository = groupRepository;
+        this.courseRepository = courseRepository;
         this.attrMsgHandler = attrMsgHandler;
         this.bindingResultErrHandler = bindingResultErrHandler;
     }
@@ -68,6 +78,7 @@ public class GroupServiceImpl implements GroupService {
         checkGroupNameExist(groupDto);
         Group group = new Group();
         group.setName(groupDto.getName());
+        group.setGroupCourses(courseRepository.findAllByIdIn(groupDto.getCoursesIds()));
         groupRepository.save(group);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "Group added successfully!");
     }
@@ -89,6 +100,7 @@ public class GroupServiceImpl implements GroupService {
         checkGroupNameExist(groupDto);
         Group groupToUpdate = groupRepository.getGroupById(groupDto.getId());
         groupToUpdate.setName(groupDto.getName());
+        groupToUpdate.setGroupCourses(courseRepository.findAllByIdIn(groupDto.getCoursesIds()));
         groupRepository.save(groupToUpdate);
         attrMsgHandler.setSuccessMessage(redirectAttributes, "Group updated successfully!");
     }

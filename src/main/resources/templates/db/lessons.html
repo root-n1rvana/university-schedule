@@ -41,7 +41,7 @@
             <tbody>
             <!-- Iterate over the list of lessons and display the data in rows -->
             <tr th:each="lesson, iterStat : ${page.content}">
-                <td th:text="${iterStat.count}"></td>
+                <td th:text="${iterStat.count + (page.getNumber * 10)}"></td>
                 <td th:text="${lesson.ownerCourse.courseName}"></td>
                 <td th:text="${lesson.ownerRoom.roomLabel}"></td>
                 <td th:text="${lesson.ownerGroup.name}"></td>

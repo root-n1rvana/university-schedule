@@ -115,7 +115,7 @@
                                name="yearMonth"
                                id="datepickerT" data-date-format="yyyy-mm">
                         <input type="hidden" th:name="courseId"
-                               th:value="${#authentication.principal.professorCourses.iterator().next().id}"/>
+                               th:value="${#authentication.principal.professorCourses?.isEmpty() ? '0' : #authentication.principal.professorCourses.iterator().next().id}" />
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
@@ -156,7 +156,7 @@
                                name="yearMonthDay"
                                id="daydatepickerT" data-date-format="yyyy-mm-dd">
                         <input type="hidden" th:name="courseId"
-                               th:value="${#authentication.principal.professorCourses.iterator().next().id}"/>
+                               th:value="${#authentication.principal.professorCourses?.isEmpty() ? '0' : #authentication.principal.professorCourses.iterator().next().id}" />
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>

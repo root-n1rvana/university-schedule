@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Groups Page</title>
@@ -31,12 +31,19 @@
         <thead>
         <tr>
             <th>Group Name</th>
+            <th>Group Courses</th>
         </tr>
         </thead>
         <tbody>
         <!-- Iterate over the list of groups and display the data in rows -->
         <tr th:each="group : ${groups}">
             <td th:text="${group.name}"></td>
+            <td>
+                <span th:each="course, iterStat : ${group.groupCourses}">
+                    <span th:text="${course.courseName}"></span>
+                    <span th:if="${!iterStat.last}">,</span>
+                </span>
+            </td>
         </tr>
         </tbody>
     </table>

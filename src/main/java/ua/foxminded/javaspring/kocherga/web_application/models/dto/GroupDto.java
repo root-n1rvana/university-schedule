@@ -15,6 +15,8 @@ public class GroupDto {
 
     private List<CourseDto> groupCourses;
 
+    private List<Long> coursesIds;
+
     public GroupDto() {
     }
 
@@ -22,9 +24,11 @@ public class GroupDto {
         this.id = id;
     }
 
-    public GroupDto(Long id, String name) {
+    public GroupDto(Long id, String name, List<CourseDto> groupCourses, List<Long> coursesIds) {
         this.id = id;
         this.name = name;
+        this.groupCourses = groupCourses;
+        this.coursesIds = coursesIds;
     }
 
     public Long getId() {
@@ -49,5 +53,13 @@ public class GroupDto {
 
     public void setGroupCourses(List<CourseDto> groupCourses) {
         this.groupCourses = groupCourses;
+    }
+
+    public List<Long> getCoursesIds() {
+        return coursesIds;
+    }
+
+    public void setCoursesIds(List<Long> coursesIds) {
+        this.coursesIds = coursesIds;
     }
 }

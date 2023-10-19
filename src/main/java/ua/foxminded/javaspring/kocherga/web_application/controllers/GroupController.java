@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foxminded.javaspring.kocherga.web_application.models.dto.CourseDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.GroupDto;
+import ua.foxminded.javaspring.kocherga.web_application.service.CourseService;
 import ua.foxminded.javaspring.kocherga.web_application.service.GroupService;
 
 import java.util.List;
@@ -20,15 +22,19 @@ public class GroupController {
     private final static String REDIRECT_TO_GROUP_MANAGEMENT_PAGE = "redirect:/group/management";
 
     private final GroupService groupService;
+    private final CourseService courseService;
 
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService, CourseService courseService) {
         this.groupService = groupService;
+        this.courseService = courseService;
     }
 
     @GetMapping("/management")
     public String showManagementPage(Model model) {
         List<GroupDto> groups = groupService.getAllGroupsForManagement();
+        List<CourseDto> courses = courseService.getAllCourses();
         model.addAttribute("groups", groups);
+        model.addAttribute("courses", courses);
         return GROUP_MANAGEMENT_PAGE;
     }
 

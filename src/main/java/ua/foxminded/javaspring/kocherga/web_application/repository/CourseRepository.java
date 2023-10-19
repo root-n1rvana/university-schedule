@@ -6,6 +6,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import ua.foxminded.javaspring.kocherga.web_application.models.Course;
 
+import java.util.List;
+
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
@@ -22,4 +24,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Transactional
     void deleteById(@NonNull Long courseId);
+
+    List<Course> findAllByIdIn(List<Long> coursesIds);
 }
