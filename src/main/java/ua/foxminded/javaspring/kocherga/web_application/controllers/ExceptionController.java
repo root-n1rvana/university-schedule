@@ -50,10 +50,9 @@ public class ExceptionController {
         return "redirect:/schedule/management";
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public String processGeneralException(Exception ex, RedirectAttributes redirectAttributes) {
-//        redirectAttributes.addFlashAttribute("errorMessage", "something goes wrong; " + ex.getMessage());
-//        return "home";
-//    }
-
+    @ExceptionHandler(Exception.class)
+    public String processGeneralException(Exception ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errorMessage", "something goes wrong; " + ex.getMessage());
+        return "home";
+    }
 }

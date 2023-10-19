@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
             user.setOwnerGroup(groupRepository.getGroupById(userDto.getOwnerGroup().getId()));
         }
 
-        boolean isProfessorRole = user.getRoles().stream().anyMatch(role -> role.getRoleName().equals("ROLE_PROFESSOR"));
+//        boolean isProfessorRole = user.getRoles().stream().anyMatch(role -> role.getRoleName().equals("ROLE_PROFESSOR"));
 
         if (userDto.getProfessorCourses() != null) {
             Set<Course> newProfessorCourse = new HashSet<>();

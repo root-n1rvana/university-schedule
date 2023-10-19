@@ -13,7 +13,7 @@ public class GroupDto {
     @Size(min = 2, max = 10, message = "name should have at least 2 and max 20 characters")
     private String name;
 
-    private List<CourseDto> groupCourses;
+    private List<CourseDto> assignedCourses;
 
     private List<Long> coursesIds;
 
@@ -24,10 +24,10 @@ public class GroupDto {
         this.id = id;
     }
 
-    public GroupDto(Long id, String name, List<CourseDto> groupCourses, List<Long> coursesIds) {
+    public GroupDto(Long id, String name, List<CourseDto> assignedCourses, List<Long> coursesIds) {
         this.id = id;
         this.name = name;
-        this.groupCourses = groupCourses;
+        this.assignedCourses = assignedCourses;
         this.coursesIds = coursesIds;
     }
 
@@ -47,12 +47,12 @@ public class GroupDto {
         this.name = name;
     }
 
-    public List<CourseDto> getGroupCourses() {
-        return groupCourses;
+    public List<CourseDto> getAssignedCourses() {
+        return assignedCourses;
     }
 
-    public void setGroupCourses(List<CourseDto> groupCourses) {
-        this.groupCourses = groupCourses;
+    public void setAssignedCourses(List<CourseDto> assignedCourses) {
+        this.assignedCourses = assignedCourses;
     }
 
     public List<Long> getCoursesIds() {

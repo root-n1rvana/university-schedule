@@ -28,7 +28,7 @@ public class Group {
             name = "student_groups_courses",
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> groupCourses;
+    private List<Course> assignedCourses;
 
     public Group() {
     }
@@ -70,12 +70,12 @@ public class Group {
         this.lessons = lessonsList;
     }
 
-    public List<Course> getGroupCourses() {
-        return groupCourses;
+    public List<Course> getAssignedCourses() {
+        return assignedCourses;
     }
 
-    public void setGroupCourses(List<Course> groupCourses) {
-        this.groupCourses = groupCourses;
+    public void setAssignedCourses(List<Course> assignedCourses) {
+        this.assignedCourses = assignedCourses;
     }
 
     @Override

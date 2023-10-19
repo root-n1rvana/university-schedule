@@ -31,7 +31,7 @@
         <thead>
         <tr>
             <th>Group Name</th>
-            <th>Group Courses</th>
+            <th>Assigned Courses</th>
         </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
         <tr th:each="group : ${groups}">
             <td th:text="${group.name}"></td>
             <td>
-                <span th:each="course, iterStat : ${group.groupCourses}">
+                <span th:each="course, iterStat : ${group.assignedCourses}">
                     <span th:text="${course.courseName}"></span>
                     <span th:if="${!iterStat.last}">,</span>
                 </span>
