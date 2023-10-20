@@ -33,9 +33,17 @@
                     <div class="modal-body">
                         <form th:action="@{addGroup}" method="post">
                             <div class="mb-3">
-                                <label for="newGroupName" class="col-form-label">Name:</label>
+                                <label for="newGroupName" class="col-form-label">Name</label>
                                 <input type="text" class="form-control" id="newGroupName" name="name" maxlength="10"
                                        required/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="courses">Assign Courses</label>
+                                <div th:each="course : ${courses}">
+                                    <input id="courses" type="checkbox" name="coursesIds" th:value="${course.id}" />
+                                    <label th:for="${'course_' + course.id}" th:text="${course.courseName}"></label>
+                                    <br />
+                                </div>
                             </div>
                             <br>
                             <div class="modal-footer">
@@ -53,6 +61,7 @@
             <tr>
                 <th>#</th>
                 <th>Group Name</th>
+                <th>Assigned Courses</th>
                 <th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
                 <th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
             </tr>
@@ -61,6 +70,12 @@
             <tr th:each="group, iterStat : ${groups}">
                 <td th:text="${iterStat.count}"></td>
                 <td th:text="${group.name}"></td>
+                <td>
+                    <span th:each="course, iterStat : ${group.assignedCourses}">
+                        <span th:text="${course.courseName}"></span>
+                        <span th:if="${!iterStat.last}">,</span>
+                    </span>
+                </td>
                 <td sec:authorize="hasRole('ROLE_ADMIN')">
                     <div style="text-align: center">
                         <i class="fa-regular fa-pen-to-square" data-bs-toggle="modal"
@@ -81,6 +96,14 @@
                                             <label for="newName" class="col-form-label">Name:</label>
                                             <input type="text" class="form-control" id="newName" name="name"
                                                    th:value="${group.name}" maxlength="10" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Assign Courses</label>
+                                            <div th:each="course : ${courses}">
+                                                <input type="checkbox" name="coursesIds" th:value="${course.id}"
+                                                       th:checked="${group.assignedCourses.contains(course)}" />
+                                                <label th:for="${'course_' + course.id}" th:text="${course.courseName}"></label>
+                                            </div>
                                         </div>
                                         <br>
                                         <div class="modal-footer">

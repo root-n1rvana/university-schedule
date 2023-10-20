@@ -46,7 +46,7 @@
                                        maxlength="50" required/>
                             </div>
                             <div class="mb-3">
-                                <label for="newCourseName" class="col-form-label">Choose Group</label>
+                                <label for="newCourseName" class="col-form-label">Choose Course</label>
                                 <select class="form-select" id="newCourseName" name="professorCourses">
                                     <option th:each="course : ${courses}" th:value="${course.courseName}"
                                             th:text="${course.courseName}"></option>
@@ -88,7 +88,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="teacher, iterStat : ${page.content}">
-                    <td th:text="${iterStat.count}"></td>
+                    <td th:text="${iterStat.count + (page.getNumber * 10)}"></td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${teacher.login}"></td>
                     <td th:text="${teacher.firstname}"></td>
                     <td th:text="${teacher.lastname}"></td>

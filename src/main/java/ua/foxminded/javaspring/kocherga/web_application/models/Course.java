@@ -19,7 +19,7 @@ public class Course {
     @Column(name = "description", length = 100)
     private String courseDescription;
 
-    @ManyToMany(mappedBy = "groupCourses")
+    @ManyToMany(mappedBy = "assignedCourses")
     private List<Group> groups;
 
     public Course() {
@@ -67,11 +67,11 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return id == course.id && courseName.equals(course.courseName) && Objects.equals(courseDescription, course.courseDescription);
+        return id == course.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, courseName, courseDescription);
+        return Objects.hash(id);
     }
 }

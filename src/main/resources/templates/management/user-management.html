@@ -103,7 +103,7 @@
         <tbody>
         <!-- Iterate over the list of users and display the data in rows -->
         <tr th:each="user, iterStat : ${page.content}">
-            <td th:text="${iterStat.count}"></td>
+            <td th:text="${iterStat.count + (page.getNumber * 10)}"></td>
             <td th:text="${user.login}"></td>
             <td th:text="${user.firstname}"></td>
             <td th:text="${user.lastname}"></td>
