@@ -66,6 +66,21 @@ BEGIN
 END;
 $$;
 
+-- course_belongs_to_professor
+CREATE FUNCTION course_belongs_to_professor (courseId BIGINT, professorId BIGINT)
+RETURNS BOOLEAN
+language plpgsql
+AS
+$$
+BEGIN
+
+    if NOT EXISTS (SELECT * FROM professors_courses pc WHERE pc.professor_id = professorId and pc.course_id = courseId) THEN
+        raise exception 'given professor id=% does not have given course id=%', professorId, courseId;
+    END if;
+    return true;
+END;
+$$;
+
 CREATE TYPE role_name AS ENUM ('ROLE_ADMIN', 'ROLE_PROFESSOR', 'ROLE_STUDENT');
 
 CREATE TABLE roles
@@ -89,6 +104,13 @@ CREATE TABLE users
     password  VARCHAR     NOT NULL,
     group_id  BIGINT      REFERENCES groups (id),
     CONSTRAINT user_group_ck CHECK(isUserCorrespondingToGroup(id, group_id) = true)
+);
+
+CREATE TABLE users_roles
+(
+    user_id BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    role_id BIGINT REFERENCES roles (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT user_role UNIQUE (user_id, role_id)
 );
 
 CREATE TABLE courses
@@ -117,24 +139,6 @@ CREATE TABLE schedules
     date DATE
 );
 
-CREATE TABLE lessons
-(
-    id             BIGSERIAL PRIMARY KEY,
-    course_id      BIGINT NOT NULL REFERENCES courses (id),
-    room_id        BIGINT NOT NULL REFERENCES rooms (id),
-    group_id       BIGINT NOT NULL REFERENCES groups (id),
-    lesson_time_id BIGINT NOT NULL REFERENCES lessons_time (id),
-    schedule_id    BIGINT NOT NULL REFERENCES schedules (id)
-);
-
---CREATE TABLE students_courses
---(
---    user_id   BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
---    course_id BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
---    CONSTRAINT user_course UNIQUE (user_id, course_id),
---    CONSTRAINT students_courses_ck CHECK(isStudent(user_id) = 'true')
---);
-
 CREATE TABLE student_groups_courses
 (
     group_id   BIGINT REFERENCES groups (id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -145,15 +149,21 @@ CREATE TABLE student_groups_courses
 
 CREATE TABLE professors_courses
 (
-    professor_id    BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    course_id       BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    professor_course_id     BIGSERIAL PRIMARY KEY,
+    professor_id            BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    course_id               BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT professors_courses_un UNIQUE (professor_id, course_id),
     CONSTRAINT professors_courses_ck CHECK(isProfessor(professor_id) = true)
 );
 
-CREATE TABLE users_roles
+CREATE TABLE lessons
 (
-    user_id BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    role_id BIGINT REFERENCES roles (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT user_role UNIQUE (user_id, role_id)
+    id             BIGSERIAL PRIMARY KEY,
+    course_id      BIGINT NOT NULL REFERENCES courses (id),
+    room_id        BIGINT NOT NULL REFERENCES rooms (id),
+    group_id       BIGINT NOT NULL REFERENCES groups (id),
+    lesson_time_id BIGINT NOT NULL REFERENCES lessons_time (id),
+    schedule_id    BIGINT NOT NULL REFERENCES schedules (id),
+    professor_id   BIGINT NOT NULL REFERENCES professors_courses (professor_course_id),
+    CONSTRAINT test CHECK(course_belongs_to_professor(course_id, professor_id) = true)
 );

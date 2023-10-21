@@ -12,16 +12,13 @@ import ua.foxminded.javaspring.kocherga.web_application.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User getUserById(long userId);
+//    User getUserById(long userId);
 
     User findByLogin(String loginName);
 
-    @Transactional
     void deleteByLogin(String login);
 
     boolean existsByLogin(String login);
-
-    boolean existsById(long id);
 
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleName = :roleName and u.ownerGroup.id <> 1")
     Page<User> findByRoleNameExceptAdminGroup(RoleName roleName, Pageable pageable);

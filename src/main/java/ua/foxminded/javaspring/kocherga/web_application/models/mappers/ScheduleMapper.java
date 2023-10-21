@@ -6,7 +6,7 @@ import ua.foxminded.javaspring.kocherga.web_application.models.dto.ScheduleDto;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface ScheduleMapper {
 
     ScheduleDto scheduleToScheduleDto(Schedule schedule);

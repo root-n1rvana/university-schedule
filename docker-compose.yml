@@ -23,8 +23,6 @@ services:
 #      - SPRING_DATASOURCE_URL=jdbc:postgresql://university_db_cont:5432/university_db
 #      - SPRING_DATASOURCE_USERNAME=kocherga
 #      - SPRING_DATASOURCE_PASSWORD=kocherga
-##    stdin_open: true
-##    tty: true
 #    ports:
 #      - "8080:8080"
 #    volumes:

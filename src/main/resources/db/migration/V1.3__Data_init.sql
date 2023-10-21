@@ -194,11 +194,16 @@ update users set group_id = 8 where login = 'std34';
 update users set group_id = 8 where login = 'std35';
 update users set group_id = 8 where login = 'std36';
 
-INSERT INTO professors_courses VALUES (2, 1);
-INSERT INTO professors_courses VALUES (3, 2);
-INSERT INTO professors_courses VALUES (4, 3);
-INSERT INTO professors_courses VALUES (5, 4);
-INSERT INTO professors_courses VALUES (6, 5);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (2, 1);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (3, 2);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (4, 3);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (5, 4);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (6, 5);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (2, 6);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (3, 7);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (4, 8);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (5, 9);
+INSERT INTO professors_courses(professor_id, course_id) VALUES (6, 10);
 
 INSERT INTO student_groups_courses VALUES (3, 1);
 INSERT INTO student_groups_courses VALUES (3, 2);
@@ -215,76 +220,76 @@ INSERT INTO schedules (date) VALUES ('2023-10-10');
 INSERT INTO schedules (date) VALUES ('2023-10-11');
 INSERT INTO schedules (date) VALUES ('2023-10-12');
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 1, 3, 1, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (1, 2, 3, 1, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (4, 3, 3, 1, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (10, 4, 3, 1, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (6, 5, 3, 1, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 1, 3, 1, 1, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (1, 2, 3, 1, 2, 2);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (4, 3, 3, 1, 3, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (10, 4, 3, 1, 4, 6);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (6, 5, 3, 1, 5, 2);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (8, 6, 4, 1, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (9, 7, 4, 1, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (5, 8, 4, 1, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 9, 4, 1, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (2, 10, 4, 1, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (8, 6, 4, 1, 1, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (9, 7, 4, 1, 2, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (5, 8, 4, 1, 3, 6);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 9, 4, 1, 4, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (2, 10, 4, 1, 5, 3);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (4, 3, 5, 2, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (8, 6, 5, 2, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 1, 5, 2, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (6, 5, 5, 2, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (1, 2, 5, 2, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (4, 3, 5, 2, 1, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (8, 6, 5, 2, 2, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 1, 5, 2, 3, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (6, 5, 5, 2, 4, 2);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (1, 2, 5, 2, 5, 2);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (2, 10, 6, 2, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 9, 6, 2, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (9, 7, 6, 2, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (5, 8, 6, 2, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (10, 4, 6, 2, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (2, 10, 6, 2, 1, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 9, 6, 2, 2, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (9, 7, 6, 2, 3, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (5, 8, 6, 2, 4, 6);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (10, 4, 6, 2, 5, 6);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 5, 7, 3, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 1, 7, 3, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (2, 2, 7, 3, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (8, 3, 7, 3, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (5, 7, 7, 3, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 5, 7, 3, 1, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 1, 7, 3, 2, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (2, 2, 7, 3, 3, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (8, 3, 7, 3, 4, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (5, 7, 7, 3, 5, 6);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 2, 8, 3, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (4, 3, 8, 3, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (1, 4, 8, 3, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 6, 8, 3, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 8, 8, 3, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 2, 8, 3, 1, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (4, 3, 8, 3, 2, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (1, 4, 8, 3, 3, 2);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 6, 8, 3, 4, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 8, 8, 3, 5, 4);
 
 ---
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 1, 3, 4, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (1, 2, 3, 4, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (4, 3, 3, 4, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (10, 4, 3, 4, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (6, 5, 3, 4, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 1, 3, 4, 1, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (1, 2, 3, 4, 2, 2);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (4, 3, 3, 4, 3, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (10, 4, 3, 4, 4, 6);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (6, 5, 3, 4, 5, 2);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (8, 6, 4, 4, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (9, 7, 4, 4, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (5, 8, 4, 4, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 9, 4, 4, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (2, 10, 4, 4, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (8, 6, 4, 4, 1, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (9, 7, 4, 4, 2, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (5, 8, 4, 4, 3, 6);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 9, 4, 4, 4, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (2, 10, 4, 4, 5, 3);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (4, 3, 5, 5, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (8, 6, 5, 5, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 1, 5, 5, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (6, 5, 5, 5, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (1, 2, 5, 5, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (4, 3, 5, 5, 1, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (8, 6, 5, 5, 2, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 1, 5, 5, 3, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (6, 5, 5, 5, 4, 2);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (1, 2, 5, 5, 5, 2);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (2, 10, 6, 5, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 9, 6, 5, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (9, 7, 6, 5, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (5, 8, 6, 5, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (10, 4, 6, 5, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (2, 10, 6, 5, 1, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 9, 6, 5, 2, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (9, 7, 6, 5, 3, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (5, 8, 6, 5, 4, 6);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (10, 4, 6, 5, 5, 6);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 5, 7, 6, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 1, 7, 6, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (2, 2, 7, 6, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (8, 3, 7, 6, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (5, 7, 7, 6, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 5, 7, 6, 1, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 1, 7, 6, 2, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (2, 2, 7, 6, 3, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (8, 3, 7, 6, 4, 4);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (5, 7, 7, 6, 5, 6);
 
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 2, 8, 6, 1);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (4, 3, 8, 6, 2);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (1, 4, 8, 6, 3);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (7, 6, 8, 6, 4);
-INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id) VALUES (3, 8, 8, 6, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 2, 8, 6, 1, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (4, 3, 8, 6, 2, 5);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (1, 4, 8, 6, 3, 2);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (7, 6, 8, 6, 4, 3);
+INSERT INTO lessons (course_id, room_id, group_id, schedule_id, lesson_time_id, professor_id) VALUES (3, 8, 8, 6, 5, 4);

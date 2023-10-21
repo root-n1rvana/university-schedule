@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import ua.foxminded.javaspring.kocherga.web_application.models.Lesson;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.LessonDto;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface LessonMapper {
 
     LessonDto lessonToLessonDto(Lesson lesson);

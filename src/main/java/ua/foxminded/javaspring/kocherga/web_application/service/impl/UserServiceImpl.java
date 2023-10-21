@@ -112,7 +112,9 @@ public class UserServiceImpl implements UserService {
     private void checkLoginDuplication(UserDto userDto) {
         boolean notSameLoginName = true;
         if (!(userDto.getId() == null)) {
-            notSameLoginName = !userRepository.getUserById(userDto.getId()).getLogin().equals(userDto.getLogin());
+            notSameLoginName = !userRepository.findById(userDto.getId())
+                    .orElseThrow(() -> new RuntimeException("No user found"))
+                    .getLogin().equals(userDto.getLogin());
         }
         switch (userDto.getUiPage()) {
             case "teacher":
@@ -138,7 +140,7 @@ public class UserServiceImpl implements UserService {
     public void updateUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
-        User userToEdit = userRepository.getUserById(userDto.getId());
+        User userToEdit = userRepository.findById(userDto.getId()).orElseThrow(() -> new RuntimeException("no user found"));
         mapUserByUserDtoExceptGroups(userDto, userToEdit);
         userRepository.saveAndFlush(userToEdit);
         mapUserGroupsByUserDto(userDto, userToEdit);
@@ -151,7 +153,7 @@ public class UserServiceImpl implements UserService {
     public void userCredentialsUpdate(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
-        User userToEdit = userRepository.getUserById(userDto.getId());
+        User userToEdit = userRepository.findById(userDto.getId()).orElseThrow(() -> new RuntimeException("no user found"));
         mapUserByUserDtoExceptGroups(userDto, userToEdit);
         userRepository.saveAndFlush(userToEdit);
         mapUserGroupsByUserDto(userDto, userToEdit);

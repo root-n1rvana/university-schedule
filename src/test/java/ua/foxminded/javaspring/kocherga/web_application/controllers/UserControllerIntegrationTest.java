@@ -21,6 +21,7 @@ import ua.foxminded.javaspring.kocherga.web_application.repository.RoleRepositor
 import ua.foxminded.javaspring.kocherga.web_application.repository.UserRepository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
@@ -249,7 +250,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "PROFESSOR")
     public void testUpdateStudent() throws Exception {
         // User data before test
-        User userBeforeTest = userRepository.getUserById(testStudentId);
+        User userBeforeTest = userRepository.findById(testStudentId).get();
         Group group = userBeforeTest.getOwnerGroup();
 
         // Prepare data to replace in database
@@ -272,7 +273,7 @@ class UserControllerIntegrationTest {
                 .andExpect(redirectedUrl("/user/student-management"));
 
         //Retreiving a user database after modification
-        User actualUser = userRepository.getUserById(testStudentId);
+        User actualUser = userRepository.findById(testStudentId).get();
 
         // Verify that Student data was updated in the database
         assertEquals(expectedFirstname, actualUser.getFirstname());
@@ -290,7 +291,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     public void testUpdateTeacher() throws Exception {
         // User data before test
-        User userBeforeTest = userRepository.getUserById(46);
+        User userBeforeTest = userRepository.findById(46L).get();
 
         // Prepare data to replace in database
         String expectedFirstname = "newFirstname";
@@ -311,7 +312,7 @@ class UserControllerIntegrationTest {
                 .andExpect(redirectedUrl("/user/teacher-management"));
 
         //Retreiving a user database after modification
-        User actualUser = userRepository.getUserById(46);
+        User actualUser = userRepository.findById(46L).get();
 
         // Verify that Student data was updated in the database
         assertEquals(expectedFirstname, actualUser.getFirstname());
@@ -350,38 +351,73 @@ class UserControllerIntegrationTest {
         assertFalse(userRepository.existsByLogin(testUser.getLogin()));
     }
 
-//    @Test
-//    @WithMockUser(roles = "ADMIN")
-//    public void testDeleteTeacher_AdminAccess() throws Exception {
-//        // Create a test Teacher to be deleted
-//        User testUser = new User();
-//        testUser.setFirstname("TestStd");
-//        testUser.setLastname("TestStd");
-//        testUser.setLogin("teststd2");
-//        testUser.setPassword("test");
-//        Set<Role> teacherRole = new HashSet<>();
-//        teacherRole.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
-//        testUser.setRoles(teacherRole);
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void testDeleteTeacher_AdminAccess() throws Exception {
+        List<User> users = userRepository.findAll();
+
+        // Create a test Teacher to be deleted
+        User teacher = new User();
+        teacher.setFirstname("TestStd");
+        teacher.setLastname("TestStd");
+        teacher.setLogin("testro");
+        teacher.setPassword("test");
+        Set<Role> teacherRole = new HashSet<>();
+        teacherRole.add(roleRepository.getRoleByRoleName(RoleName.ROLE_PROFESSOR));
+        teacher.setRoles(teacherRole);
+        teacher = userRepository.saveAndFlush(teacher);
+        userRepository.saveAndFlush(teacher); // ToDo detached entity passed to persist: ua.foxminded.javaspring.kocherga.web_application.models.Role
+
+        teacher.setOwnerGroup(groupRepository.getGroupById(2L));
+        userRepository.saveAndFlush(teacher);
+
+
 //
-//
-//        userRepository.save(testUser); // ToDo detached entity passed to persist: ua.foxminded.javaspring.kocherga.web_application.models.Role
 //        testUser.setOwnerGroup(groupRepository.getGroupById(2L));
-//        userRepository.save(testUser);
+//        testUser = userRepository.saveAndFlush(testUser);
 //
 //
-//        // Verify that Teacher was saved to database
+        // Verify that Teacher was saved to database
 //        assertTrue(userRepository.existsByLogin(testUser.getLogin()));
+
+
+
+//        UserDto userDto = new UserDto();
+//        userDto.setFirstname("A");
+//        userDto.setLastname("B");
+//        userDto.setLogin("login");
+//        userDto.setPassword("pass");
+//        userDto.setUiPage("any");
+//        userService.saveNewUser(userDto, null, null);
+
+        List<User> users2 = userRepository.findAll();
+//        userRepository.flush();
+//        System.out.println("AAA: " + testUser.getId());
+
+//        User testUser2 = userRepository.findById(47L).get();
+//        System.out.println("AAA: " + testUser2.getId());
 //
+//        try {
+////            userRepository.deleteByLogin("testro");
+//            userRepository.deleteById(testUser2.getId());
+//        } catch (Throwable t) {
+//            t.printStackTrace();
+//        }
+
+//        userRepository.flush();
+
 //        mockMvc.perform(post("/user/deleteTeacher")
-//                        .param("userId", String.valueOf(testUser.getId())))
+//                        .param("userId", String.valueOf(tu.getId())))
 //                .andExpect(status().is3xxRedirection())
 //                .andExpect(redirectedUrl("/user/teacher-management"))
 //                .andExpect(flash().attributeExists("successMessage"))
 //                .andExpect(flash().attribute("successMessage", "Account deleted successfully!"));
-//
+
+//        List<User> users3 = userRepository.findAll();
 //        // Verify that Teacher was deleted from the database
-//        assertFalse(userRepository.existsByLogin(testUser.getLogin()));
-//    }
+        assertTrue(users.size() != users2.size());
+        assertTrue(users.size() != users2.size());
+    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -425,11 +461,11 @@ class UserControllerIntegrationTest {
         // Prepare the updated data
         String expectedLogin = "someNewLogin";
         String expectedPassword = "someNewPass";
-        User userToUpdate = userRepository.getUserById(testStudentId);
+        User userToUpdate = userRepository.findById(testStudentId).get();
         Group group = userToUpdate.getOwnerGroup();
 
         // Confirm what data to update is different from actual
-        assertNotEquals(expectedLogin, userRepository.getUserById(testStudentId).getLogin());
+        assertNotEquals(expectedLogin, userRepository.findById(testStudentId).get().getLogin());
         assertFalse(passwordEncoder.matches(expectedPassword, userMapper.userToUserDto(userToUpdate).getPassword()));
 
         mockMvc.perform(post("/user/updateStudentCredentials")
@@ -444,7 +480,7 @@ class UserControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Credential modification was successful!"));
 
         //Retreiving a user database after modification
-        User actualUser = userRepository.getUserById(testStudentId);
+        User actualUser = userRepository.findById(testStudentId).get();
 
         String actualLogin = actualUser.getLogin();
         String actualPassword = actualUser.getPassword();
@@ -467,8 +503,8 @@ class UserControllerIntegrationTest {
         String expectedPassword = "newPass";
 
         // Confirm what data to update is different from actual
-        assertNotEquals(expectedLogin, userRepository.getUserById(testTeacherId).getLogin());
-        assertFalse(passwordEncoder.matches(expectedPassword, userMapper.userToUserDto(userRepository.getUserById(testTeacherId)).getPassword()));
+        assertNotEquals(expectedLogin, userRepository.findById(testStudentId).get().getLogin());
+        assertFalse(passwordEncoder.matches(expectedPassword, userMapper.userToUserDto(userRepository.findById(testStudentId).get()).getPassword()));
 
         mockMvc.perform(post("/user/updateTeacherCredentials")
                         .param("UiPage", "teacher")
@@ -483,7 +519,7 @@ class UserControllerIntegrationTest {
                 .andExpect(flash().attribute("successMessage", "Credential modification was successful!"));
 
         //Retreiving a user database after modification
-        User actualUser = userRepository.getUserById(testTeacherId);
+        User actualUser = userRepository.findById(testStudentId).get();
         String actualLogin = actualUser.getLogin();
         String actualPassword = actualUser.getPassword();
 
@@ -501,7 +537,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     public void testUpdateStudentCredentialsError() throws Exception {
         // Using existing data
-        String existingLogin = userRepository.getUserById(1).getLogin();
+        String existingLogin = userRepository.findById(1L).get().getLogin();
         String somePassword = "somePassword";
 
         mockMvc.perform(post("/user/updateStudentCredentials")
@@ -519,7 +555,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     public void testUpdateUserCredentialsError() throws Exception {
         // Using existing data
-        String existingLogin = userRepository.getUserById(1).getLogin();
+        String existingLogin = userRepository.findById(1L).get().getLogin();
         String somePassword = "somePassword";
 
         mockMvc.perform(post("/user/updateUserCredentials")

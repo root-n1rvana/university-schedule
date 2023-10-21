@@ -10,7 +10,7 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id", nullable = false)
@@ -31,6 +31,10 @@ public class Lesson {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lesson_time_id", nullable = false)
     private LessonTime ownerLessonTime;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "professor_id", nullable = false)
+    private User professor;
 
     public Lesson() {
     }
@@ -90,6 +94,18 @@ public class Lesson {
 
     public void setOwnerLessonTime(LessonTime ownerLessonTime) {
         this.ownerLessonTime = ownerLessonTime;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(User professor) {
+        this.professor = professor;
     }
 
     @Override

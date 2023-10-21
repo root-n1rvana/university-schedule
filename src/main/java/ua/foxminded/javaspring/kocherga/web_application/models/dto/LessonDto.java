@@ -19,16 +19,19 @@ public class LessonDto {
 
     private LessonTimeDto ownerLessonTime;
 
+    private UserDto professor;
+
     public LessonDto() {
     }
 
-    public LessonDto(long id, CourseDto ownerCourse, RoomDto ownerRoom, GroupDto ownerGroup, String newScheduleDate, LessonTimeDto ownerLessonTime) {
+    public LessonDto(long id, CourseDto ownerCourse, RoomDto ownerRoom, GroupDto ownerGroup, String newScheduleDate, LessonTimeDto ownerLessonTime, UserDto professor) {
         this.id = id;
         this.ownerCourse = ownerCourse;
         this.ownerRoom = ownerRoom;
         this.ownerGroup = ownerGroup;
         this.newScheduleDate = newScheduleDate;
         this.ownerLessonTime = ownerLessonTime;
+        this.professor = professor;
     }
 
     public long getId() {
@@ -78,4 +81,13 @@ public class LessonDto {
     public void setOwnerLessonTime(LessonTimeDto ownerLessonTime) {
         this.ownerLessonTime = ownerLessonTime;
     }
+
+    public UserDto getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(UserDto professor) {
+        this.professor = professor;
+    }
 }
+
