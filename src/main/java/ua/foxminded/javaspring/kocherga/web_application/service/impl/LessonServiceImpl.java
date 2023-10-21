@@ -28,6 +28,7 @@ public class LessonServiceImpl implements LessonService {
     private final GroupRepository groupRepository;
     private final LessonTimeRepository lessonTimeRepository;
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
     private final LessonMapper lessonMapper;
     private final RedirectAttributesMessageHandler attrMsgHandler;
     private final BindingResultErrorsHandler bindingResultErrHandler;
@@ -38,6 +39,7 @@ public class LessonServiceImpl implements LessonService {
                              GroupRepository groupRepository,
                              LessonTimeRepository lessonTimeRepository,
                              ScheduleRepository scheduleRepository,
+                             final UserRepository userRepository,
                              LessonMapper lessonMapper,
                              RedirectAttributesMessageHandler attrMsgHandler,
                              BindingResultErrorsHandler bindingResultErrHandler) {
@@ -47,6 +49,7 @@ public class LessonServiceImpl implements LessonService {
         this.groupRepository = groupRepository;
         this.lessonTimeRepository = lessonTimeRepository;
         this.scheduleRepository = scheduleRepository;
+        this.userRepository = userRepository;
         this.lessonMapper = lessonMapper;
         this.attrMsgHandler = attrMsgHandler;
         this.bindingResultErrHandler = bindingResultErrHandler;
@@ -83,6 +86,7 @@ public class LessonServiceImpl implements LessonService {
         lesson.setOwnerGroup(groupRepository.getGroupById(lessonDto.getOwnerGroup().getId()));
         lesson.setOwnerLessonTime(lessonTimeRepository.findById(lessonDto.getOwnerLessonTime().getId()));
         lesson.setOwnerSchedule(addScheduleIfNotExist(lessonDto.getNewScheduleDate()));
+        lesson.setProfessor(userRepository.findById(lessonDto.getProfessor().getId()).orElseThrow(() -> new RuntimeException("user not found")));
     }
 
     private Schedule addScheduleIfNotExist(String scheduleDate) {

@@ -11,12 +11,9 @@ public interface LessonService {
 
     Page<LessonDto> getAllLessons(Pageable pageable);
 
-    @Transactional
     void saveNewLesson(LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    @Transactional
     void updateLesson(LessonDto lessonDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
-    @Transactional
     void deleteLesson(Long id, RedirectAttributes redirectAttributes);
 }

@@ -96,8 +96,8 @@ public class UserServiceImpl implements UserService {
         return userMapper.pageUserToPageUserDto(userPage);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void saveNewUser(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         bindingResultErrHandler.validateUserBindingResultErrors(bindingResult);
         checkLoginDuplication(userDto);
