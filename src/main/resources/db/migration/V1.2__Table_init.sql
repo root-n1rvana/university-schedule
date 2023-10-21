@@ -88,7 +88,7 @@ CREATE TABLE users
     login     VARCHAR(20) NOT NULL UNIQUE,
     password  VARCHAR     NOT NULL,
     group_id  BIGINT      REFERENCES groups (id),
-    CONSTRAINT user_group_ck CHECK(isUserCorrespondingToGroup(id, group_id) = 'true')
+    CONSTRAINT user_group_ck CHECK(isUserCorrespondingToGroup(id, group_id) = true)
 );
 
 CREATE TABLE courses
@@ -127,20 +127,12 @@ CREATE TABLE lessons
     schedule_id    BIGINT NOT NULL REFERENCES schedules (id)
 );
 
---CREATE TABLE students_courses
---(
---    user_id   BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
---    course_id BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
---    CONSTRAINT user_course UNIQUE (user_id, course_id),
---    CONSTRAINT students_courses_ck CHECK(isStudent(user_id) = 'true')
---);
-
 CREATE TABLE student_groups_courses
 (
     group_id   BIGINT REFERENCES groups (id) ON UPDATE CASCADE ON DELETE CASCADE,
     course_id  BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT group_course UNIQUE (group_id, course_id),
-    CONSTRAINT students_courses_ck CHECK(isNotAdminOrProfessorGroup(group_id) = 'true')
+    CONSTRAINT students_courses_ck CHECK(isNotAdminOrProfessorGroup(group_id) = true)
 );
 
 CREATE TABLE professors_courses

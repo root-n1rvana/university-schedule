@@ -1,10 +1,14 @@
 package ua.foxminded.javaspring.kocherga.web_application.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.ScheduleDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.ScheduleMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.ScheduleRepository;
+import ua.foxminded.javaspring.kocherga.web_application.service.BindingResultErrorsHandler;
+import ua.foxminded.javaspring.kocherga.web_application.service.RedirectAttributesMessageHandler;
 import ua.foxminded.javaspring.kocherga.web_application.service.ScheduleService;
 
 import java.time.LocalDate;
@@ -18,10 +22,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMapper scheduleMapper;
+    private final RedirectAttributesMessageHandler attrMsgHandler;
+    private final BindingResultErrorsHandler bindingResultErrHandler;
 
-    public ScheduleServiceImpl(ScheduleRepository scheduleRepository, ScheduleMapper scheduleMapper) {
+    public ScheduleServiceImpl(ScheduleRepository scheduleRepository,
+                               ScheduleMapper scheduleMapper,
+                               RedirectAttributesMessageHandler attrMsgHandler,
+                               BindingResultErrorsHandler bindingResultErrHandler) {
         this.scheduleRepository = scheduleRepository;
         this.scheduleMapper = scheduleMapper;
+        this.attrMsgHandler = attrMsgHandler;
+        this.bindingResultErrHandler = bindingResultErrHandler;
     }
 
     @Override
@@ -44,8 +55,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleDto> getScheduleInDateRangeForGroup(ScheduleDto scheduleDto) {
+    public List<ScheduleDto> getScheduleInDateRangeForGroup(ScheduleDto scheduleDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        bindingResultErrHandler.validateScheduleBindingResultErrors(bindingResult);
         if (isInvalidInput(scheduleDto.getYearMonth(), scheduleDto.getGroupId())) {
+            attrMsgHandler.setErrorMessage(redirectAttributes, "Schedule for this date is Empty"); //todo trying to add msg if schedule list empty
             return Collections.emptyList();
         }
         String yearMonth = scheduleDto.getYearMonth();

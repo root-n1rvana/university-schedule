@@ -40,9 +40,9 @@ public class ScheduleController {
         this.lessonService = lessonService;
     }
 
-    @GetMapping("/")
-    public String showSchedulePage(@ModelAttribute ScheduleDto scheduleDto, Model model) {
-        List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(scheduleDto);
+    @GetMapping("/") //todo added BindingResult bindingResult, RedirectAttributes redirectAttributes to adjust msg if schedule list empty
+    public String showSchedulePage(@ModelAttribute ScheduleDto scheduleDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(scheduleDto, bindingResult, redirectAttributes);
         List<ScheduleDto> scheduleForStudentDay = scheduleService.getScheduleForDayForGroup(scheduleDto);
         model.addAttribute("scheduleInDateRangeForGroup", scheduleInDateRangeForGroup);
         model.addAttribute("scheduleForStudentDay", scheduleForStudentDay);
