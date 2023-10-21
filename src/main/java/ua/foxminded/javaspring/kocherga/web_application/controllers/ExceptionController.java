@@ -70,8 +70,9 @@ public class ExceptionController {
 
     @ExceptionHandler(Exception.class)
     public String processGeneralException(Exception ex, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("errorMessage", "something goes wrong; " + ex.getMessage());
-        LOG.error(ex.getMessage());
+        String errorMsg = "something goes wrong; " + ex.getCause().getMessage();
+        LOG.error(errorMsg);
+        redirectAttributes.addFlashAttribute("errorMessage", errorMsg);
         return "redirect:/";
     }
 }
