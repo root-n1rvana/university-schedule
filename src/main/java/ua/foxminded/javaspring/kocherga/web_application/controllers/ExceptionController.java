@@ -61,6 +61,13 @@ public class ExceptionController {
         return "redirect:/schedule/management";
     }
 
+    @ExceptionHandler(ScheduleValidationException.class)
+    public String scheduleValidationException(ScheduleValidationException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        LOG.error(ex.getMessage());
+        return "redirect:/schedule";
+    }
+
     @ExceptionHandler(Exception.class)
     public String processGeneralException(Exception ex, RedirectAttributes redirectAttributes) {
         String errorMsg = "something goes wrong; " + ex.getCause().getMessage();

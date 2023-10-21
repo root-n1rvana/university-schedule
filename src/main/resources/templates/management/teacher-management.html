@@ -133,9 +133,9 @@
                                             <div class="mb-3">
                                                 <label for="CourseNameEdit" class="col-form-label">Choose Course</label>
                                                 <select class="form-select" id="CourseNameEdit" name="professorCourses">
-                                                    <option th:each="course : ${courses}"
-                                                            th:value="${course.courseName}"
-                                                            th:text="${course.courseName}"></option>
+                                                    <option th:each="course : ${courses}"  th:value="${course.courseName}"
+                                                            th:text="${course.courseName}"
+                                                            th:selected="${teacher.professorCourses.contains(course)}"></option>
                                                 </select>
                                             </div>
                                             <br>

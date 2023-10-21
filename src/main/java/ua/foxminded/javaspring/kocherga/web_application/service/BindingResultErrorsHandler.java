@@ -37,6 +37,15 @@ public class BindingResultErrorsHandler {
         }
     }
 
+    public void validateScheduleBindingResultErrors(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errMessage = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(", "));
+            throw new ScheduleValidationException(errMessage);
+        }
+    }
+
     public void validateGroupBindingResultErrors(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errMessage = bindingResult.getAllErrors().stream()
@@ -54,4 +63,6 @@ public class BindingResultErrorsHandler {
             throw new RegistrationValidationException(errMessage);
         }
     }
+
+
 }
