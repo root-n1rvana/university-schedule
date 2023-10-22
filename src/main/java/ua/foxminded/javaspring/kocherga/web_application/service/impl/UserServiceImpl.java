@@ -7,10 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.foxminded.javaspring.kocherga.web_application.models.Course;
-import ua.foxminded.javaspring.kocherga.web_application.models.Role;
-import ua.foxminded.javaspring.kocherga.web_application.models.RoleName;
-import ua.foxminded.javaspring.kocherga.web_application.models.User;
+import ua.foxminded.javaspring.kocherga.web_application.models.*;
 import ua.foxminded.javaspring.kocherga.web_application.models.dto.UserDto;
 import ua.foxminded.javaspring.kocherga.web_application.models.mappers.UserMapper;
 import ua.foxminded.javaspring.kocherga.web_application.repository.CourseRepository;
@@ -111,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
     private void checkLoginDuplication(UserDto userDto) {
         boolean notSameLoginName = true;
-        if (!(userDto.getId() == null)) {
+        if (userDto.getId() != null) {
             notSameLoginName = !userRepository.findById(userDto.getId())
                     .orElseThrow(() -> new RuntimeException("No user found"))
                     .getLogin().equals(userDto.getLogin());

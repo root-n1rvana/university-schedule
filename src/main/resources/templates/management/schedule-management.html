@@ -67,6 +67,15 @@
                                             th:text="${course.courseName}"></option>
                                 </select>
                             </div>
+                            <!-- add professor to course -->
+                            <div class="mb-3">
+                                <label for="selectProfessor" class="col-form-label">Choose Professor</label>
+                                <select class="form-select" id="selectProfessor" name="professor.id">
+                                    <option th:each="professorCourse : ${professorCourses}" th:value="${professorCourse.id}"
+                                            th:text="${professorCourse.firstname} + ${professorCourse.lastname} "></option>
+                                </select>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="selectRoom" class="col-form-label">Choose Room</label>
                                 <select class="form-select" id="selectRoom" name="ownerRoom.id">

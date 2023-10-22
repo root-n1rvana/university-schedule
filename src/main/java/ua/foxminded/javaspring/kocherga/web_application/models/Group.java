@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "groups")
@@ -16,12 +15,6 @@ public class Group {
 
     @Column(name = "name", length = 10, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
-    private Set<User> users;
-
-    @OneToMany(mappedBy = "ownerGroup", fetch = FetchType.EAGER)
-    private Set<Lesson> lessons;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -52,22 +45,6 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> usersList) {
-        this.users = usersList;
-    }
-
-    public Set<Lesson> getLessons() {
-        return lessons;
-    }
-
-    public void setLessons(Set<Lesson> lessonsList) {
-        this.lessons = lessonsList;
     }
 
     public List<Course> getAssignedCourses() {

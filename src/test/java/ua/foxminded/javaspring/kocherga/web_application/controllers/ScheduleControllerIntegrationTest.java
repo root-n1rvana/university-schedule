@@ -40,7 +40,7 @@ class ScheduleControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testSchedulePage() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("schedule"));
     }
@@ -236,13 +236,13 @@ class ScheduleControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @Test
     public void testScheduleInDateRangeForGroup() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/group/month")
                         .param("groupId", "3")
                         .param("yearMonth", "2023-10"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("schedule"))
-                .andExpect(model().attributeExists("scheduleInDateRangeForGroup"))
-                .andExpect(model().attribute("scheduleInDateRangeForGroup", hasItem(
+                .andExpect(model().attributeExists("groupScheduleByMonth"))
+                .andExpect(model().attribute("groupScheduleByMonth", hasItem(
                         allOf(
                                 hasProperty("id", is(4L)),
                                 hasProperty("lessons", hasItem(
@@ -261,22 +261,22 @@ class ScheduleControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @Test
     public void testScheduleInDateRangeForTeacher() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
-                        .param("courseId", "2")
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/teacher/month")
+                        .param("professorLogin", "teach1")
                         .param("yearMonth", "2023-10"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("schedule"))
-                .andExpect(model().attributeExists("scheduleInDateRangeForTeacher"))
-                .andExpect(model().attribute("scheduleInDateRangeForTeacher", hasItem(
+                .andExpect(model().attributeExists("teacherScheduleByMonth"))
+                .andExpect(model().attribute("teacherScheduleByMonth", hasItem(
                         allOf(
-                                hasProperty("id", is(5L)),
+                                hasProperty("id", is(6L)),
                                 hasProperty("lessons", hasItem(
                                         allOf(
-                                                hasProperty("id", is(46L)),
-                                                hasProperty("ownerCourse", hasProperty("courseName", is("Topography"))),
-                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A0"))),
-                                                hasProperty("ownerGroup", hasProperty("name", is("GR-4"))),
-                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("8:00-9:30")))
+                                                hasProperty("id", is(58L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("History"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A4"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-6"))),
+                                                hasProperty("ownerLessonTime", hasProperty("lessonTime", is("11:30-13:00")))
                                         )
                                 ))
                         )
@@ -286,13 +286,13 @@ class ScheduleControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @Test
     public void testScheduleForDayForGroup() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/group/day")
                         .param("groupId", "3")
                         .param("yearMonthDay", "2023-10-10"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("schedule"))
-                .andExpect(model().attributeExists("scheduleForStudentDay"))
-                .andExpect(model().attribute("scheduleForStudentDay", hasItem(
+                .andExpect(model().attributeExists("groupScheduleByDay"))
+                .andExpect(model().attribute("groupScheduleByDay", hasItem(
                         allOf(
                                 hasProperty("id", is(4L)),
                                 hasProperty("lessons", hasItem(
@@ -311,21 +311,21 @@ class ScheduleControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @Test
     public void testScheduleForDayForTeacher() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/")
-                        .param("courseId", "2")
+        mockMvc.perform(MockMvcRequestBuilders.get("/schedule/teacher/day")
+                        .param("professorLogin", "teach1")
                         .param("yearMonthDay", "2023-10-12"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("schedule"))
-                .andExpect(model().attributeExists("scheduleForTeacherDay"))
-                .andExpect(model().attribute("scheduleForTeacherDay", hasItem(
+                .andExpect(model().attributeExists("teacherScheduleByDay"))
+                .andExpect(model().attribute("teacherScheduleByDay", hasItem(
                         allOf(
                                 hasProperty("id", is(6L)),
                                 hasProperty("lessons", hasItem(
                                         allOf(
-                                                hasProperty("id", is(53L)),
-                                                hasProperty("ownerCourse", hasProperty("courseName", is("Topography"))),
-                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A2"))),
-                                                hasProperty("ownerGroup", hasProperty("name", is("GR-5"))),
+                                                hasProperty("id", is(58L)),
+                                                hasProperty("ownerCourse", hasProperty("courseName", is("History"))),
+                                                hasProperty("ownerRoom", hasProperty("roomLabel", is("A4"))),
+                                                hasProperty("ownerGroup", hasProperty("name", is("GR-6"))),
                                                 hasProperty("ownerLessonTime", hasProperty("lessonTime", is("11:30-13:00")))
                                         )
                                 ))

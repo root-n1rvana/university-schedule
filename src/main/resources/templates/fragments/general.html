@@ -9,7 +9,7 @@
   <nav role="navigation" class="primary-navigation">
     <ul>
       <li><a href="/">Home</a></li>
-      <li sec:authorize="hasAnyRole('ROLE_PROFESSOR', 'ROLE_STUDENT')"><a href="/schedule/">Schedule</a></li>
+      <li sec:authorize="hasAnyRole('ROLE_PROFESSOR', 'ROLE_STUDENT') and !hasAnyRole('ROLE_ADMIN')"><a href="/schedule">Schedule</a></li>
       <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/course/management">Courses</a></li>
       <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/group/management">Groups</a></li>
       <li sec:authorize="hasRole('ROLE_STUDENT')"><a href="/user/student-management">Students</a></li>

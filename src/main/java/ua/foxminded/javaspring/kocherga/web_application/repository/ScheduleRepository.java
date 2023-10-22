@@ -8,10 +8,12 @@ import ua.foxminded.javaspring.kocherga.web_application.models.Schedule;
 import java.time.LocalDate;
 import java.util.List;
 
-@Repository
+@Repository //todo refactor methods in repo
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     Schedule getByScheduleDate(LocalDate scheduleDate);
+
+    List<Schedule> getScheduleByScheduleDateBetween(LocalDate start, LocalDate end);
 
     boolean existsByScheduleDate(LocalDate scheduleDate);
 
@@ -20,7 +22,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
             "WHERE l.ownerGroup.id = :groupId " +
             "AND s.scheduleDate BETWEEN :startDate AND :endDate " +
             "ORDER BY s.scheduleDate, l.ownerLessonTime.id")
-    List<Schedule> findScheduleInDateRangeForGroup(Long groupId, LocalDate startDate, LocalDate endDate);
+    List<Schedule> findScheduleByGroupAndDateBetween(Long groupId, LocalDate startDate, LocalDate endDate);
 
     @Query("SELECT s FROM Schedule s " +
             "JOIN FETCH s.lessons l " +
@@ -28,10 +30,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
             "ORDER BY s.scheduleDate ASC, l.ownerGroup.id ASC, l.ownerLessonTime.id ASC")
     List<Schedule> findScheduleInDateRange(LocalDate startDate, LocalDate endDate);
 
-    @Query("SELECT s FROM Schedule s " +
-            "JOIN FETCH s.lessons l " +
-            "WHERE l.ownerCourse.id = :courseId " +
-            "AND s.scheduleDate BETWEEN :startDate AND :endDate " +
+    @Query("   SELECT s FROM Schedule s " +
+            "    JOIN FETCH s.lessons l " +
+            "   WHERE l.professor.login = :professorLogin " +
+            "     AND s.scheduleDate BETWEEN :startDate AND :endDate " +
             "ORDER BY s.scheduleDate, l.ownerLessonTime.id")
-    List<Schedule> findScheduleInDateRangeForCourse(Long courseId, LocalDate startDate, LocalDate endDate);
+    List<Schedule> findScheduleByProfessorLoginAndDateBetween(String professorLogin, LocalDate startDate, LocalDate endDate);
 }

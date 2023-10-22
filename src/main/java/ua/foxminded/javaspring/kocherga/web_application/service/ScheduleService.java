@@ -12,11 +12,11 @@ public interface ScheduleService {
 
     List<ScheduleDto> getScheduleInDateRange(String yearMonth);
 
-    List<ScheduleDto> getScheduleInDateRangeForGroup(ScheduleDto scheduleDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
+    List<ScheduleDto> getGroupScheduleByMonth(ScheduleDto scheduleDto, BindingResult bindingResult);
 
-    List<ScheduleDto> getScheduleForDayForGroup(ScheduleDto scheduleDto);
+    List<ScheduleDto> getGroupScheduleByDay(ScheduleDto scheduleDto);
 
-    List<ScheduleDto> getScheduleInDateRangeForTeacher(ScheduleDto scheduleDto);
+    List<ScheduleDto> getTeacherScheduleByMonth(ScheduleDto scheduleDto);
 
-    List<ScheduleDto> getScheduleForDayForTeacher(ScheduleDto scheduleDto);
+    List<ScheduleDto> getTeacherScheduleByDay(ScheduleDto scheduleDto);
 }

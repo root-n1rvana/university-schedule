@@ -1,6 +1,8 @@
 package ua.foxminded.javaspring.kocherga.web_application.controllers;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,41 +28,68 @@ public class ScheduleController {
     private final CourseService courseService;
     private final LessonService lessonService;
 
+    private final UserService userService;
+
     public ScheduleController(ScheduleService scheduleService,
                               GroupService groupService,
                               RoomService roomService,
                               LessonTimeService lessonTimeService,
                               CourseService courseService,
-                              LessonService lessonService) {
+                              LessonService lessonService,
+                              UserService userService) {
         this.scheduleService = scheduleService;
         this.groupService = groupService;
         this.roomService = roomService;
         this.lessonTimeService = lessonTimeService;
         this.courseService = courseService;
         this.lessonService = lessonService;
+        this.userService = userService;
     }
 
-    @GetMapping("/") //todo added BindingResult bindingResult, RedirectAttributes redirectAttributes to adjust msg if schedule list empty
-    public String showSchedulePage(@ModelAttribute ScheduleDto scheduleDto, Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getScheduleInDateRangeForGroup(scheduleDto, bindingResult, redirectAttributes);
-        List<ScheduleDto> scheduleForStudentDay = scheduleService.getScheduleForDayForGroup(scheduleDto);
-        model.addAttribute("scheduleInDateRangeForGroup", scheduleInDateRangeForGroup);
-        model.addAttribute("scheduleForStudentDay", scheduleForStudentDay);
+    @GetMapping
+    public String showSchedulePage() {
+        return "schedule";
+    }
 
-        List<ScheduleDto> scheduleInDateRangeForTeacher = scheduleService.getScheduleInDateRangeForTeacher(scheduleDto);
-        List<ScheduleDto> scheduleForTeacherDay = scheduleService.getScheduleForDayForTeacher(scheduleDto);
-        model.addAttribute("scheduleInDateRangeForTeacher", scheduleInDateRangeForTeacher);
-        model.addAttribute("scheduleForTeacherDay", scheduleForTeacherDay);
+    @GetMapping("/teacher/month")
+    @PreAuthorize("hasRole('ROLE_PROFESSOR')")
+    public String getTeacherScheduleByMonth(@ModelAttribute ScheduleDto scheduleDto, Model model) {
+        model.addAttribute("teacherScheduleByMonth", scheduleService.getTeacherScheduleByMonth(scheduleDto));
+        return "schedule";
+    }
+
+    @GetMapping("/teacher/day")
+    @PreAuthorize("hasRole('ROLE_PROFESSOR')")
+    public String getTeacherScheduleByDay(@ModelAttribute ScheduleDto scheduleDto, Model model) {
+        List<ScheduleDto> scheduleForTeacherDay = scheduleService.getTeacherScheduleByDay(scheduleDto);
+        model.addAttribute("teacherScheduleByDay", scheduleForTeacherDay);
+        return "schedule";
+    }
+
+    @GetMapping("/group/month")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public String getGroupScheduleByMonth(@ModelAttribute ScheduleDto scheduleDto, Model model, BindingResult bindingResult) {
+        List<ScheduleDto> scheduleInDateRangeForGroup = scheduleService.getGroupScheduleByMonth(scheduleDto, bindingResult);
+        model.addAttribute("groupScheduleByMonth", scheduleInDateRangeForGroup);
+        return "schedule";
+    }
+
+    @GetMapping("/group/day")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public String getGroupScheduleByDay(@ModelAttribute ScheduleDto scheduleDto, Model model) {
+        List<ScheduleDto> scheduleForStudentDay = scheduleService.getGroupScheduleByDay(scheduleDto);
+        model.addAttribute("groupScheduleByDay", scheduleForStudentDay);
         return "schedule";
     }
 
     @GetMapping("/management")
-    public String showScheduleManagementPage(String yearMonth, Model model) {
+    public String showScheduleManagementPage(String yearMonth, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("groups", groupService.getAllStudentsGroups());
         model.addAttribute("courses", courseService.getAllCourses());
         model.addAttribute("rooms", roomService.getAllRoomsDto());
         model.addAttribute("lessonsTime", lessonTimeService.getAllLessonsTimeDto());
         model.addAttribute("scheduleInDateRange", scheduleService.getScheduleInDateRange(yearMonth));
+        model.addAttribute("professorCourses", userService.getAllTeacherUsers(pageable));
         return SCHEDULE_MANAGEMENT_PAGE;
     }
 

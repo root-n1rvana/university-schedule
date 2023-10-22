@@ -18,6 +18,7 @@ public class ScheduleDto {
     private String yearMonthDay;
     private Long groupId;
     private Long courseId;
+    private String professorLogin;
 
     public ScheduleDto() {
     }
@@ -87,5 +88,13 @@ public class ScheduleDto {
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
+    }
+
+    public String getProfessorLogin() {
+        return professorLogin;
+    }
+
+    public void setProfessorLogin(String professorLogin) {
+        this.professorLogin = professorLogin;
     }
 }

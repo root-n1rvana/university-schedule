@@ -56,6 +56,10 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
+    public String getLogin() {
+        return user.getLogin();
+    }
+
     public Group getOwnerGroup() {
         return user.getOwnerGroup();
     }

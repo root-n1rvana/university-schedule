@@ -149,7 +149,6 @@ CREATE TABLE student_groups_courses
 
 CREATE TABLE professors_courses
 (
-    professor_course_id     BIGSERIAL PRIMARY KEY,
     professor_id            BIGINT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
     course_id               BIGINT REFERENCES courses (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT professors_courses_un UNIQUE (professor_id, course_id),
@@ -164,6 +163,6 @@ CREATE TABLE lessons
     group_id       BIGINT NOT NULL REFERENCES groups (id),
     lesson_time_id BIGINT NOT NULL REFERENCES lessons_time (id),
     schedule_id    BIGINT NOT NULL REFERENCES schedules (id),
-    professor_id   BIGINT NOT NULL REFERENCES professors_courses (professor_course_id),
+    professor_id   BIGINT NOT NULL REFERENCES users (id),
     CONSTRAINT test CHECK(course_belongs_to_professor(course_id, professor_id) = true)
 );
